@@ -1,18 +1,18 @@
 "use client";
 import { Cart } from "@/src/models/Cart";
-import React, { useState } from "react";
+import { cn } from "@/src/utils/func";
+import { useState } from "react";
+import { CartItem } from "./cart-item";
 import { EmptyCart } from "./empty-cart";
 import { FoodTitleBar } from "./food-title-bar";
-import { cn } from "@/src/utils/func";
-import { CartItem } from "./cart-item";
 import { PaymentStepBar } from "./payment-step-bar";
-import { showDefaultToast } from "../ui/toast";
 
 interface CartListProps {
   carts: Cart[];
 }
 const CartList = ({ carts }: CartListProps) => {
   const [selectedCardIds, setSelectedCartIds] = useState<number[]>([]);
+  const [cartData, setCartData] = useState(carts);
   return (
     <div>
       <div className="bg-white flex flex-col gap-8 items-start mb-4 font-sans">
@@ -33,56 +33,56 @@ const CartList = ({ carts }: CartListProps) => {
         )}
       >
         {carts.map((cart) => {
-          //   const handleQuantityChange = (value: number) => {
-          //     setCartData(
-          //       cartData.map((i) =>
-          //         i.id === cart.id ? { ...i, quantity: value } : i
-          //       )
-          //     );
-          //   };
-          //   const handleNoteChange = async (note: string) => {
-          //     const updatedCart = { ...cart, note: note };
-          //     await CartService.UpdateCart(updatedCart)
-          //       .then(() => {
-          //         dispatch(updateCartItem(updatedCart));
-          //         setCartData(
-          //           cartData.map((cart) =>
-          //             cart.id === updatedCart.id ? updatedCart : cart
-          //           )
-          //         );
-          //       })
-          //       .catch((err) => {
-          //         showErrorToast(
-          //           "Failed to update cart item with error:" + err
-          //         );
-          //       });
-          //   };
-          //   const onDelete = async (id: number) => {
-          //     await CartService.DeleteCart(id)
-          //       .then(() => {
-          //         dispatch(deleteCartItem(id));
-          //         setCartData(cartData.filter((i) => i.id !== id));
-          //         setSelectedCartIds(
-          //           selectedCardIds.filter((i) => i !== id)
-          //         );
-          //       })
-          //       .catch((err) => {
-          //         showErrorToast(
-          //           "Failed to delete cart item with error:" + err
-          //         );
-          //       });
-          //   };
-          //   const food = foodData.find(
-          //     (food) => food.id === cart.food.id
-          //   );
-          //   if (!food) return null;
+          const handleQuantityChange = (value: number) => {
+            setCartData(
+              cartData.map((c) =>
+                c.id === cart.id ? { ...c, quantity: value } : c
+              )
+            );
+            localStorage.setItem(
+              "selectedCartIds",
+              JSON.stringify(selectedCardIds)
+            );
+          };
+          // const handleNoteChange = async (note: string) => {
+          //   const updatedCart = { ...cart, note: note };
+          //   await CartService.UpdateCart(updatedCart)
+          //     .then(() => {
+          //       dispatch(updateCartItem(updatedCart));
+          //       setCartData(
+          //         cartData.map((cart) =>
+          //           cart.id === updatedCart.id ? updatedCart : cart
+          //         )
+          //       );
+          //     })
+          //     .catch((err) => {
+          //       showErrorToast(
+          //         "Failed to update cart item with error:" + err
+          //       );
+          //     });
+          // };
+          // const onDelete = async (id: number) => {
+          //   await CartService.DeleteCart(id)
+          //     .then(() => {
+          //       dispatch(deleteCartItem(id));
+          //       setCartData(cartData.filter((i) => i.id !== id));
+          //       setSelectedCartIds(
+          //         selectedCardIds.filter((i) => i !== id)
+          //       );
+          //     })
+          //     .catch((err) => {
+          //       showErrorToast(
+          //         "Failed to delete cart item with error:" + err
+          //       );
+          //     });
+          // };
 
           return (
             <CartItem
               key={cart.id}
               cart={cart}
               isOutOfStock={cart.foodSize.deleted}
-              //   onQuantityChange={handleQuantityChange}
+              onQuantityChange={handleQuantityChange}
               //   onNoteChange={handleNoteChange}
               //   onDelete={() => onDelete(cart.id)}
               //   isSelected={selectedCardIds.includes(cart.id)}

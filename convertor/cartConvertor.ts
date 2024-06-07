@@ -1,4 +1,4 @@
-import { Cart } from "@/models/Cart";
+import { Cart } from "src/models/Cart";
 
 const CartToSend = (cart: Cart) => {
   return {

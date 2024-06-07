@@ -76,7 +76,7 @@ const CustomLink = ({
       href={href}
       className={cn(
         "w-full flex flex-row items-center gap-4 justify-start whitespace-nowrap p-2 text-white rounded-md transition-all cursor-pointer",
-        path === href ? "bg-blue-500" : "hover:bg-white/10",
+        path === href ? "bg-blue-600" : "hover:bg-white/10",
         className
       )}
     >
