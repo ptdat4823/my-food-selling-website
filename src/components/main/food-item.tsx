@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/src/utils/func";
 import FoodImageFrame from "./food-image-frame";
-import { Button } from "../ui/buttons";
+import { Button } from "../ui/button";
 import { HeartIcon } from "lucide-react";
 import { showDefaultToast } from "../ui/toast";
 import { Food } from "@/src/models/Food";

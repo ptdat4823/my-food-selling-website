@@ -98,7 +98,7 @@ export default function Sidebar({}: {}) {
               isSidebarOpen={isSidebarOpen}
             />
             <SidebarLink
-              href="/inventory/menu"
+              href="/inventory"
               content="Inventory"
               icon={<LayoutList />}
               isSidebarOpen={isSidebarOpen}
@@ -211,7 +211,7 @@ export default function Sidebar({}: {}) {
                   <span className="font-semibold">{"Ptdat"}</span>
                 </div>
               </PopoverTrigger>
-              <PopoverContent className="font-sans text-primaryWord select-none">
+              <PopoverContent className="font-sans text-primary-word select-none">
                 <div className="w-[200px] py-2 rounded-md flex flex-col">
                   <div className="flex flex-row gap-2 items-center">
                     <Image

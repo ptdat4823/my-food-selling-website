@@ -76,7 +76,7 @@ const CustomLink = ({
       href={href}
       className={cn(
         "w-full flex flex-row items-center gap-4 justify-start whitespace-nowrap p-2 text-white rounded-md transition-all cursor-pointer",
-        path === href ? "bg-blue-600" : "hover:bg-white/10",
+        path.startsWith(href) ? "bg-blue-600" : "hover:bg-white/10",
         className
       )}
     >
@@ -91,14 +91,7 @@ const CustomLink = ({
         </div>
         {icon}
       </div>
-      <span
-        className={cn(
-          "w-fit font-sans font-semibold ease-linear duration-500 opacity-100",
-          !isSidebarOpen && "hidden"
-        )}
-      >
-        {content}
-      </span>
+      <span className={cn("w-fit font-sans font-semibold")}>{content}</span>
     </Link>
   );
 };

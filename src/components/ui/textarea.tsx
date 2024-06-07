@@ -18,7 +18,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           htmlFor={id}
           className={cn(
             "font-semibold cursor-pointer mb-2",
-            labelColor ? labelColor : "text-primaryWord",
+            labelColor ? labelColor : "text-primary-word",
             label ? "" : "hidden"
           )}
         >
@@ -30,7 +30,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           name={name}
           placeholder={placeholder}
           className={cn(
-            "border-0 outline outline-1 outline-borderColor rounded py-1 px-3 focus:outline-primary disabled:outline-disableColor font-normal text-primaryWord",
+            "border-0 outline outline-1 outline-border rounded py-1 px-3 focus:outline-primary disabled:outline-disable font-normal text-primary-word",
             className
           )}
           {...props}

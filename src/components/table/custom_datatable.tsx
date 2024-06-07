@@ -24,8 +24,8 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
-import { Button } from "../ui/buttons";
+} from "@/src/components/ui/dropdown-menu";
+import { Button } from "../ui/button";
 import { DataTableViewOptions } from "./my_table_column_visibility_toggle";
 
 export type DatatableConfig<TData> = {
@@ -152,12 +152,12 @@ export function CustomDatatable<TData>({
               <DropdownMenuTrigger asChild>
                 <Button
                   iconBefore={<Filter className="h-4 w-4" />}
-                  className="gap-2 whitespace-nowrap text-secondaryWord bg-gray-100 hover:bg-gray-200 ease-linear duration-100 py-2 rounded-md cursor-pointer outline-none select-none"
+                  className="gap-2 whitespace-nowrap text-secondary-word bg-gray-100 hover:bg-gray-200 ease-linear duration-100 py-2 rounded-md cursor-pointer outline-none select-none"
                 >
                   {columnTitles[selectedFilterKey] || "Filter"}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="font-sans bg-white text-secondaryWord">
+              <DropdownMenuContent className="font-sans bg-white text-secondary-word z-50">
                 <DropdownMenuCheckboxItem
                   key="all"
                   checked={selectedFilterKey === ""}

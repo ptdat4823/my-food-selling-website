@@ -6,8 +6,8 @@ import Image from "next/image";
 import { cn, displayNumber } from "@/src/utils/func";
 import { Edit, FileText, X } from "lucide-react";
 import { useRef, useState } from "react";
-import { TextArea } from "../ui/textarea";
-import { NumberInput } from "../ui/number-input";
+import { TextArea } from "../../ui/textarea";
+import { NumberInput } from "../../ui/number-input";
 
 export const CartItem = ({
   cart,
@@ -45,7 +45,7 @@ export const CartItem = ({
     <div
       ref={cartRef}
       className={cn(
-        "w-full group text-primaryWord rounded-md bg-slate-50 flex flex-row items-center justify-end p-2",
+        "w-full group text-primary-word rounded-md bg-slate-50 flex flex-row items-center justify-end p-2",
         isOutOfStock ? "" : "cursor-pointer"
       )}
       onClick={() => {
@@ -155,7 +155,7 @@ export const CartItem = ({
         >
           <span
             className={cn(
-              "w-[50px] flex items-center justify-center opacity-0 text-primaryWord group-hover:opacity-100 ease-linear duration-100 cursor-pointer",
+              "w-[50px] flex items-center justify-center opacity-0 text-primary-word group-hover:opacity-100 ease-linear duration-100 cursor-pointer",
               isEdittingNote ? "opacity-100" : "",
               cart.note && cart.note.length > 0 ? "opacity-100" : ""
             )}

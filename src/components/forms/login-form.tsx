@@ -8,7 +8,7 @@ import Image from "next/image";
 import { cn } from "@nextui-org/react";
 import { Separate } from "../ui/separate";
 import { Input } from "../ui/input";
-import { Button } from "../ui/buttons";
+import { Button } from "../ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import { ClassValue } from "clsx";
 
@@ -52,7 +52,7 @@ const LoginForm = ({ className }: LoginFormProps) => {
           </div>
           <div className="w-2/3 flex flex-row items-center justify-between gap-4">
             <Separate classname="h-[1px]" />
-            <span className="text-nowrap text-secondaryWord font-semibold text-xl">
+            <span className="text-nowrap text-secondary-word font-semibold text-xl">
               Sign In
             </span>
             <Separate classname="h-[1px]" />
@@ -83,7 +83,7 @@ const LoginForm = ({ className }: LoginFormProps) => {
             {isLoggingIn ? "Logging in" : "Sign Me In"}
           </Button>
 
-          <span className="text-sm text-secondaryWord">
+          <span className="text-sm text-secondary-word">
             Don&#39;t have an account
             <span
               onClick={() => router.push("/register")}

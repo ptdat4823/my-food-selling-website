@@ -2,16 +2,17 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./my_table_column_header";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./dropdown-menu";
+} from "@/src/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { ReactNode } from "react";
 import { format } from "date-fns";
-import { formatDate, formatPrice } from "@/utils/func";
 import { Checkbox } from "@nextui-org/react";
-import { TextButton } from "../buttons";
+import { displayNumber, formatDate } from "@/src/utils/func";
+import { Button } from "../ui/button";
 
 function defaultColumn<T>(
   accessorKey: string,
@@ -28,13 +29,12 @@ function defaultColumn<T>(
     cell: ({ row }) => {
       const value: ReactNode = row.getValue(accessorKey);
       let formatedValue: ReactNode = "";
-      if (accessorKey === "maxValue") console.log("type", typeof value);
       if (value instanceof Date) formatedValue = formatDate(value, "datetime");
       else if (
-        (accessorKey === "createdAt" ||
-          accessorKey === "createdDate" ||
-          accessorKey === "issuedDate" ||
-          accessorKey === "usedDate") &&
+        (accessorKey.toLowerCase().includes("create") ||
+          accessorKey.toLowerCase().includes("date") ||
+          accessorKey.toLowerCase().includes("time") ||
+          accessorKey.toLowerCase().includes("update")) &&
         value !== null &&
         value !== undefined &&
         new Date(String(value)) instanceof Date
@@ -42,10 +42,10 @@ function defaultColumn<T>(
         formatedValue = format(new Date(String(value)), "MM/dd/yyyy");
       } else if (
         typeof value === "number" &&
-        accessorKey !== "phoneNumber" &&
-        accessorKey !== "cccd"
+        !accessorKey.toLowerCase().includes("phone") &&
+        !accessorKey.toLowerCase().includes("phonenumber")
       )
-        formatedValue = formatPrice(value);
+        formatedValue = displayNumber(value, "$");
       else formatedValue = value;
 
       return <p className="w-fit px-2">{formatedValue}</p>;
@@ -95,10 +95,10 @@ function defaultConfigColumn<T>(): ColumnDef<T> {
         <div className="text-right">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <TextButton className="h-8 w-8 p-0">
+              <Button className="h-8 w-8 p-0">
                 <span className="sr-only">Open menu</span>
                 <MoreHorizontal className="h-4 w-4" />
-              </TextButton>
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem>Edit</DropdownMenuItem>

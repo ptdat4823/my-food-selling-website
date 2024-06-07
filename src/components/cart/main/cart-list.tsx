@@ -15,10 +15,6 @@ const CartList = ({ carts }: CartListProps) => {
   const [cartData, setCartData] = useState(carts);
   return (
     <div>
-      <div className="bg-white flex flex-col gap-8 items-start mb-4 font-sans">
-        <h1 className="text-primary text-3xl font-bold">Your cart</h1>
-        <PaymentStepBar />
-      </div>
       {carts.length === 0 && <EmptyCart />}
       <FoodTitleBar
         className={carts.length > 0 ? "" : "hidden"}

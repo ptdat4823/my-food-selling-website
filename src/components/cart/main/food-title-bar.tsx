@@ -54,7 +54,7 @@ const Title = ({
   return (
     <span
       className={cn(
-        "text-secondaryWord text-lg font-semibold text-center",
+        "text-secondary-word text-lg font-semibold text-center",
         className
       )}
     >

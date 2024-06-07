@@ -1,4 +1,5 @@
 import { ClassValue, clsx } from "clsx";
+import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 function cn(...inputs: ClassValue[]) {
@@ -49,4 +50,34 @@ const displayNumber = (
   );
 };
 
-export { cn, displayNumber };
+type DateType = "date" | "datetime" | "time";
+const formatDate = (date: Date, type: DateType = "date") => {
+  const convertDate = new Date(date);
+  if (!convertDate) return "";
+  if (type === "date") return format(convertDate, "MM/dd/yyyy");
+  if (type === "datetime") return format(convertDate, "MM/dd/yyyy hh:mm a");
+  return format(convertDate, "hh:mm a");
+};
+
+function handleFilterColumn<T>(
+  filterInput: string,
+  col: string,
+  listToFilter: Array<T>
+): Array<T> {
+  if (filterInput === "") return listToFilter;
+  const filter = filterInput.toLowerCase();
+  const filterList = listToFilter.filter((row) => {
+    const value = row[col as keyof typeof row];
+    if (value === null || value === undefined) return false;
+    if (typeof value === "string") {
+      if (!value.toLowerCase().includes(filter)) return false;
+    }
+    if (typeof value === "number") {
+      if (!value.toString().includes(filter)) return false;
+    }
+    return true;
+  });
+  return filterList;
+}
+
+export { cn, displayNumber, formatDate, handleFilterColumn };

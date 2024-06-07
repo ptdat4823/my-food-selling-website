@@ -10,7 +10,9 @@ export const EmptyCart = () => {
         src={emptyCartImage}
         alt="empty cart item image"
       />
-      <span className="text-secondaryWord text-xl">Your cart is now empty</span>
+      <span className="text-secondary-word text-xl">
+        Your cart is now empty
+      </span>
     </div>
   );
 };

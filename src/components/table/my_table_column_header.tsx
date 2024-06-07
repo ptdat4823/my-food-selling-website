@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
+} from "@/src/components/ui/dropdown-menu";
 import { cn } from "@/src/utils/func";
 import { CollumnHeaderButton } from "./collumn-header-button";
 
@@ -24,7 +24,7 @@ function DataTableColumnHeader<TData, TValue>({
   return (
     <div
       className={cn(
-        "font-sans w-min flex items-center space-x-2 text-primaryWord justify-stretch",
+        "font-sans w-min flex items-center space-x-2 text-primary-word justify-stretch",
         className
       )}
     >
@@ -48,7 +48,7 @@ function DataTableColumnHeader<TData, TValue>({
         <DropdownMenuContent
           align="start"
           className={cn(
-            "font-sans bg-white text-secondaryWord",
+            "font-sans bg-white text-secondary-word",
             column.getCanSort() ? "" : "hidden"
           )}
         >

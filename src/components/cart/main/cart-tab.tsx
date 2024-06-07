@@ -36,7 +36,7 @@ const CartTab = ({
       </div>
       <span
         className={cn(
-          "cursor-pointer font-semibold text-lg whitespace-nowrap",
+          "cursor-pointer font-semibold text-lg whitespace-nowrap hover:text-primary-word ease-linear duration-100",
           path === href ? selectedStepStyle : defaultStepStyle
         )}
       >

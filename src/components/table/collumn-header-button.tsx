@@ -17,7 +17,7 @@ export const CollumnHeaderButton = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "w-fit px-2 py-2 gap-2 outline-none border-0 whitespace-nowrap text-secondaryWord bg-white ease-linear duration-100 disabled:bg-gray-100/60 rounded-md flex flex-row items-center justify-center cursor-pointer disabled:cursor-default font-semibold",
+          "w-fit px-2 py-2 gap-2 outline-none border-0 whitespace-nowrap text-secondary-word bg-white ease-linear duration-100 disabled:bg-gray-100/60 rounded-md flex flex-row items-center justify-center cursor-pointer disabled:cursor-default font-semibold",
           canSort ? "hover:bg-gray-100 select-none" : "",
           className
         )}

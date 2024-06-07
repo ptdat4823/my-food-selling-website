@@ -3,8 +3,8 @@ import { Cart } from "@/src/models/Cart";
 import { Food } from "@/src/models/Food";
 import React, { useEffect, useState } from "react";
 import { SummaryItem } from "./summary-item";
-import { Separate } from "../ui/separate";
-import { Button } from "../ui/buttons";
+import { Separate } from "../../ui/separate";
+import { Button } from "../../ui/button";
 import { useRouter } from "next/navigation";
 
 interface SummaryListProps {
@@ -33,7 +33,7 @@ const SummaryList = ({ carts }: SummaryListProps) => {
   return (
     <div className="relative w-full h-full flex flex-col justify-start text-white gap-4">
       <h1 className="text-3xl font-bold whitespace-nowrap">Order Summary</h1>
-      <div className="w-full h-3/5 max-h-3/5 flex flex-col gap-4 overflow-y-scroll scrollbar scrollbar-track-rounded-full scrollbar-thumb-white scrollbar-track-transparent">
+      <div className="w-full h-3/5 max-h-3/5 flex flex-col gap-4 white-scrollbar">
         {/* {carts
           .filter((cart) => selectedCardIds.includes(cart.id))
           .sort()

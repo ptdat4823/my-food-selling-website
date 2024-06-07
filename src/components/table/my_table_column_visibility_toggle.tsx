@@ -6,10 +6,10 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
+} from "@/src/components/ui/dropdown-menu";
 import { Settings2 } from "lucide-react";
 import { Checkbox } from "@nextui-org/react";
-import { Button } from "../ui/buttons";
+import { Button } from "../ui/button";
 
 interface DataTableViewOptionsProps<TData> {
   title: string;
@@ -37,14 +37,14 @@ function DataTableViewOptions<TData>({
       <DropdownMenuTrigger asChild>
         <Button
           iconBefore={<Settings2 className="h-4 w-4" />}
-          className="gap-2 whitespace-nowrap text-secondaryWord bg-gray-100 hover:bg-gray-200 ease-linear duration-100 py-2 rounded-md cursor-pointer"
+          className="gap-2 whitespace-nowrap text-secondary-word bg-gray-100 hover:bg-gray-200 ease-linear duration-100 py-2 rounded-md cursor-pointer select-none"
         >
           {title}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="font-sans flex flex-row justify-between space-x-2 bg-white text-secondaryWord"
+        className="font-sans flex flex-row justify-between space-x-2 bg-white text-secondary-word"
       >
         {arrColIndex.map((col) => {
           return (

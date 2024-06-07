@@ -4,7 +4,7 @@ import React, { RefObject } from "react";
 import { ClassValue } from "clsx";
 import { cn } from "@/src/utils/func";
 import { TableCell, TableRow } from "./table";
-import { Button } from "../ui/buttons";
+import { Button } from "../ui/button";
 
 export interface TabProps<TData> {
   render: (
@@ -99,7 +99,7 @@ export default function CustomDatatableRow<TData, TValue>({
                       )}
                       onClick={(e) => setShowTabIndex(tabIdx)}
                     >
-                      <Button className="flex-1 text-sm rounded-xl py-1 bg-gray-100 hover:bg-gray-100 text-secondaryWord hover:text-primaryWord">
+                      <Button className="flex-1 text-sm rounded-xl py-1 bg-gray-100 hover:bg-gray-100 text-secondary-word hover:text-primary-word">
                         {tab.tabName}
                       </Button>
                     </div>

@@ -6,14 +6,15 @@ import {
   ChevronsRight,
 } from "lucide-react";
 import { cn } from "@/src/utils/func";
+
+import { Button } from "../ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@radix-ui/react-select";
-import { Button } from "../ui/buttons";
+} from "../ui/select";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
@@ -55,7 +56,7 @@ export function CustomDataTablePagination<TData>({
             </SelectTrigger>
             <SelectContent
               side="top"
-              className="font-sans bg-white text-primaryWord"
+              className="font-sans bg-white text-primary-word"
             >
               {[10, 20, 30, 40, 50].map((pageSize) => (
                 <SelectItem

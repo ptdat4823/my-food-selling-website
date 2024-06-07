@@ -54,7 +54,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           onChange={onChange}
           disabled={disabled}
           className={cn(
-            "w-[60px] border-0 outline outline-1 outline-borderColor rounded py-1 px-3 focus:outline-primary disabled:outline-disableColor font-normal text-center text-primaryWord",
+            "w-[60px] border-0 outline outline-1 outline-border rounded py-1 px-3 focus:outline-primary disabled:outline-disable font-normal text-center text-primary-word",
             errorMessages ? "outline-red-500" : "",
             className
           )}

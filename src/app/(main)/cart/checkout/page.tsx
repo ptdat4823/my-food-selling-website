@@ -1,12 +1,11 @@
-import CartList from "@/src/components/cart/main/cart-list";
+import CheckoutDetail from "@/src/components/cart/checkout/checkout-detail";
 import { PaymentStepBar } from "@/src/components/cart/main/payment-step-bar";
 import SummaryList from "@/src/components/cart/main/summary-list";
 import { Cart } from "@/src/models/Cart";
+import React from "react";
 
-const CartPage = async () => {
+const CheckoutPage = () => {
   const carts = [] as Cart[];
-  let selectedCardIds = [] as number[];
-
   return (
     <div className="w-full h-full flex flex-row justify-between items-center overflow-hidden">
       <div className="min-h-screen flex-1 p-8">
@@ -14,7 +13,7 @@ const CartPage = async () => {
           <h1 className="text-primary text-3xl font-bold">Your cart</h1>
           <PaymentStepBar />
         </div>
-        <CartList carts={carts} />
+        <CheckoutDetail />
       </div>
       <div className="w-[400px] h-[100vh] bg-primary p-8">
         <SummaryList carts={carts} />
@@ -23,4 +22,4 @@ const CartPage = async () => {
   );
 };
 
-export default CartPage;
+export default CheckoutPage;
