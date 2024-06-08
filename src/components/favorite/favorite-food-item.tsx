@@ -1,16 +1,13 @@
-"use client";
+import { Food } from "@/src/models/Food";
+import FoodImageFrame from "../main/food-image-frame";
 import { cn } from "@/src/utils/func";
-import FoodImageFrame from "./food-image-frame";
 import { Button } from "../ui/button";
 import { HeartIcon } from "lucide-react";
-import { showDefaultToast } from "../ui/toast";
-import { Food } from "@/src/models/Food";
-import { ClassValue } from "clsx";
-import { FoodPrice } from "./food-price";
-import FoodRating from "./food-rating";
-import FoodTag from "./food-tag";
+import { FoodPrice } from "../main/food-price";
+import FoodRating from "../main/food-rating";
+import FoodTag from "../main/food-tag";
 
-export default function FoodItem({
+export default function FavouriteFoodItem({
   food,
   className,
   onClick,
@@ -18,10 +15,10 @@ export default function FoodItem({
   onFavoriteChange,
 }: {
   food: Food;
-  className?: ClassValue;
-  onClick?: (food: Food) => void;
+  className?: string;
+  onClick?: () => void;
   isFavorite?: boolean;
-  onFavoriteChange?: (foodId: number) => void;
+  onFavoriteChange?: (isFavorite: boolean) => void;
 }) {
   const getMinAndMaxPrice = (food: Food) => {
     const tempSortedPriceList = food.foodSizes
@@ -34,22 +31,16 @@ export default function FoodItem({
   };
 
   const sortedPriceList = getMinAndMaxPrice(food);
-  const isLogin = false;
 
   return (
     <div
       className={cn(
-        "rounded overflow-hidden shadow-lg bg-[#12192C] bg-opacity-75 p-0",
+        "w-full h-min flex flex-col rounded overflow-hidden shadow-lg",
         className
       )}
     >
       <div className="w-full h-40 overflow-hidden cursor-pointer">
-        <FoodImageFrame
-          food={food}
-          onClick={() => {
-            if (onClick) onClick(food);
-          }}
-        />
+        <FoodImageFrame food={food} />
       </div>
       <div className="flex flex-col m-2 gap-2">
         <div className="w-full flex flex-row items-center justify-between">
@@ -64,11 +55,7 @@ export default function FoodItem({
               )
             }
             onClick={() => {
-              if (!isLogin) {
-                showDefaultToast("Please login to add your favorite food");
-                return;
-              }
-              if (onFavoriteChange) onFavoriteChange(food.id);
+              if (onFavoriteChange) onFavoriteChange(!isFavorite);
             }}
           />
         </div>
@@ -77,13 +64,14 @@ export default function FoodItem({
           defaultPrice={sortedPriceList[0]}
           secondPrice={sortedPriceList[sortedPriceList.length - 1]}
         />
+
         <div className={cn("flex items-center")}>
           <FoodRating
             rating={food.rating}
             className={cn("mt-2", food.rating === 0 && "hidden")}
           />
           {food.tags.map((tag) => {
-            return <FoodTag key={tag} name={tag} theme="dark" />;
+            return <FoodTag key={tag} name={tag} theme="light" />;
           })}
         </div>
       </div>

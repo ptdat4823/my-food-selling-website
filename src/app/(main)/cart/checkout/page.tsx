@@ -4,7 +4,7 @@ import SummaryList from "@/src/components/cart/main/summary-list";
 import { Cart } from "@/src/models/Cart";
 import React from "react";
 
-const CheckoutPage = () => {
+const CartCheckoutPage = () => {
   const carts = [] as Cart[];
   return (
     <div className="w-full h-full flex flex-row justify-between items-center overflow-hidden">
@@ -22,4 +22,4 @@ const CheckoutPage = () => {
   );
 };
 
-export default CheckoutPage;
+export default CartCheckoutPage;

@@ -11,8 +11,8 @@ export interface ButtonProps
 
 export const PayMethodButton = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, content, selectedButton, icon, onClick, ...props }, ref) => {
-    const selectedStyle = "bg-momoBgColor border-momoBorderColor";
-    const defaultStyle = "bg-white border-borderColor";
+    const selectedStyle = "bg-momo-bg border-momo-border";
+    const defaultStyle = "bg-white border-border";
     return (
       <button
         ref={ref}
