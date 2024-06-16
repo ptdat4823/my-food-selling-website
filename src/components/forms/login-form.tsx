@@ -1,47 +1,60 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { ZodType, z } from "zod";
 import Logo from "@/public/images/logo.png";
-import Image from "next/image";
+import { LoginFormData } from "@/src/lib/form-data";
+import { loginSchema } from "@/src/lib/schema";
 import { cn } from "@nextui-org/react";
-import { Separate } from "../ui/separate";
-import { Input } from "../ui/input";
+import { signIn, useSession } from "next-auth/react";
+import Image from "next/image";
+import { redirect, useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Google } from "../icons/brand";
 import { Button } from "../ui/button";
-import { usePathname, useRouter } from "next/navigation";
-import { ClassValue } from "clsx";
+import { Input } from "../ui/input";
+import { Separate } from "../ui/separate";
+import { showErrorToast, showSuccessToast } from "../ui/toast";
 
-export type LoginFormData = {
-  email: string;
-  password: string;
-};
-
-const loginSchema: ZodType<LoginFormData> = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
-export interface LoginFormProps {
-  className?: ClassValue;
-}
-
-const LoginForm = ({ className }: LoginFormProps) => {
+const LoginForm = () => {
+  const { data: session } = useSession();
+  if (session) {
+    redirect("/home");
+  }
   const router = useRouter();
-  const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
-  const form = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-  });
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = form;
-  const handleFormSubmit = async (data: LoginFormData) => {
-    console.log(data);
+  const form = useForm<LoginFormData>();
+  const { register } = form;
+  const [fieldErrors, setFieldErrors] = useState<any>();
+
+  const clientAction = async (data: FormData) => {
+    //create request object
+    const request = {
+      email: data.get("email"),
+      password: data.get("password"),
+    };
+
+    //validate request object
+    const validation = loginSchema.safeParse(request);
+    if (!validation.success) {
+      setFieldErrors(validation.error.formErrors.fieldErrors);
+      return;
+    }
+
+    const res = await signIn("credentials", {
+      email: request.email,
+      password: request.password,
+      redirect: false,
+    });
+
+    if (res) {
+      if (res.ok) {
+        showSuccessToast("Login successfully");
+        redirect("/home");
+      } else {
+        showErrorToast(res.error ? res.error : "Login failed");
+      }
+    }
   };
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
+    <form action={clientAction}>
       <div className="flex flex-col items-center gap-10 pt-10">
         <div className="w-full flex flex-col items-center gap-4">
           <div className="font-extrabold text-xl select-none flex items-center gap-2">
@@ -62,7 +75,9 @@ const LoginForm = ({ className }: LoginFormProps) => {
           <Input
             id="email"
             label="Email"
-            errorMessages={errors.email ? errors.email.message : ""}
+            errorMessages={
+              fieldErrors && fieldErrors.email ? fieldErrors.email[0] : ""
+            }
             placeholder="demo@example.com"
             {...register("email")}
           />
@@ -70,17 +85,35 @@ const LoginForm = ({ className }: LoginFormProps) => {
             id="password"
             label="Password"
             type="password"
-            errorMessages={errors.password ? errors.password.message : ""}
+            errorMessages={
+              fieldErrors && fieldErrors.password ? fieldErrors.password[0] : ""
+            }
             {...register("password")}
           />
         </div>
         <div className="w-full flex flex-col items-center gap-2">
           <Button
             type="submit"
-            disabled={isLoggingIn}
             className="w-full mt-6 text-sm font-extrabold text-white bg-primary hover:bg-primary/80"
           >
-            {isLoggingIn ? "Logging in" : "Sign Me In"}
+            Sign Me In
+            {/* {isLoggingIn ? "Logging in" : "Sign Me In"} */}
+          </Button>
+
+          <span className="my-2">or</span>
+
+          <Button
+            type="button"
+            className="w-full bg-white border text-primary-word gap-2"
+            iconBefore={<Google />}
+            onClick={() =>
+              signIn("google", {
+                redirect: true,
+                callbackUrl: "/home",
+              })
+            }
+          >
+            Sign in with google
           </Button>
 
           <span className="text-sm text-secondary-word">

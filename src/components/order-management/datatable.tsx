@@ -9,7 +9,7 @@ import {
 } from "./columns";
 import { OrderDetailTab } from "./order-detail-tab";
 import OrderService from "@/src/services/orderService";
-import { OrderToReceive } from "@/convertor/orderConvertor";
+import { OrderToReceive } from "@/src/convertor/orderConvertor";
 import { formatDate, handleFilterColumn } from "@/src/utils/func";
 
 interface Props {

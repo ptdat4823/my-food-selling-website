@@ -80,4 +80,15 @@ function handleFilterColumn<T>(
   return filterList;
 }
 
-export { cn, displayNumber, formatDate, handleFilterColumn };
+function isValidPhoneNumberInput(phoneNumber: string): boolean {
+  const regex = /^[0-9]{0,10}$/;
+  return regex.test(phoneNumber);
+}
+
+export {
+  cn,
+  displayNumber,
+  formatDate,
+  handleFilterColumn,
+  isValidPhoneNumberInput,
+};

@@ -1,4 +1,4 @@
-import { CartsToOrder, OrderToSend } from "@/convertor/orderConvertor";
+import { CartsToOrder, OrderToSend } from "@/src/convertor/orderConvertor";
 import { Feedback, OrderStatus, PaymentMethod } from "src/models/Order";
 import { Cart } from "../models/Cart";
 import { User } from "../models/User";

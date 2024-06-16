@@ -1,5 +1,4 @@
 import { cn } from "@/src/utils/func";
-import { usePathname } from "next/navigation";
 import LoginForm from "src/components/forms/login-form";
 import animation from "src/style/animation.module.css";
 

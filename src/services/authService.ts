@@ -1,6 +1,5 @@
-import { LoginFormData } from "src/components/forms/login-form";
-import { RegisterFormData } from "src/components/forms/register-form";
 import AxiosService from "./axiosService";
+import { LoginFormData, RegisterFormData } from "../lib/form-data";
 
 const register = (data: RegisterFormData) => {
   return AxiosService.post(

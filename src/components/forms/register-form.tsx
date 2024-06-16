@@ -1,56 +1,64 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { ZodType, z } from "zod";
 import Logo from "@/public/images/logo.png";
-import Image from "next/image";
+import { RegisterAction } from "@/src/actions/auth";
+import { RegisterFormData } from "@/src/lib/form-data";
+import { registerSchema } from "@/src/lib/schema";
 import { cn } from "@nextui-org/react";
-import { Separate } from "../ui/separate";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
 import { ClassValue } from "clsx";
-
-export type RegisterFormData = {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
-
-const registerSchema: ZodType<RegisterFormData> = z
-  .object({
-    username: z.string().min(2, "Username must be at least 2 characters"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string(),
-    email: z.string().email(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Confirm Password do not match",
-    path: ["confirmPassword"],
-  });
+import Image from "next/image";
+import { redirect, useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Separate } from "../ui/separate";
+import { showErrorToast, showSuccessToast } from "../ui/toast";
+import { useSession } from "next-auth/react";
 
 export interface RegisterFormProps {
   className?: ClassValue;
 }
 
 const RegisterForm = ({ className }: RegisterFormProps) => {
+  const { data: session } = useSession();
+  if (session) {
+    redirect("/home");
+  }
   const router = useRouter();
+  const form = useForm<RegisterFormData>();
+  const { register } = form;
+  const [fieldErrors, setFieldErrors] = useState<any>();
   const [isSigningUp, setIsSigningUp] = useState(false);
-  const form = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
-  });
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = form;
-  const handleFormSubmit = async (data: RegisterFormData) => {
-    console.log(data);
+
+  const clientAction = async (data: FormData) => {
+    //create request object
+    const request = {
+      username: data.get("username"),
+      email: data.get("email"),
+      password: data.get("password"),
+      confirmPassword: data.get("confirmPassword"),
+    };
+
+    //validate request object
+    const validation = registerSchema.safeParse(request);
+    if (!validation.success) {
+      setFieldErrors(validation.error.formErrors.fieldErrors);
+      return;
+    }
+
+    //call login action
+    const res = await RegisterAction(data);
+    if (res?.error) {
+      showErrorToast(res.error);
+    }
+    if (res?.message) {
+      showSuccessToast(res.message);
+      redirect("/login");
+    }
   };
+
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
+    <form action={clientAction}>
       <div className="flex flex-col items-center gap-4 p-8">
         <div className="w-full flex flex-col items-center gap-4">
           <div className="font-extrabold text-xl select-none flex items-center gap-2">
@@ -72,21 +80,27 @@ const RegisterForm = ({ className }: RegisterFormProps) => {
             id="username"
             label="Username"
             placeholder="username"
-            errorMessages={errors.username ? errors.username.message : ""}
+            errorMessages={
+              fieldErrors && fieldErrors.username ? fieldErrors.username[0] : ""
+            }
             {...register("username")}
           />
           <Input
             id="email"
             label="Email"
             placeholder="demo@example.com"
-            errorMessages={errors.email ? errors.email.message : ""}
+            errorMessages={
+              fieldErrors && fieldErrors.email ? fieldErrors.email[0] : ""
+            }
             {...register("email")}
           />
           <Input
             id="password"
             label="Password"
             type="password"
-            errorMessages={errors.password ? errors.password.message : ""}
+            errorMessages={
+              fieldErrors && fieldErrors.password ? fieldErrors.password[0] : ""
+            }
             {...register("password")}
           />
           <Input
@@ -94,7 +108,9 @@ const RegisterForm = ({ className }: RegisterFormProps) => {
             label="Confirm Password"
             type="password"
             errorMessages={
-              errors.confirmPassword ? errors.confirmPassword.message : ""
+              fieldErrors && fieldErrors.confirmPassword
+                ? fieldErrors.confirmPassword[0]
+                : ""
             }
             {...register("confirmPassword")}
           />

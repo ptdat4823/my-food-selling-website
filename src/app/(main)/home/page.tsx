@@ -2,12 +2,14 @@ import Banners from "@/src/components/main/banners";
 import BestRatedList from "@/src/components/main/best-rated-list";
 import BestSellerList from "@/src/components/main/best-seller-list";
 import FavoriteList from "@/src/components/main/favorite-list";
-import React from "react";
 
-const HomePage = () => {
+const HomePage = async () => {
+  // const foods = await fetch("http://localhost:8080/api/food").then((res) => {
+  //   if (res.ok) res.json();
+  // });
   return (
     <div
-      className="relative w-full h-screen white-scrollbar"
+      className="relative w-full h-full white-scrollbar"
       style={{
         background:
           "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8) ), url('/images/bg-main-page.jpg')",
@@ -15,7 +17,7 @@ const HomePage = () => {
         backgroundSize: "cover",
       }}
     >
-      <div className="w-full h-fit px-4 pb-8 space-y-4 overflow-x-hidden">
+      <div className="w-full h-fit px-4 pb-8 space-y-4 overflow-hidden">
         <div className="h-12 mt-8 flex items-center justify-between relative">
           <div className="flex items-center rounded-md bg-gray-100 self-stretch px-4 w-2/3">
             <svg
