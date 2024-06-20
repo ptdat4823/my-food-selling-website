@@ -1,4 +1,3 @@
-import { CreateCategoryAction } from "@/src/actions/inventory";
 import { FoodCategory, FoodStatus } from "@/src/models/Food";
 import { cn } from "@/src/utils/func";
 import { ClassValue } from "clsx";
@@ -15,6 +14,7 @@ import {
 import { ChooseImageButton } from "./choose-image-button";
 import { FoodFormData } from "./food-form";
 import NewCategoryModal from "./new-category-modal";
+import { CreateCategory } from "@/src/actions/category";
 
 type InputProps = {
   label: Path<FoodFormData>;
@@ -148,7 +148,7 @@ const CategoryInput = ({
       new Blob([JSON.stringify(newCategory)], { type: "application/json" })
     );
     if (imageFile) dataForm.append("files", imageFile);
-    const res = await CreateCategoryAction(dataForm);
+    const res = await CreateCategory(dataForm);
     if (res.error) {
       showErrorToast(res.error);
     }

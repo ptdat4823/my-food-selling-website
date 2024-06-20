@@ -29,8 +29,10 @@ import { useState } from "react";
 import { Separate } from "./separate";
 import { SidebarLink } from "./sidebar-link";
 
-interface Props {}
-export default function Sidebar({}: Props) {
+interface Props {
+  cartQuantity: number;
+}
+export default function Sidebar({ cartQuantity }: Props) {
   const { data: session } = useSession();
   if (!session) {
     redirect("/login");
@@ -138,7 +140,7 @@ export default function Sidebar({}: Props) {
               content="Your cart"
               icon={<ShoppingCart />}
               isSidebarOpen={isSidebarOpen}
-              notification={1}
+              notification={cartQuantity}
             />
 
             <SidebarLink

@@ -13,7 +13,7 @@ const FoodTag = ({ theme = "dark", name }: Props) => {
   return (
     <span
       className={cn(
-        "hover:cursor-pointer rounded-md font-semibold px-2 py-1 font-hairline text-xs ml-1",
+        "hover:cursor-pointer rounded-md font-semibold px-2 py-1 font-hairline text-xs",
         theme === "light" ? lightTheme : darkTheme
       )}
     >

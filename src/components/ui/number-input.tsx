@@ -38,7 +38,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       >
         <span
           className={cn(
-            "cursor-pointer text-primary hover:text-secondary",
+            "cursor-pointer text-primary hover:text-hover-primary",
             disabled ? "opacity-0" : ""
           )}
           onClick={onDecrease}
@@ -62,7 +62,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         />
         <span
           className={cn(
-            "cursor-pointer text-primary hover:text-secondary",
+            "cursor-pointer text-primary hover:text-hover-primary",
             disabled ? "opacity-0" : ""
           )}
           onClick={onIncrease}

@@ -11,6 +11,8 @@ import {
 } from "./columns";
 import { FoodDetailTab } from "./food-detail-tab";
 import { FoodForm } from "./food-form";
+import { showErrorToast, showSuccessToast } from "../ui/toast";
+import { DeleteFood } from "@/src/actions/food";
 
 interface Props {
   foods: Food[];
@@ -23,6 +25,16 @@ const InventoryDataTable = ({ foods, categories }: Props) => {
   const filterOptionKeys = Object.keys(menuColumnTitles)
     .filter((key) => key !== "images")
     .map((key) => key);
+
+  const handleDeleteFood = async (id: number) => {
+    const res = await DeleteFood(id);
+    if (res.error) {
+      showErrorToast(res.error);
+    }
+    if (res.message) {
+      showSuccessToast(res.message);
+    }
+  };
 
   return (
     <>
@@ -48,7 +60,7 @@ const InventoryDataTable = ({ foods, categories }: Props) => {
                 <FoodDetailTab
                   row={row}
                   setShowTabs={setShowTabs}
-                  // onDeleteFood={handleDeleteFood}
+                  onDeleteFood={handleDeleteFood}
                   onUpdateFood={() => {
                     setSelectedFood(row.original);
                     setOpenNewFoodForm(true);

@@ -2,11 +2,11 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const url = "http://localhost:8080/api/categories";
+  const url = "http://localhost:8080/api/cart";
   const accessToken = cookies().get("access-token")?.value;
 
   try {
-    const data = await request.formData();
+    const data = await request.json();
 
     const res = await fetch(url, {
       cache: "no-cache",
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
       headers: {
         Cookie: `access-token=${accessToken}`,
       },
-      body: data,
+      body: new Blob([JSON.stringify(data)], { type: "application/json" }),
       credentials: "include",
     }).catch(() => {
       throw new Error("Internal Server Error");
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     if (!res.ok) {
       return NextResponse.json(
         {},
-        { status: res.status, statusText: "Categories already exists" }
+        { status: res.status, statusText: "Add to cart failed" }
       );
     }
   } catch (e: any) {
@@ -31,6 +31,6 @@ export async function POST(request: Request) {
   }
   return NextResponse.json(
     {},
-    { status: 200, statusText: "Add new category successfully!" }
+    { status: 200, statusText: "Add to cart successfully!" }
   );
 }

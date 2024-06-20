@@ -2,13 +2,13 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const registerUrl = "http://localhost:8080/api/foods";
+  const url = "http://localhost:8080/api/foods";
   const accessToken = cookies().get("access-token")?.value;
 
   try {
     const data = await request.formData();
 
-    const res = await fetch(registerUrl, {
+    const res = await fetch(url, {
       cache: "no-cache",
       method: "POST",
       headers: {

@@ -54,6 +54,7 @@ const SummaryList = ({ carts }: SummaryListProps) => {
               />
             );
           })} */}
+        {/* <SummaryItem key={1} title={"food"} total={92} quantity={3} />
         <SummaryItem key={1} title={"food"} total={92} quantity={3} />
         <SummaryItem key={1} title={"food"} total={92} quantity={3} />
         <SummaryItem key={1} title={"food"} total={92} quantity={3} />
@@ -67,8 +68,7 @@ const SummaryList = ({ carts }: SummaryListProps) => {
         <SummaryItem key={1} title={"food"} total={92} quantity={3} />
         <SummaryItem key={1} title={"food"} total={92} quantity={3} />
         <SummaryItem key={1} title={"food"} total={92} quantity={3} />
-        <SummaryItem key={1} title={"food"} total={92} quantity={3} />
-        <SummaryItem key={1} title={"food"} total={92} quantity={3} />
+        <SummaryItem key={1} title={"food"} total={92} quantity={3} /> */}
       </div>
       <div className="flex flex-col gap-4">
         <Separate classname="h-[1.5px]" />

@@ -1,12 +1,28 @@
+import { GetAllCategories } from "@/src/actions/category";
+import { GetAllFood } from "@/src/actions/food";
 import Banners from "@/src/components/main/banners";
 import BestRatedList from "@/src/components/main/best-rated-list";
 import BestSellerList from "@/src/components/main/best-seller-list";
 import FavoriteList from "@/src/components/main/favorite-list";
+import { FoodList } from "@/src/components/main/food-list";
+import { Food, FoodCategory } from "@/src/models/Food";
 
 const HomePage = async () => {
-  // const foods = await fetch("http://localhost:8080/api/food").then((res) => {
-  //   if (res.ok) res.json();
-  // });
+  const [foodsResult, categoriesResult] = await Promise.allSettled([
+    GetAllFood(),
+    GetAllCategories(),
+  ]);
+
+  const foods =
+    foodsResult.status === "fulfilled" ? (foodsResult.value as Food[]) : [];
+  const categories =
+    categoriesResult.status === "fulfilled"
+      ? (categoriesResult.value as FoodCategory[])
+      : [];
+
+  const getActiveFood = (foods: Food[]) => {
+    return foods.filter((food) => !food.isDeleted && food.name !== null);
+  };
   return (
     <div
       className="relative w-full h-full white-scrollbar"
@@ -42,6 +58,8 @@ const HomePage = async () => {
           </div>
         </div>
         <Banners />
+
+        <FoodList foods={getActiveFood(foods)} />
 
         <BestSellerList />
 

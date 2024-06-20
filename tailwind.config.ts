@@ -24,6 +24,7 @@ const config = {
       },
       colors: {
         primary: "#fc8019",
+        "hover-primary": "#f37000",
         secondary: "#1f1f23",
         "primary-word": "#000000",
         "secondary-word": "#777777",

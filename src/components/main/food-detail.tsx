@@ -18,6 +18,7 @@ import { NumberInput } from "../ui/number-input";
 import { FoodProperty } from "./food-property";
 import FoodRating from "./food-rating";
 import FoodTag from "./food-tag";
+import { SolidHeartIcon } from "../icons/solid";
 
 export const FoodDetail = ({
   isOpen,
@@ -57,7 +58,7 @@ export const FoodDetail = ({
       isOpen={isOpen}
       onOpenChange={() => onOpenChange(!isOpen)}
       className={cn(
-        "z-50 text-primaryWord rounded-lg overflow-hidden",
+        "z-50 text-primary-word rounded-lg overflow-hidden",
         className
       )}
       hideCloseButton
@@ -81,14 +82,11 @@ export const FoodDetail = ({
                         <div className="flex flex-row items-center gap-2">
                           <span>{food.name}</span>
                           <Button
-                            className="rounded-full ease-linear duration-100"
-                            iconBefore={
-                              isFavorite ? (
-                                <HeartIcon />
-                              ) : (
-                                <HeartIcon className="bg-pink-600 text-pink-600" />
-                              )
-                            }
+                            className={cn(
+                              "rounded-full ease-linear duration-100 bg-transparent hover:bg-transparent hover:opacity-60",
+                              !isFavorite && "opacity-50"
+                            )}
+                            iconBefore={<SolidHeartIcon color="pink" />}
                             onClick={() => {
                               if (!isLogin) {
                                 {
@@ -109,7 +107,7 @@ export const FoodDetail = ({
                           </p>
                           <div className="w-min font-sans">
                             <NumberInput
-                              className="outline-0 text-primaryWord"
+                              className="outline-0 text-primary-word"
                               value={foodQuantity}
                               onDecrease={() =>
                                 onFoodQuantityChange(
@@ -144,16 +142,21 @@ export const FoodDetail = ({
                       <div className="font-normal text-base">
                         {selectedSize.note}
                       </div>
-                      <div
-                        className={cn(
-                          "flex flex-row items-center",
-                          food.rating === 0 ? "opacity-0" : ""
-                        )}
-                      >
-                        <FoodRating rating={food.rating} />
-                        {food.tags.map((tag) => {
-                          return <FoodTag key={tag} name={tag} />;
-                        })}
+                      <div className="flex items-center">
+                        <FoodRating
+                          rating={food.rating}
+                          className={cn(
+                            "mt-2 hidden",
+                            food.rating > 0 && "visible"
+                          )}
+                        />
+                        <div className="flex flex-row gap-1">
+                          {food.tags.map((tag) => {
+                            return (
+                              <FoodTag key={tag} name={tag} theme="dark" />
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
                   </ModalHeader>

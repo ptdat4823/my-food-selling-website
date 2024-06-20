@@ -26,7 +26,7 @@ export async function PUT(
     if (!res.ok) {
       return NextResponse.json(
         {},
-        { status: res.status, statusText: "Food already exists" }
+        { status: res.status, statusText: "Updated failed!" }
       );
     }
   } catch (e: any) {
@@ -34,6 +34,40 @@ export async function PUT(
   }
   return NextResponse.json(
     {},
-    { status: 200, statusText: "Add new food successfully!" }
+    { status: 200, statusText: "Updated successfully!" }
+  );
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const url = `http://localhost:8080/api/foods/${params.id}`;
+  const accessToken = cookies().get("access-token")?.value;
+
+  try {
+    const res = await fetch(url, {
+      cache: "no-cache",
+      method: "DELETE",
+      headers: {
+        Cookie: `access-token=${accessToken}`,
+      },
+      credentials: "include",
+    }).catch(() => {
+      throw new Error("Internal Server Error");
+    });
+
+    if (!res.ok) {
+      return NextResponse.json(
+        {},
+        { status: res.status, statusText: "Deleted failed!" }
+      );
+    }
+  } catch (e: any) {
+    return NextResponse.json({}, { status: 500, statusText: e.message });
+  }
+  return NextResponse.json(
+    {},
+    { status: 200, statusText: "Deleted successfully!" }
   );
 }

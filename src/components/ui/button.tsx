@@ -16,7 +16,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "w-fit px-2 py-2 bg-primary text-white hover:opacity-60 disabled:opacity-60 rounded-md text-md font-bold flex flex-row items-center justify-center cursor-pointer disabled:cursor-default ease-linear duration-100",
+          "w-fit px-2 py-2 bg-primary text-white hover:bg-hover-primary disabled:opacity-60 rounded-md text-md font-bold flex flex-row items-center justify-center cursor-pointer disabled:cursor-default ease-linear duration-100",
           className
         )}
         {...props}

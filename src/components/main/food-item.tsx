@@ -2,13 +2,14 @@
 import { cn } from "@/src/utils/func";
 import FoodImageFrame from "./food-image-frame";
 import { Button } from "../ui/button";
-import { HeartIcon } from "lucide-react";
 import { showDefaultToast } from "../ui/toast";
 import { Food } from "@/src/models/Food";
 import { ClassValue } from "clsx";
 import { FoodPrice } from "./food-price";
 import FoodRating from "./food-rating";
 import FoodTag from "./food-tag";
+import { HeartIcon } from "lucide-react";
+import { SolidHeartIcon } from "../icons/solid";
 
 export default function FoodItem({
   food,
@@ -51,17 +52,15 @@ export default function FoodItem({
           }}
         />
       </div>
-      <div className="flex flex-col m-2 gap-2">
+      <div className="flex flex-col m-2 gap-2 text-white">
         <div className="w-full flex flex-row items-center justify-between">
           <span className="font-semibold">{food.name}</span>
           <Button
-            className={cn("rounded-full ease-linear duration-100")}
+            className={cn(
+              "rounded-full ease-linear duration-100 bg-transparent hover:bg-transparent hover:opacity-60"
+            )}
             iconBefore={
-              isFavorite ? (
-                <HeartIcon />
-              ) : (
-                <HeartIcon className="bg-pink-600 text-pink-600" />
-              )
+              isFavorite ? <SolidHeartIcon /> : <SolidHeartIcon color="white" />
             }
             onClick={() => {
               if (!isLogin) {
@@ -77,14 +76,16 @@ export default function FoodItem({
           defaultPrice={sortedPriceList[0]}
           secondPrice={sortedPriceList[sortedPriceList.length - 1]}
         />
-        <div className={cn("flex items-center")}>
+        <div className="flex items-center">
           <FoodRating
             rating={food.rating}
-            className={cn("mt-2", food.rating === 0 && "hidden")}
+            className={cn("mt-2 hidden", food.rating > 0 && "visible")}
           />
-          {food.tags.map((tag) => {
-            return <FoodTag key={tag} name={tag} theme="dark" />;
-          })}
+          <div className="flex flex-row gap-1">
+            {food.tags.map((tag) => {
+              return <FoodTag key={tag} name={tag} theme="dark" />;
+            })}
+          </div>
         </div>
       </div>
     </div>

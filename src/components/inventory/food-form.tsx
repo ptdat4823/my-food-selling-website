@@ -24,7 +24,7 @@ import {
 } from "./custom-input";
 import { FoodSizeList } from "./food-size-list";
 import { Button } from "../ui/button";
-import { CreateFoodAction, UpdateFoodAction } from "@/src/actions/inventory";
+import { CreateFood, UpdateFood } from "@/src/actions/food";
 
 export type FoodFormData = {
   name: string;
@@ -189,7 +189,7 @@ export const FoodForm = ({
     setIsUploadingFood(true);
 
     if (food) {
-      const res = await UpdateFoodAction(food.id, dataForm);
+      const res = await UpdateFood(food.id, dataForm);
       if (res.error) {
         showErrorToast(res.error);
       }
@@ -198,19 +198,8 @@ export const FoodForm = ({
         showSuccessToast(res.message);
       }
       setIsUploadingFood(false);
-      // await FoodService.updateFood(food.id, dataForm)
-      //   .then((result) => {
-      //     const updatedFood = FoodToReceive(result.data);
-      //     dispatch(updateFood(updatedFood));
-      //     showSuccessToast("Food updated successfully");
-      //   })
-      //   .catch((e) => console.error(e))
-      //   .finally(() => {
-      //     setIsUploadingFood(false);
-      //     closeForm();
-      //   });
     } else {
-      const res = await CreateFoodAction(dataForm);
+      const res = await CreateFood(dataForm);
       if (res.error) {
         showErrorToast(res.error);
       }
@@ -219,17 +208,6 @@ export const FoodForm = ({
         showSuccessToast(res.message);
       }
       setIsUploadingFood(false);
-      // await FoodService.createNewFood(dataForm)
-      //   .then((result) => {
-      //     const newFood = FoodToReceive(result.data);
-      //     dispatch(addFood(newFood));
-      //     showSuccessToast("New food added successfully");
-      //   })
-      //   .catch((e) => console.error(e))
-      //   .finally(() => {
-      //     setIsUploadingFood(false);
-      //     closeForm();
-      //   });
     }
   };
 
@@ -388,8 +366,6 @@ export const FoodForm = ({
               className="w-[100px] px-4 text-white"
               disabled={isUploadingFood}
               onClick={() => {
-                console.log("submitting", form.getValues());
-                console.log("submitting error", errors);
                 setIsFormSubmitted(true);
               }}
             >

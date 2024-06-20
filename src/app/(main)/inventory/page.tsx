@@ -1,12 +1,13 @@
 import InventoryDataTable from "@/src/components/inventory/datatable";
 import { Food, FoodCategory } from "@/src/models/Food";
-import { getAllCategories, getAllFood } from "./api";
 import { showErrorToast } from "@/src/components/ui/toast";
+import { GetAllFood } from "@/src/actions/food";
+import { GetAllCategories } from "@/src/actions/category";
 
 const InventoryPage = async () => {
   const [foodsResult, categoriesResult] = await Promise.allSettled([
-    getAllFood(),
-    getAllCategories(),
+    GetAllFood(),
+    GetAllCategories(),
   ]);
 
   const foods =
