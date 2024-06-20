@@ -1,5 +1,4 @@
 import Sidebar from "@/src/components/ui/sidebar";
-import { cookies } from "next/headers";
 export default async function RootLayout({
   children,
 }: Readonly<{

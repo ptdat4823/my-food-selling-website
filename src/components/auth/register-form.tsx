@@ -46,7 +46,7 @@ const RegisterForm = ({ className }: RegisterFormProps) => {
       return;
     }
 
-    //call login action
+    //call register action
     const res = await RegisterAction(data);
     if (res?.error) {
       showErrorToast(res.error);

@@ -29,24 +29,28 @@ function defaultColumn<T>(
     cell: ({ row }) => {
       const value: ReactNode = row.getValue(accessorKey);
       let formatedValue: ReactNode = "";
+      const columnDisplayDate = ["createdAt"];
+      const columnDisplayPrice = [
+        "price",
+        "total",
+        "revenue",
+        "costPrice",
+        "profit",
+      ];
       if (value instanceof Date) formatedValue = formatDate(value, "datetime");
       else if (
-        (accessorKey.toLowerCase().includes("create") ||
-          accessorKey.toLowerCase().includes("date") ||
-          accessorKey.toLowerCase().includes("time") ||
-          accessorKey.toLowerCase().includes("update")) &&
+        columnDisplayDate.includes(accessorKey) &&
         value !== null &&
         value !== undefined &&
         new Date(String(value)) instanceof Date
       ) {
-        formatedValue = format(new Date(String(value)), "MM/dd/yyyy");
+        formatedValue = formatDate(new Date(String(value)), "date");
       } else if (
         typeof value === "number" &&
-        !accessorKey.toLowerCase().includes("phone") &&
-        !accessorKey.toLowerCase().includes("phonenumber")
-      )
+        columnDisplayPrice.includes(accessorKey)
+      ) {
         formatedValue = displayNumber(value, "$");
-      else formatedValue = value;
+      } else formatedValue = value;
 
       return <p className="w-fit px-2">{formatedValue}</p>;
     },

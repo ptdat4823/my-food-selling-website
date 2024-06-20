@@ -1,26 +1,27 @@
 import InventoryDataTable from "@/src/components/inventory/datatable";
-import { Food } from "@/src/models/Food";
+import { Food, FoodCategory } from "@/src/models/Food";
+import { getAllCategories, getAllFood } from "./api";
+import { showErrorToast } from "@/src/components/ui/toast";
 
-import React from "react";
+const InventoryPage = async () => {
+  const [foodsResult, categoriesResult] = await Promise.allSettled([
+    getAllFood(),
+    getAllCategories(),
+  ]);
 
-const InventoryPage = () => {
-  const foods = [] as Food[];
+  const foods =
+    foodsResult.status === "fulfilled" ? (foodsResult.value as Food[]) : [];
+  const categories =
+    categoriesResult.status === "fulfilled"
+      ? (categoriesResult.value as FoodCategory[])
+      : [];
+
   return (
-    <div className="h-screen flex flex-col p-8 text-primary-word default-scrollbar">
+    <div className="h-screen flex flex-col p-8 text-primary-word default-scrollbar overflow-hidden">
       <div className="flex flex-row justify-between mb-4">
         <h1 className="text-4xl font-bold text-primary">Inventory</h1>
       </div>
-      <InventoryDataTable foods={foods} />
-      {/* {openNewFoodForm && (
-        <FoodForm
-          food={selectedFood}
-          categories={categories}
-          closeForm={() => {
-            setSelectedFood(undefined);
-            setOpenNewFoodForm(false);
-          }}
-        />
-      )} */}
+      <InventoryDataTable foods={foods} categories={categories} />
     </div>
   );
 };

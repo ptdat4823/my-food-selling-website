@@ -1,4 +1,4 @@
-import RegisterForm from "@/src/components/forms/register-form";
+import RegisterForm from "@/src/components/auth/register-form";
 import { cn } from "@/src/utils/func";
 import animation from "src/style/animation.module.css";
 

@@ -2,6 +2,7 @@ import type { AuthOptions } from "next-auth";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import { cookies } from "next/headers";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -10,12 +11,7 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.GG_SECRET as string,
     }),
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
       name: "credentials",
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         email: {},
         password: {},
@@ -38,6 +34,12 @@ export const authOptions: AuthOptions = {
           if (!res.ok) {
             throw new Error("Wrong email or password");
           }
+
+          const jwt = res.headers
+            .getSetCookie()[0]
+            .split("; ")[0]
+            .split("=")[1];
+          cookies().set("access-token", jwt, { httpOnly: true });
           return res.json();
         } catch (error: any) {
           throw new Error(error.message);
@@ -45,6 +47,9 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+  session: {
+    maxAge: 3600, // 1 hour
+  },
 };
 
 const handler = NextAuth(authOptions);

@@ -28,12 +28,20 @@ import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Separate } from "./separate";
 import { SidebarLink } from "./sidebar-link";
-import { showSuccessToast } from "./toast";
 
 interface Props {}
 export default function Sidebar({}: Props) {
   const { data: session } = useSession();
   if (!session) {
+    redirect("/login");
+  }
+  //check if session is expired
+  if (
+    session &&
+    session.expires &&
+    new Date(session.expires).getTime() < new Date().getTime()
+  ) {
+    signOut();
     redirect("/login");
   }
 

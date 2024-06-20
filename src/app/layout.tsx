@@ -5,6 +5,8 @@ import { Toast } from "../components/ui/toast";
 import Provider from "../components/auth/session-provider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
+import ReduxProvider from "../redux/provider";
+import { cn } from "../utils/func";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,8 +23,10 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Provider session={session}>{children}</Provider>
+      <body className={cn(inter.className, "overflow-hidden")}>
+        <Provider session={session}>
+          <ReduxProvider>{children}</ReduxProvider>
+        </Provider>
 
         <Toast />
       </body>

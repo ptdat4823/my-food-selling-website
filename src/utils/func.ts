@@ -85,10 +85,31 @@ function isValidPhoneNumberInput(phoneNumber: string): boolean {
   return regex.test(phoneNumber);
 }
 
+function removeCharNAN(str: string): string {
+  const regex = /[^0-9.]/g;
+  return str.replace(regex, "");
+}
+
+function addCommatoStringNumber(strNum: string): string {
+  // Split the value into integer and fractional parts
+  let parts = strNum.split(".");
+  let integerPart = parts[0];
+  let fractionalPart = parts.length > 1 ? parts[1] : "";
+
+  // Add commas to the integer part
+  integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  // Combine the integer and fractional parts
+  if (fractionalPart) return `${integerPart}.${fractionalPart}`;
+  else return integerPart;
+}
+
 export {
   cn,
   displayNumber,
   formatDate,
   handleFilterColumn,
   isValidPhoneNumberInput,
+  removeCharNAN,
+  addCommatoStringNumber,
 };
