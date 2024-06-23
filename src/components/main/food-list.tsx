@@ -19,7 +19,6 @@ export const FoodList = ({ foods }: { foods: Food[] }) => {
   const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
   const [favoriteFoodIds, setFavoriteFoodIds] = useState<number[]>([]);
   const isLogin = false;
-  console.log("food", foods);
 
   const handleFoodClick = (food: Food) => {
     setSelectedFood(food);

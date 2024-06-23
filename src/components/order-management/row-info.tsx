@@ -15,7 +15,7 @@ export const RowInfo = ({
         <div className="text-wrap">
           <div
             className={cn(
-              "h-fit w-full rounded-md resize-none border-0 py-1 px-2 text-primaryWord",
+              "h-fit w-full rounded-md resize-none border-0 py-1 px-2 text-primary-word",
               value && value.length > 0 ? "bg-yellow-100" : "bg-gray-200 "
             )}
           >
@@ -23,7 +23,7 @@ export const RowInfo = ({
             <br />
             <div
               className={cn(
-                value && value.length > 0 ? "" : "italic text-secondaryWord"
+                value && value.length > 0 ? "" : "italic text-secondary-word"
               )}
             >
               {value && value.length > 0

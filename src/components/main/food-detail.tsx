@@ -19,6 +19,8 @@ import { FoodProperty } from "./food-property";
 import FoodRating from "./food-rating";
 import FoodTag from "./food-tag";
 import { SolidHeartIcon } from "../icons/solid";
+import LoadingCircle from "../icons/custom/LoadingCircle/loading_circle";
+import { useState } from "react";
 
 export const FoodDetail = ({
   isOpen,
@@ -42,7 +44,7 @@ export const FoodDetail = ({
   onFoodSizeChange: (foodSize: FoodSize) => void;
   isFavorite?: boolean;
   onFavoriteChange?: (isFavorite: boolean) => void;
-  onAddToCart?: () => void;
+  onAddToCart?: () => Promise<void>;
   className?: ClassValue;
 }) => {
   const [emblaRef, emplaApi] = useEmblaCarousel({
@@ -52,6 +54,7 @@ export const FoodDetail = ({
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
     useDotButton(emplaApi);
   const isLogin = false;
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <Modal
@@ -188,11 +191,22 @@ export const FoodDetail = ({
                 />
               </div>
               <Button
-                iconAfter={<ShoppingCart className="w-4 h-4" />}
-                className="w-min justify-self-end gap-2 font-sans text-nowrap text-primaryWord bg-transparent hover:text-primary hover:bg-transparent ease-linear duration-100"
-                onClick={onAddToCart}
+                iconAfter={
+                  isLoading ? (
+                    <LoadingCircle />
+                  ) : (
+                    <ShoppingCart className="w-4 h-4" />
+                  )
+                }
+                className="w-min justify-self-end gap-2 font-sans text-nowrap text-primary-word bg-transparent hover:text-primary hover:bg-transparent ease-linear duration-100"
+                onClick={() => {
+                  if (onAddToCart) {
+                    setIsLoading(true);
+                    onAddToCart().finally(() => setIsLoading(false));
+                  }
+                }}
               >
-                Add to cart
+                {!isLoading && "Add to cart"}
               </Button>
             </ModalFooter>
           </>
@@ -218,7 +232,7 @@ const Tab = ({
   onClick?: () => void;
 }) => {
   const defaultTabStyle = "text-white bg-black hover:text-primary";
-  const selectedTabStyle = "text-primaryWord bg-white hover:text-primaryWord";
+  const selectedTabStyle = "text-primary-word bg-white hover:text-primary-word";
 
   return (
     <span

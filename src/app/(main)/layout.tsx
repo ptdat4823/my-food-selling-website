@@ -10,7 +10,6 @@ export default async function RootLayout({
 
   const carts =
     cartResults.status === "fulfilled" ? (cartResults.value as Cart[]) : [];
-  console.log("carts", carts);
 
   return (
     <div className="w-screen h-screen flex flex-row overflow-hidden">

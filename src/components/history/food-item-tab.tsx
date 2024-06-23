@@ -27,7 +27,7 @@ export const FoodItemTab = ({
   if (orderStatus === OrderStatus.CANCELLED) selectedStyle += "bg-red-500";
   if (orderStatus === OrderStatus.DELIVERED) selectedStyle += "bg-blue-500";
   const defaultStyle =
-    "flex flex-row items-center bg-gray-100 hover:bg-gray-100 text-secondaryWord hover:text-primaryWord";
+    "flex flex-row items-center bg-gray-100 hover:bg-gray-100 text-secondary-word hover:text-primary-word";
   return (
     <Button
       className={cn(

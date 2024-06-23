@@ -89,7 +89,7 @@ const statusColumn = (
                 : (value as OrderStatus)}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="font-sans bg-white text-secondaryWord">
+          <DropdownMenuContent className="font-sans bg-white text-secondary-word">
             {Object.keys(OrderStatus).map((key) => (
               <DropdownMenuCheckboxItem
                 key={key}

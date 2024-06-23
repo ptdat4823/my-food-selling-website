@@ -10,7 +10,7 @@ export const EmptyItem = () => {
         src={empty_image}
         alt="empty item image"
       />
-      <span className="text-secondaryWord text-xl">
+      <span className="text-secondary-word text-xl">
         Shopping more to find your favorite food
       </span>
     </div>

@@ -17,7 +17,7 @@ export const PayMethodButton = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "min-w-60 w-auto flex flex-row items-center justify-between px-4 py-2 gap-4 ease-linear duration-200 text-primaryWord border rounded-2xl text-md font-bold cursor-pointer disabled:cursor-default",
+          "min-w-60 w-auto flex flex-row items-center justify-between px-4 py-2 gap-4 ease-linear duration-200 text-primary-word border rounded-2xl text-md font-bold cursor-pointer disabled:cursor-default",
           selectedButton === content ? selectedStyle : defaultStyle,
           className
         )}

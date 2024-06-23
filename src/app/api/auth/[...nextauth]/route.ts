@@ -34,19 +34,21 @@ export const authOptions: AuthOptions = {
           if (!res.ok) {
             throw new Error("Wrong email or password");
           }
+          const user = await res.json();
 
           const jwt = res.headers
             .getSetCookie()[0]
             .split("; ")[0]
             .split("=")[1];
           cookies().set("access-token", jwt, { httpOnly: true });
-          return res.json();
+          return user;
         } catch (error: any) {
           throw new Error(error.message);
         }
       },
     }),
   ],
+
   session: {
     maxAge: 3600, // 1 hour
   },

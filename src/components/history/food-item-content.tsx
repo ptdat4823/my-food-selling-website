@@ -23,16 +23,16 @@ export const FoodItemContent = ({
         </div>
         <div className="relative flex-1">
           <div className="w-auto flex flex-col gap-2 justify-start">
-            <div className="w-[60vw] text-primaryWord text-2xl font-semibold capitalize truncate">
+            <div className="w-[60vw] text-primary-word text-2xl font-semibold capitalize truncate">
               {cart.food.name}
             </div>
-            <div className="w-[40vw] text-secondaryWord text-lg capitalize truncate">
+            <div className="w-[40vw] text-secondary-word text-lg capitalize truncate">
               {cart.food.description}
             </div>
             <div className="flex flex-row gap-2 justify-between">
               <FoodProperty name={cart.foodSize.name} isSelected={true} />
 
-              <span className="text-secondaryWord italic">
+              <span className="text-secondary-word italic">
                 Price:{" "}
                 <span className="w-fit text-primary font-normal">
                   {displayNumber(cart.price, "$")}
@@ -46,7 +46,7 @@ export const FoodItemContent = ({
               )}
             >
               <span className="text-cyan-500 font-semibold">Note:</span>
-              <span className="w-full text-primaryWord line-clamp-3 overflow-hidden text-ellipsis">
+              <span className="w-full text-primary-word line-clamp-3 overflow-hidden text-ellipsis">
                 {cart.note}
               </span>
             </div>

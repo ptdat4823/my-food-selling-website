@@ -1,7 +1,5 @@
 "use client";
 import Logo from "@/public/images/logo.png";
-import { LoginFormData } from "@/src/lib/form-data";
-import { loginSchema } from "@/src/lib/schema";
 import { cn } from "@nextui-org/react";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
@@ -13,6 +11,17 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separate } from "../ui/separate";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
+import { ZodType, z } from "zod";
+
+export type LoginFormData = {
+  email: string;
+  password: string;
+};
+
+export const loginSchema: ZodType<LoginFormData> = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
 
 const LoginForm = () => {
   const { data: session } = useSession();
@@ -104,7 +113,7 @@ const LoginForm = () => {
 
           <Button
             type="button"
-            className="w-full bg-white border text-primary-word gap-2"
+            className="w-full bg-white hover:bg-gray-200 border text-primary-word gap-2"
             iconBefore={<Google />}
             onClick={() =>
               signIn("google", {

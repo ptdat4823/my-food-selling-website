@@ -26,6 +26,7 @@ const config = {
         primary: "#fc8019",
         "hover-primary": "#f37000",
         secondary: "#1f1f23",
+        "hover-secondary": "#2b2b2e",
         "primary-word": "#000000",
         "secondary-word": "#777777",
         disable: "#d8d8d8",
@@ -52,10 +53,37 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        move_to_left: {
+          "0%": { transform: "translateX(0)", width: "0px", opacity: "1" },
+          "100%": {
+            transform: "translateX(-100%)",
+            width: "400px",
+            opacity: "0",
+          },
+        },
+        move_to_right: {
+          "0%": { transform: "translateX(0)", opacity: "1" },
+          "100%": {
+            transform: "translateX(100%)",
+            width: "0px",
+            opacity: "0",
+          },
+        },
+        disappear_to_left: {
+          "0%": { transform: "translateX(0)", opacity: "1" },
+          "100%": {
+            transform: "translateX(-100%)",
+            opacity: "0",
+          },
+        },
       },
+
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "row-disappear": "disappear_to_left .5s linear",
+        "col-move-to-right": "move_to_right .3s linear forwards",
+        "col-move-to-left": "move_to_left .3s linear forwards",
       },
     },
   },

@@ -37,15 +37,6 @@ export default function Sidebar({ cartQuantity }: Props) {
   if (!session) {
     redirect("/login");
   }
-  //check if session is expired
-  if (
-    session &&
-    session.expires &&
-    new Date(session.expires).getTime() < new Date().getTime()
-  ) {
-    signOut();
-    redirect("/login");
-  }
 
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -223,15 +214,17 @@ export default function Sidebar({ cartQuantity }: Props) {
               placement="right-end"
             >
               <PopoverTrigger>
-                <div className="flex flex-row gap-2 items-center hover:bg-white/10 rounded-lg py-3 pl-2 cursor-pointer shrink-0">
+                <div className="flex flex-row gap-4 items-center hover:bg-white/10 rounded-lg py-2 pl-2 cursor-pointer shrink-0">
                   <Image
                     width={400}
                     height={400}
                     src={default_user_image}
                     alt="image"
-                    className="w-[30px] h-[30px] flex-shrink-0 rounded-full object-cover overflow-hidden cursor-pointer select-none"
+                    className="w-[24px] h-[24px] flex-shrink-0 rounded-full object-cover overflow-hidden cursor-pointer select-none"
                   />
-                  <span className="font-semibold">{"Ptdat"}</span>
+                  <span className="font-semibold">
+                    {session && session.user ? session.user.name : "Ptdat"}
+                  </span>
                 </div>
               </PopoverTrigger>
               <PopoverContent className="font-sans text-primary-word select-none">
@@ -245,14 +238,16 @@ export default function Sidebar({ cartQuantity }: Props) {
                       alt="image"
                       className="w-[50px] h-[50px] flex-shrink-0 rounded-full object-cover overflow-hidden"
                     />
-                    <span className="font-semibold">{"Ptdat"}</span>
+                    <span className="font-semibold">
+                      {session && session.user ? session.user.name : "Ptdat"}
+                    </span>
                   </div>
 
                   <Separate classname="my-2" />
                   <div
                     className="flex flex-row gap-2 items-center cursor-pointer hover:bg-gray-100 rounded-lg p-2"
                     onClick={() => {
-                      router.push("/user-setting");
+                      router.push("/setting");
                       setShowPopover(false);
                     }}
                   >

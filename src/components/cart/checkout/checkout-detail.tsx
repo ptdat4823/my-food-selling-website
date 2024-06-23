@@ -31,7 +31,7 @@ const CheckoutDetail = () => {
           id="full-name"
           label="Full name"
           // placeholder={thisUser ? thisUser.address : ""}
-          labelColor="text-secondaryWord"
+          labelColor="text-secondary-word"
           className="text-primary-word"
           disabled
         />
@@ -39,15 +39,15 @@ const CheckoutDetail = () => {
           id="address"
           label="Address"
           // placeholder={thisUser ? thisUser.address : ""}
-          labelColor="text-secondaryWord"
-          className="text-primaryWord"
+          labelColor="text-secondary-word"
+          className="text-primary-word"
           disabled
         />
         <Input
           id="phone-number"
           label="Phone number"
           // placeholder={thisUser ? thisUser.phoneNumber : ""}
-          labelColor="text-secondaryWord"
+          labelColor="text-secondary-word"
           disabled
         />
       </div>
@@ -58,7 +58,7 @@ const CheckoutDetail = () => {
           id="note"
           label="Note"
           placeholder="Your note here"
-          labelColor="text-primaryWord"
+          labelColor="text-primary-word"
           className="resize-none h-24"
           // onChange={(e) => setOrderNote(e.currentTarget.value)}
         />

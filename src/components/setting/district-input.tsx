@@ -8,6 +8,8 @@ import {
 } from "@nextui-org/react";
 import { Input } from "../ui/input";
 import AddressService from "@/src/services/addressService";
+import { UseFormRegister, useFormContext } from "react-hook-form";
+import { UserSettingFormData } from "./user-info-form";
 
 interface Props {
   errorMessage?: string;
@@ -22,6 +24,7 @@ const DistrictInput = ({
   onDistrictChange,
 }: Props) => {
   const [districtNames, setDistrictNames] = useState<string[]>([]);
+  const { register } = useFormContext();
   useEffect(() => {
     const fetchData = async () => {
       const districts = await AddressService.getDistrictsByProvinceName(
@@ -34,32 +37,37 @@ const DistrictInput = ({
     fetchData();
   }, [province]);
   return (
-    <Dropdown placement="bottom-start" className="font-sans">
-      <DropdownTrigger>
-        <Input
-          id="district"
-          label="District"
-          labelColor="text-secondary-word"
-          className="text-secondary-word text-left cursor-pointer"
-          errorMessages={errorMessage}
-          value={value}
-        />
-      </DropdownTrigger>
-      <DropdownMenu className="max-h-[300px] !rounded-sm overflow-y-scroll scrollbar-hide">
-        {districtNames.map((districtName) => (
-          <DropdownItem
-            key={districtName}
-            onClick={() => {
-              if (onDistrictChange) onDistrictChange(districtName);
-            }}
-          >
-            <div className="text-primaryWord bg-transparent">
-              {districtName}
-            </div>
-          </DropdownItem>
-        ))}
-      </DropdownMenu>
-    </Dropdown>
+    <div>
+      {/* This input is a trick to active the register action */}
+      <Input className="hidden" value={value} {...register("district")} />
+      <Dropdown placement="bottom-start" className="font-sans">
+        <DropdownTrigger>
+          {/* This input inside the dropdown trigger can not active register action */}
+          <Input
+            id="district"
+            label="District"
+            labelColor="text-secondary-word"
+            className="text-secondary-word text-left cursor-pointer"
+            errorMessages={errorMessage}
+            value={value}
+          />
+        </DropdownTrigger>
+        <DropdownMenu className="max-h-[300px] !rounded-sm overflow-y-scroll scrollbar-hide">
+          {districtNames.map((districtName) => (
+            <DropdownItem
+              key={districtName}
+              onClick={() => {
+                if (onDistrictChange) onDistrictChange(districtName);
+              }}
+            >
+              <div className="text-primary-word bg-transparent">
+                {districtName}
+              </div>
+            </DropdownItem>
+          ))}
+        </DropdownMenu>
+      </Dropdown>
+    </div>
   );
 };
 

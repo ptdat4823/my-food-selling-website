@@ -1,15 +1,12 @@
 import { cn, displayNumber } from "@/src/utils/func";
 import { X } from "lucide-react";
 
-export const SummaryItem = ({
-  title,
-  quantity,
-  total,
-}: {
+interface Props {
   title: string;
   quantity?: number;
   total: number;
-}) => {
+}
+export const SummaryItem = ({ title, quantity, total }: Props) => {
   return (
     <div className="flex flex-row items-center justify-between text-nowrap">
       <div className="w-2/3 flex flex-row items-center gap-2">

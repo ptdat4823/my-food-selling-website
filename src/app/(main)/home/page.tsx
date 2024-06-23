@@ -1,5 +1,6 @@
 import { GetAllCategories } from "@/src/actions/category";
 import { GetAllFood } from "@/src/actions/food";
+import { GetInfo } from "@/src/actions/user";
 import Banners from "@/src/components/main/banners";
 import BestRatedList from "@/src/components/main/best-rated-list";
 import BestSellerList from "@/src/components/main/best-seller-list";
@@ -23,6 +24,7 @@ const HomePage = async () => {
   const getActiveFood = (foods: Food[]) => {
     return foods.filter((food) => !food.isDeleted && food.name !== null);
   };
+
   return (
     <div
       className="relative w-full h-full white-scrollbar"

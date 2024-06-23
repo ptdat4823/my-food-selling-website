@@ -1,10 +1,11 @@
 import { cn } from "@/src/utils/func";
+import { ClassValue } from "clsx";
 import React from "react";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  labelColor?: string;
+  labelColor?: ClassValue;
   errorMessages?: string;
 }
 

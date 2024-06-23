@@ -19,7 +19,6 @@ export const GetAllCarts = async () => {
 };
 
 export async function AddCart(data: Cart) {
-  console.log("data ------------ ", data);
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.NEXTAUTH_URL + "/api/cart", {
     method: "POST",
@@ -34,6 +33,45 @@ export async function AddCart(data: Cart) {
     };
   }
   revalidatePath("/(main)");
+  return {
+    message: res.statusText,
+  };
+}
+
+export async function DeleteCart(id: number) {
+  const accessToken = cookies().get("access-token")?.value;
+  const res = await fetch(process.env.NEXTAUTH_URL + `/api/cart/${id}`, {
+    method: "DELETE",
+    headers: {
+      Cookie: `access-token=${accessToken}`,
+    },
+  });
+  if (!res.ok) {
+    return {
+      error: res.statusText,
+    };
+  }
+  revalidatePath("/(main)/cart");
+  return {
+    message: res.statusText,
+  };
+}
+
+export async function UpdateCart(id: number, data: Cart) {
+  const accessToken = cookies().get("access-token")?.value;
+  const res = await fetch(process.env.NEXTAUTH_URL + `/api/cart/${id}`, {
+    method: "PUT",
+    headers: {
+      Cookie: `access-token=${accessToken}`,
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    return {
+      error: res.statusText,
+    };
+  }
+  revalidatePath("/(main)/cart");
   return {
     message: res.statusText,
   };

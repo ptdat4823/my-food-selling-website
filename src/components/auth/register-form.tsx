@@ -1,8 +1,6 @@
 "use client";
 import Logo from "@/public/images/logo.png";
 import { RegisterAction } from "@/src/actions/auth";
-import { RegisterFormData } from "@/src/lib/form-data";
-import { registerSchema } from "@/src/lib/schema";
 import { cn } from "@nextui-org/react";
 import { ClassValue } from "clsx";
 import Image from "next/image";
@@ -14,12 +12,28 @@ import { Input } from "../ui/input";
 import { Separate } from "../ui/separate";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
 import { useSession } from "next-auth/react";
+import { ZodType, z } from "zod";
 
-export interface RegisterFormProps {
-  className?: ClassValue;
-}
+export type RegisterFormData = {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
 
-const RegisterForm = ({ className }: RegisterFormProps) => {
+export const registerSchema: ZodType<RegisterFormData> = z
+  .object({
+    username: z.string().min(2, "Username must be at least 2 characters"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string(),
+    email: z.string().email(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Confirm password do not match",
+    path: ["confirmPassword"],
+  });
+
+const RegisterForm = () => {
   const { data: session } = useSession();
   if (session) {
     redirect("/home");

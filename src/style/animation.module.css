@@ -10,5 +10,48 @@
 }
 
 .fade-in {
-  animation: fadeIn 0.75s ease-in-out;
+  animation: fadeIn 0.75s ease-in-out forwards;
+}
+
+.fade-in-delay-1 {
+  animation: fadeIn 0.75s ease-in-out forwards;
+  animation-delay: 0.25s;
+}
+
+.fade-in-delay-2 {
+  animation: fadeIn 0.75s ease-in-out forwards;
+  animation-delay: 0.5s;
+}
+
+.fade-in-delay-3 {
+  animation: fadeIn 0.75s ease-in-out forwards;
+  animation-delay: 0.75s;
+}
+
+@keyframes fadeOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+}
+.fade-out {
+  animation: fadeOut 0.25s ease-in-out forwards;
+}
+
+@keyframes fade-in-right {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.fade-in-right {
+  animation: fade-in-right 0.75s ease-in-out forwards;
 }

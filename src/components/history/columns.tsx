@@ -92,7 +92,7 @@ const actionColumn = (
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="bg-white text-primaryWord font-sans z-50"
+            className="bg-white text-primary-word font-sans z-50"
           >
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem

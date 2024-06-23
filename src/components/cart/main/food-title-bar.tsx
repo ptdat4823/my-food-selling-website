@@ -1,20 +1,16 @@
 "use client";
 import { Cart } from "@/src/models/Cart";
+import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
+import cart, { setSelectedCart } from "@/src/redux/slices/cart";
 import { cn } from "@/src/utils/func";
 import { Checkbox } from "@nextui-org/react";
 import { ClassValue } from "clsx";
 
-export const FoodTitleBar = ({
-  className,
-  cartData,
-  selectedItems,
-  setSelectedItems,
-}: {
-  className?: ClassValue;
-  cartData: Cart[];
-  selectedItems: number[];
-  setSelectedItems: (selectedItems: number[]) => void;
-}) => {
+export const FoodTitleBar = ({ className }: { className?: ClassValue }) => {
+  const dispatch = useAppDispatch();
+  const selectedCart = useAppSelector((state) => state.cart.selectedCart);
+  const selectedCartIds = selectedCart.map((cart) => cart.id);
+  const cartData = useAppSelector((state) => state.cart.cartItems);
   const activeCarts = cartData.filter((cart) => !cart.foodSize.deleted);
 
   return (
@@ -27,11 +23,13 @@ export const FoodTitleBar = ({
       <Checkbox
         className="mr-2"
         isSelected={
-          selectedItems.length === activeCarts.length && activeCarts.length > 0
+          selectedCartIds.length === activeCarts.length &&
+          activeCarts.length > 0
         }
         onClick={() => {
-          if (selectedItems.length === activeCarts.length) setSelectedItems([]);
-          else setSelectedItems(activeCarts.map((item) => item.id));
+          if (selectedCartIds.length === activeCarts.length)
+            dispatch(setSelectedCart([]));
+          else dispatch(setSelectedCart(activeCarts));
         }}
       />
       <Title content="Food" className="flex-1 flex justify-start" />

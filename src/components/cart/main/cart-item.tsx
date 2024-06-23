@@ -1,13 +1,14 @@
 "use client";
 import { Cart } from "@/src/models/Cart";
-import { Checkbox, Tooltip } from "@nextui-org/react";
+import { Checkbox, Tooltip, divider } from "@nextui-org/react";
 import foodDefaultImage from "@/public/images/default_food.jpg";
 import Image from "next/image";
 import { cn, displayNumber } from "@/src/utils/func";
 import { Edit, FileText, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TextArea } from "../../ui/textarea";
 import { NumberInput } from "../../ui/number-input";
+import LoadingCircle from "../../icons/custom/LoadingCircle/loading_circle";
 
 export const CartItem = ({
   cart,
@@ -20,8 +21,8 @@ export const CartItem = ({
 }: {
   cart: Cart;
   onQuantityChange?: (value: number) => void;
-  onNoteChange?: (value: string) => void;
-  onDelete?: () => void;
+  onNoteChange?: (value: string) => Promise<void>;
+  onDelete?: () => Promise<void>;
   isSelected?: boolean;
   onSelected?: () => void;
   isOutOfStock?: boolean;
@@ -35,11 +36,17 @@ export const CartItem = ({
   const [isEdittingNote, setIsEdittingNote] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [tempCartNote, setTempCartNote] = useState(cart.note);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  window.addEventListener("click", (e) => {
-    setIsTooltipOpen(false);
-    setIsEdittingNote(false);
-  });
+  useEffect(() => {
+    if (window !== undefined) {
+      window.addEventListener("click", (e) => {
+        setIsTooltipOpen(false);
+        setIsEdittingNote(false);
+      });
+    }
+  }, []);
 
   return (
     <div
@@ -104,88 +111,110 @@ export const CartItem = ({
       <span className="w-[100px] text-center">
         {displayNumber(cart.price * cart.quantity, "$")}
       </span>
-      {isOutOfStock ? (
-        <span className="w-[50px]"></span>
-      ) : (
-        <Tooltip
-          showArrow
-          isOpen={isTooltipOpen}
-          onOpenChange={(isOpen) => {
-            if (!isEdittingNote) setIsTooltipOpen(isOpen);
-          }}
-          content={
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
+      {isOutOfStock && <span className="w-[50px]"></span>}
+      {!isOutOfStock && (
+        <>
+          {isLoading && <LoadingCircle />}
+          {!isLoading && (
+            <Tooltip
+              showArrow
+              isOpen={isTooltipOpen}
+              onOpenChange={(isOpen) => {
+                if (!isEdittingNote) setIsTooltipOpen(isOpen);
+              }}
+              content={
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  {isEdittingNote ? (
+                    <TextArea
+                      className="outline-0 rounded-lg resize-none"
+                      value={tempCartNote}
+                      onChange={(e) => setTempCartNote(e.currentTarget.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          if (onNoteChange) {
+                            setIsLoading(true);
+                            onNoteChange(tempCartNote).finally(() =>
+                              setIsLoading(false)
+                            );
+                          }
+                          setIsTooltipOpen(false);
+                          setIsEdittingNote(false);
+                        }
+                      }}
+                    />
+                  ) : (
+                    <span className="px-2">
+                      {cart.note && cart.note.length > 0
+                        ? cart.note
+                        : "Add note"}
+                    </span>
+                  )}
+                </div>
+              }
+              closeDelay={0}
+              classNames={{
+                base: [
+                  // arrow color
+                  "before:bg-cyan-500 focus-within:before:bg-cyan-500",
+                ],
+                // tooltip color
+                content: [
+                  "bg-cyan-500 text-white font-sans px-1 focus-within:bg-cyan-500",
+                ],
               }}
             >
-              {isEdittingNote ? (
-                <div className="flex flex-row items-center font-sans">
-                  <TextArea
-                    className="outline-0 rounded-lg resize-none"
-                    value={tempCartNote}
-                    onChange={(e) => setTempCartNote(e.currentTarget.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        if (onNoteChange) onNoteChange(tempCartNote);
-                        setIsTooltipOpen(false);
-                        setIsEdittingNote(false);
-                      }
-                    }}
-                  />
-                </div>
-              ) : (
-                <span className="px-2">
-                  {cart.note && cart.note.length > 0 ? cart.note : "Add note"}
-                </span>
-              )}
-            </div>
-          }
-          closeDelay={0}
-          classNames={{
-            base: [
-              // arrow color
-              "before:bg-cyan-500 focus-within:before:bg-cyan-500",
-            ],
-            // tooltip color
-            content: [
-              "bg-cyan-500 text-white font-sans px-1 focus-within:bg-cyan-500",
-            ],
-          }}
-        >
-          <span
-            className={cn(
-              "w-[50px] flex items-center justify-center opacity-0 text-primary-word group-hover:opacity-100 ease-linear duration-100 cursor-pointer",
-              isEdittingNote ? "opacity-100" : "",
-              cart.note && cart.note.length > 0 ? "opacity-100" : ""
-            )}
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsTooltipOpen(!isTooltipOpen);
-              setIsEdittingNote(!isEdittingNote);
-            }}
-          >
-            {cart.note && cart.note.length > 0 ? (
-              <FileText className="text-cyan-500" />
-            ) : (
-              <Edit />
-            )}
-          </span>
-        </Tooltip>
+              <span
+                className={cn(
+                  "w-[50px] flex items-center justify-center opacity-0 text-primary-word group-hover:opacity-100 ease-linear duration-100 cursor-pointer",
+                  isEdittingNote ? "opacity-100" : "",
+                  cart.note && cart.note.length > 0 ? "opacity-100" : ""
+                )}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsTooltipOpen(!isTooltipOpen);
+                  setIsEdittingNote(!isEdittingNote);
+                }}
+              >
+                {cart.note && cart.note.length > 0 ? (
+                  <FileText className="text-cyan-500" />
+                ) : (
+                  <Edit />
+                )}
+              </span>
+            </Tooltip>
+          )}
+        </>
       )}
 
-      <X
-        className={cn(
-          "w-[50px] text-center opacity-0 text-red-500 group-hover:opacity-100 ease-linear duration-100 cursor-pointer",
-          isEdittingNote ? "opacity-100" : ""
-        )}
-        onClick={() => {
-          setTimeout(() => {
-            if (onDelete) onDelete();
-          }, 200);
-          addAnimation();
-        }}
-      />
+      {isDeleting && (
+        <div className="w-[50px]">
+          <LoadingCircle />
+        </div>
+      )}
+      {!isDeleting && (
+        <X
+          className={cn(
+            "w-[50px] text-center opacity-0 text-red-500 group-hover:opacity-100 ease-linear duration-100 cursor-pointer",
+            isEdittingNote ? "opacity-100" : ""
+          )}
+          onClick={() => {
+            setIsDeleting(true);
+
+            setTimeout(() => {
+              if (onDelete) {
+                addAnimation();
+                onDelete().then(() => {
+                  setIsDeleting(false);
+                });
+              }
+            }, 500);
+          }}
+        />
+      )}
     </div>
   );
 };
