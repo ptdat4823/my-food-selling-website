@@ -5,6 +5,7 @@ export const orderSlice = createSlice({
   name: "order",
   initialState: {
     orders: [] as Order[],
+    currentOrder: null as Order | null,
   },
   reducers: {
     setOrders: (state, action: PayloadAction<Order[]>) => {
@@ -26,9 +27,22 @@ export const orderSlice = createSlice({
         product.id === action.payload.id ? action.payload : product
       );
     },
+    setCurrentOrder: (state, action: PayloadAction<Order | null>) => {
+      state.currentOrder = action.payload;
+    },
+    updateCurrentOrder: (state, action: PayloadAction<Order>) => {
+      state.currentOrder = { ...state.currentOrder, ...action.payload };
+    },
   },
 });
 
-export const { addOrder, addOrders, deleteOrder, setOrders, updateOrder } =
-  orderSlice.actions;
+export const {
+  addOrder,
+  addOrders,
+  deleteOrder,
+  setOrders,
+  updateOrder,
+  setCurrentOrder,
+  updateCurrentOrder,
+} = orderSlice.actions;
 export default orderSlice.reducer;

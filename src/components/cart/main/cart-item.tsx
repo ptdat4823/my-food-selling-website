@@ -114,7 +114,11 @@ export const CartItem = ({
       {isOutOfStock && <span className="w-[50px]"></span>}
       {!isOutOfStock && (
         <>
-          {isLoading && <LoadingCircle />}
+          {isLoading && (
+            <div className="w-[50px]">
+              <LoadingCircle />
+            </div>
+          )}
           {!isLoading && (
             <Tooltip
               showArrow

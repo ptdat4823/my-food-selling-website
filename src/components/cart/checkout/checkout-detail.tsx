@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../../ui/button";
 import { Pen } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -9,12 +9,37 @@ import { TextArea } from "../../ui/textarea";
 import { PayMethodButton } from "./paymethod-button";
 import Image from "next/image";
 import PayByCashImage from "@/public/images/pay_by_cash.png";
-import { PaymentMethod } from "@/src/models/Order";
+import { Order, PaymentMethod } from "@/src/models/Order";
+import { User } from "@/src/models/User";
+import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
+import { setCurrentOrder, updateCurrentOrder } from "@/src/redux/slices/order";
+import { CartsToOrder } from "@/src/convertor/orderConvertor";
 
-const CheckoutDetail = () => {
+interface Props {
+  thisUser: User;
+}
+const CheckoutDetail = ({ thisUser }: Props) => {
   const router = useRouter();
-  const [selectedPayMethod, setSelectedPayMethod] =
-    React.useState<PaymentMethod>(PaymentMethod.CASH);
+  const dispatch = useAppDispatch();
+  const selectedCart = useAppSelector((state) => state.cart.selectedCart);
+  const [selectedPayMethod, setSelectedPayMethod] = useState<PaymentMethod>(
+    PaymentMethod.CASH
+  );
+  const currentOrder = useAppSelector((state) => state.order.currentOrder);
+  const orderNote = currentOrder && currentOrder.note ? currentOrder.note : "";
+  const handleOrderNoteChange = (note: string) => {
+    if (currentOrder) {
+      dispatch(updateCurrentOrder({ ...currentOrder, note: note }));
+    } else {
+      const order: Order = CartsToOrder(
+        selectedCart,
+        selectedPayMethod,
+        note,
+        thisUser
+      );
+      dispatch(setCurrentOrder(order));
+    }
+  };
   return (
     <div className="h-fit px-2 flex flex-col gap-8">
       <div className="w-full flex flex-col gap-2">
@@ -22,15 +47,14 @@ const CheckoutDetail = () => {
           iconBefore={<Pen className="w-4 h-4" strokeWidth={2} />}
           className="self-end bg-gray-50 shadow-primaryShadow text-primary hover:bg-primary hover:text-white hover:opacity-100 ease-linear duration-100"
           onClick={() => {
-            //   setCookie("redirect", "/cart");
-            router.push("/user-setting");
+            router.push("/setting");
           }}
         />
         <Separate classname="h-[1.5px]" />
         <Input
           id="full-name"
           label="Full name"
-          // placeholder={thisUser ? thisUser.address : ""}
+          placeholder={thisUser ? thisUser.name : ""}
           labelColor="text-secondary-word"
           className="text-primary-word"
           disabled
@@ -38,7 +62,7 @@ const CheckoutDetail = () => {
         <Input
           id="address"
           label="Address"
-          // placeholder={thisUser ? thisUser.address : ""}
+          placeholder={thisUser ? thisUser.address : ""}
           labelColor="text-secondary-word"
           className="text-primary-word"
           disabled
@@ -46,7 +70,7 @@ const CheckoutDetail = () => {
         <Input
           id="phone-number"
           label="Phone number"
-          // placeholder={thisUser ? thisUser.phoneNumber : ""}
+          placeholder={thisUser ? thisUser.phoneNumber : ""}
           labelColor="text-secondary-word"
           disabled
         />
@@ -60,7 +84,8 @@ const CheckoutDetail = () => {
           placeholder="Your note here"
           labelColor="text-primary-word"
           className="resize-none h-24"
-          // onChange={(e) => setOrderNote(e.currentTarget.value)}
+          value={orderNote ? orderNote : ""}
+          onChange={(e) => handleOrderNoteChange(e.currentTarget.value)}
         />
       </div>
       <div className="w-full flex flex-col gap-2">

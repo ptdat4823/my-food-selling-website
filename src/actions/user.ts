@@ -18,7 +18,6 @@ export const GetInfo = async () => {
 
 export const UpdateInfo = async (formData: FormData) => {
   const accessToken = cookies().get("access-token")?.value;
-  console.log("formdata ------------- ", formData);
 
   try {
     const res = await fetch(process.env.BACKEND_HOST + "/api/user/me", {
@@ -51,7 +50,6 @@ export const UpdateInfo = async (formData: FormData) => {
 
 export const ChangePassword = async (formData: FormData) => {
   const accessToken = cookies().get("access-token")?.value;
-  console.log("formdata ------------- ", formData);
 
   try {
     const res = await fetch(
