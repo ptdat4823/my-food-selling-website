@@ -10,6 +10,7 @@ import FoodRating from "./food-rating";
 import FoodTag from "./food-tag";
 import { HeartIcon } from "lucide-react";
 import { SolidHeartIcon } from "../icons/solid";
+import { useSession } from "next-auth/react";
 
 export default function FoodItem({
   food,
@@ -35,7 +36,6 @@ export default function FoodItem({
   };
 
   const sortedPriceList = getMinAndMaxPrice(food);
-  const isLogin = false;
 
   return (
     <div
@@ -63,10 +63,6 @@ export default function FoodItem({
               isFavorite ? <SolidHeartIcon /> : <SolidHeartIcon color="white" />
             }
             onClick={() => {
-              if (!isLogin) {
-                showDefaultToast("Please login to add your favorite food");
-                return;
-              }
               if (onFavoriteChange) onFavoriteChange(food.id);
             }}
           />

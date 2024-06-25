@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { Cart } from "../models/Cart";
+import { NextResponse } from "next/server";
 
 export const GetAllCarts = async () => {
   const accessToken = cookies().get("access-token")?.value;
@@ -12,10 +13,17 @@ export const GetAllCarts = async () => {
       Cookie: `access-token=${accessToken}`,
     },
     credentials: "include",
+  }).catch(() => {
+    return NextResponse.json(
+      {},
+      { status: 500, statusText: "Internal Server Error" }
+    );
   });
-  revalidatePath("/(main)");
-  const data = await res.json();
-  return data;
+  if (res.ok) {
+    revalidatePath("/(main)");
+    return await res.json();
+  }
+  return [];
 };
 
 export async function AddCart(data: Cart) {

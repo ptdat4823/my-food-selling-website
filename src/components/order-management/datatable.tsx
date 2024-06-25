@@ -1,16 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { CustomDatatable } from "../table/custom_datatable";
+import { UpdateOrder } from "@/src/actions/order";
 import { Order, OrderStatus } from "@/src/models/Order";
+import { formatDate, handleFilterColumn } from "@/src/utils/func";
+import { useEffect, useState } from "react";
+import { CustomDatatable } from "../table/custom_datatable";
+import { showErrorToast, showSuccessToast } from "../ui/toast";
 import {
   orderColumnTitles,
   orderDefaultVisibilityState,
   orderTableColumns,
 } from "./columns";
 import { OrderDetailTab } from "./order-detail-tab";
-import OrderService from "@/src/services/orderService";
-import { OrderToReceive } from "@/src/convertor/orderConvertor";
-import { formatDate, handleFilterColumn } from "@/src/utils/func";
+import { notFound } from "next/navigation";
 
 interface Props {
   orders: Order[];
@@ -23,21 +24,18 @@ export const OrderManagementDataTable = ({ orders }: Props) => {
     .map((key) => key);
 
   const onStatusChange = async (id: number, status: OrderStatus) => {
-    // setRowUpdating([...rowUpdating, id]);
-    // await OrderService.UpdateOrder(id, status)
-    //   .then((res) => {
-    //     const updatedOrder = OrderToReceive(res.data);
-    //     const newData = data.map((order) =>
-    //       order.id === updatedOrder.id ? updatedOrder : order
-    //     );
-    //     dispatch(setOrders(newData));
-    //   })
-    //   .catch((err) => {
-    //     showErrorToast(err.message);
-    //   })
-    //   .finally(() => {
-    //     setRowUpdating(rowUpdating.filter((rowId) => rowId !== id));
-    //   });
+    setRowUpdating([...rowUpdating, id]);
+    const orderToUpdate = orders.find((order) => order.id === id);
+    if (!orderToUpdate) return;
+    const res = await UpdateOrder(id, { ...orderToUpdate, status }).finally(
+      () => setRowUpdating(rowUpdating.filter((rowId) => rowId !== id))
+    );
+    if (res.error) {
+      showErrorToast(res.error);
+    }
+    if (res.message) {
+      showSuccessToast(res.message);
+    }
   };
 
   useEffect(() => {
@@ -102,7 +100,7 @@ export const OrderManagementDataTable = ({ orders }: Props) => {
 
   return (
     <CustomDatatable
-      data={orders}
+      data={filteredData}
       columns={orderTableColumns(rowUpdating, onStatusChange)}
       columnTitles={orderColumnTitles}
       infoTabs={[
@@ -119,7 +117,7 @@ export const OrderManagementDataTable = ({ orders }: Props) => {
         filterOptionKeys: filterOptionKeys,
         showDataTableViewOptions: true,
         showRowSelectedCounter: true,
-        //   onFilterChange: handleFilterChange,
+        onFilterChange: handleFilterChange,
         rowColorDependence: {
           key: "status",
           condition: [

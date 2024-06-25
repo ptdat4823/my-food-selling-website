@@ -23,7 +23,9 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   return (
     <html lang="en">
-      <body className={cn(inter.className, "overflow-hidden")}>
+      <body
+        className={cn(inter.className, "overflow-x-hidden default-scrollbar")}
+      >
         <Provider session={session}>
           <ReduxProvider>{children}</ReduxProvider>
         </Provider>

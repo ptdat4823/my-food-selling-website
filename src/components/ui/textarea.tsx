@@ -5,15 +5,26 @@ export interface TextAreaProps
   extends React.InputHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   labelColor?: string;
+  errorMessages?: string;
 }
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   (
-    { className, type, name, id, placeholder, label, labelColor, ...props },
+    {
+      className,
+      type,
+      name,
+      id,
+      placeholder,
+      label,
+      labelColor,
+      errorMessages,
+      ...props
+    },
     ref
   ) => {
     return (
-      <div className="w-full flex flex-col">
+      <div className="relative w-full flex flex-col">
         <label
           htmlFor={id}
           className={cn(
@@ -35,6 +46,9 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           )}
           {...props}
         />
+        <span className="absolute -bottom-5 text-red-500 text-xs">
+          {errorMessages ? errorMessages : ""}
+        </span>
       </div>
     );
   }

@@ -1,8 +1,5 @@
-import { ClassValue } from "clsx";
-import Image from "next/image";
-import React, { ReactNode } from "react";
-import { Checkbox } from "@nextui-org/react";
 import { cn } from "@/src/utils/func";
+import React, { ReactNode } from "react";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

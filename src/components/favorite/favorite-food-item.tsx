@@ -1,11 +1,12 @@
 import { Food } from "@/src/models/Food";
-import FoodImageFrame from "../main/food-image-frame";
 import { cn } from "@/src/utils/func";
-import { Button } from "../ui/button";
-import { HeartIcon } from "lucide-react";
+import { SolidHeartIcon } from "../icons/solid";
+import FoodImageFrame from "../main/food-image-frame";
 import { FoodPrice } from "../main/food-price";
 import FoodRating from "../main/food-rating";
 import FoodTag from "../main/food-tag";
+import { Button } from "../ui/button";
+import { HeartIcon } from "lucide-react";
 
 export default function FavouriteFoodItem({
   food,
@@ -18,7 +19,7 @@ export default function FavouriteFoodItem({
   className?: string;
   onClick?: () => void;
   isFavorite?: boolean;
-  onFavoriteChange?: (isFavorite: boolean) => void;
+  onFavoriteChange?: (id: number) => void;
 }) {
   const getMinAndMaxPrice = (food: Food) => {
     const tempSortedPriceList = food.foodSizes
@@ -35,27 +36,29 @@ export default function FavouriteFoodItem({
   return (
     <div
       className={cn(
-        "w-full h-min flex flex-col rounded overflow-hidden shadow-lg",
+        "w-full h-min flex flex-col rounded overflow-hidden shadow-lg bg-white/70",
         className
       )}
     >
       <div className="w-full h-40 overflow-hidden cursor-pointer">
-        <FoodImageFrame food={food} />
+        <FoodImageFrame food={food} onClick={onClick} />
       </div>
       <div className="flex flex-col m-2 gap-2">
         <div className="w-full flex flex-row items-center justify-between">
           <span className="font-semibold">{food.name}</span>
           <Button
-            className={cn("rounded-full ease-linear duration-100")}
+            className={cn(
+              "rounded-full ease-linear duration-100 bg-transparent hover:bg-transparent hover:opacity-60"
+            )}
             iconBefore={
               isFavorite ? (
-                <HeartIcon />
+                <SolidHeartIcon color="pink" />
               ) : (
-                <HeartIcon className="bg-pink-600 text-pink-600" />
+                <SolidHeartIcon color="pink" />
               )
             }
             onClick={() => {
-              if (onFavoriteChange) onFavoriteChange(!isFavorite);
+              if (onFavoriteChange) onFavoriteChange(food.id);
             }}
           />
         </div>

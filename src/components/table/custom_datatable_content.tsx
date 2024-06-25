@@ -39,7 +39,7 @@ export default function CustomDataTableContent<TData>({
   rowColorDependence,
 }: CustomDataTableProps<TData>) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <div className="rounded-md border">
         <Table>
           <TableHeader>

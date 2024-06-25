@@ -19,8 +19,10 @@ import { FoodProperty } from "./food-property";
 import FoodRating from "./food-rating";
 import FoodTag from "./food-tag";
 import { SolidHeartIcon } from "../icons/solid";
-import LoadingCircle from "../icons/custom/LoadingCircle/loading_circle";
+import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 import { useState } from "react";
+import { CommentSection } from "./comment-section";
+import { User } from "@/src/models/User";
 
 export const FoodDetail = ({
   isOpen,
@@ -33,6 +35,7 @@ export const FoodDetail = ({
   isFavorite = false,
   onFavoriteChange,
   onAddToCart,
+  user,
   className,
 }: {
   isOpen: boolean;
@@ -43,8 +46,9 @@ export const FoodDetail = ({
   selectedSize: FoodSize;
   onFoodSizeChange: (foodSize: FoodSize) => void;
   isFavorite?: boolean;
-  onFavoriteChange?: (isFavorite: boolean) => void;
+  onFavoriteChange?: (id: number) => void;
   onAddToCart?: () => Promise<void>;
+  user: User;
   className?: ClassValue;
 }) => {
   const [emblaRef, emplaApi] = useEmblaCarousel({
@@ -70,8 +74,11 @@ export const FoodDetail = ({
       <ModalContent>
         {(onClose) => (
           <>
-            <div className="w-full overflow-hidden rounded-md" ref={emblaRef}>
-              <div className="w-full flex items-start">
+            <div
+              className="w-full h-[65vh] overflow-hidden rounded-md"
+              ref={emblaRef}
+            >
+              <div className="w-full h-full flex items-start">
                 <div
                   className="flex-[0_0_100%] overflow-y-scroll scrollbar scrollbar-hide h-[60vh] pt-2"
                   draggable={false}
@@ -99,8 +106,7 @@ export const FoodDetail = ({
                                   return;
                                 }
                               }
-                              if (onFavoriteChange)
-                                onFavoriteChange(!isFavorite);
+                              if (onFavoriteChange) onFavoriteChange(food.id);
                             }}
                           />
                         </div>
@@ -169,9 +175,13 @@ export const FoodDetail = ({
                     <p>{food.description}</p>
                   </ModalBody>
                 </div>
-                {/* <div className="flex-[0_0_100%] overflow-y-scroll font-sans pt-4">
-                    <CommentSection foodId={food.id} hasPurchased={food.purchased} />
-                  </div> */}
+                <div className="flex-[0_0_100%] h-full default-scrollbar font-sans pt-4">
+                  <CommentSection
+                    foodId={food.id}
+                    hasPurchased={food.purchased}
+                    user={user}
+                  />
+                </div>
               </div>
             </div>
 

@@ -11,7 +11,11 @@ import { Button } from "../ui/button";
 import { Order, OrderStatus } from "@/src/models/Order";
 import { cn, displayNumber } from "@/src/utils/func";
 import { User } from "@/src/models/User";
-import { defaultColumn } from "../table/my_table_default_column";
+import {
+  defaultColumn,
+  defaultIndexColumn,
+  defaultSelectColumn,
+} from "../table/my_table_default_column";
 
 export const orderColumnTitles = {
   id: "Order ID",
@@ -215,7 +219,7 @@ export const orderTableColumns = (
   rowUpdating: number[],
   onStatusChange: (id: number, status: OrderStatus) => Promise<void>
 ): ColumnDef<Order>[] => {
-  const columns: ColumnDef<Order>[] = [];
+  const columns: ColumnDef<Order>[] = [defaultIndexColumn<Order>()];
 
   for (let key in orderColumnTitles) {
     let col: ColumnDef<Order>;

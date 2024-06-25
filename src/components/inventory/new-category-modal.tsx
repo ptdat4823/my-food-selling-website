@@ -12,7 +12,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
-import LoadingCircle from "../icons/custom/LoadingCircle/loading_circle";
+import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { showErrorToast } from "../ui/toast";

@@ -9,6 +9,10 @@ import {
 import { Order, OrderStatus } from "@/src/models/Order";
 import { formatDate, handleFilterColumn } from "@/src/utils/func";
 import { FoodDetailTab } from "./food-detail-tab";
+import { ConfirmDialog, useConfirmDialog } from "../ui/confirm-dialog";
+import { UpdateOrder } from "@/src/actions/order";
+import { showErrorToast, showSuccessToast } from "../ui/toast";
+import { RateForm } from "./rate-form";
 
 interface Props {
   orders: Order[];
@@ -19,9 +23,35 @@ const HistoryDataTable = ({ orders }: Props) => {
     .filter((key) => key !== "images")
     .map((key) => key);
   const [rowUpdating, setRowUpdating] = useState<number[]>([]);
+  const [orderToRate, setOrderToRate] = useState<Order | undefined>();
+
+  const { isOpen, setOpen } = useConfirmDialog();
+  const [dataStatusChange, setDataStatusChange] = useState<{
+    id: number;
+    status: OrderStatus;
+  }>();
   const handleConfirmBeforeStatusChange = (id: number, status: OrderStatus) => {
-    // setDataStatusChange({ id, status });
-    // setOpen(true);
+    setDataStatusChange({ id, status });
+    setOpen(true);
+  };
+
+  const handleRateOrder = (food: Order) => {
+    setOrderToRate(food);
+  };
+
+  const onStatusChange = async (id: number, status: OrderStatus) => {
+    setRowUpdating([...rowUpdating, id]);
+    const orderToUpdate = orders.find((order) => order.id === id);
+    if (!orderToUpdate) return;
+    const res = await UpdateOrder(id, { ...orderToUpdate, status }).finally(
+      () => setRowUpdating(rowUpdating.filter((rowId) => rowId !== id))
+    );
+    if (res.error) {
+      showErrorToast(res.error);
+    }
+    if (res.message) {
+      showSuccessToast(res.message);
+    }
   };
 
   useEffect(() => {
@@ -83,46 +113,70 @@ const HistoryDataTable = ({ orders }: Props) => {
     const filteredData = Array.from(filteredAllTableData);
     return filteredData;
   };
+
   return (
-    <CustomDatatable
-      data={orders}
-      columns={orderTableColumns(rowUpdating, handleConfirmBeforeStatusChange)}
-      columnTitles={orderColumnTitles}
-      infoTabs={[
-        {
-          render(row, setShowTabs) {
-            return (
-              <FoodDetailTab
-                row={row}
-                //   setOrderToRate={handleRateOrder}
-                setShowTabs={setShowTabs}
-              />
-            );
-          },
-          tabName: "Order details",
-        },
-      ]}
-      config={{
-        defaultVisibilityState: orderDefaultVisibilityState,
-        showFilterButton: true,
-        filterOptionKeys: filterOptionKeys,
-        showDataTableViewOptions: true,
-        showRowSelectedCounter: true,
-        onFilterChange: handleFilterChange,
-        rowColorDependence: {
-          key: "status",
-          condition: [
-            { value: OrderStatus.PENDING, borderColor: "border-yellow-400" },
-            { value: OrderStatus.ACCEPTED, borderColor: "border-green-400" },
-            { value: OrderStatus.DELIVERED, borderColor: "border-blue-400" },
-            {
-              value: OrderStatus.CANCELLED,
-              borderColor: "border-red-400",
+    <>
+      <CustomDatatable
+        data={filteredData}
+        columns={orderTableColumns(
+          rowUpdating,
+          handleConfirmBeforeStatusChange
+        )}
+        columnTitles={orderColumnTitles}
+        infoTabs={[
+          {
+            render(row, setShowTabs) {
+              return (
+                <FoodDetailTab
+                  row={row}
+                  setOrderToRate={handleRateOrder}
+                  setShowTabs={setShowTabs}
+                />
+              );
             },
-          ],
-        },
-      }}
-    />
+            tabName: "Order details",
+          },
+        ]}
+        config={{
+          defaultVisibilityState: orderDefaultVisibilityState,
+          showFilterButton: true,
+          filterOptionKeys: filterOptionKeys,
+          showDataTableViewOptions: true,
+          showRowSelectedCounter: true,
+          onFilterChange: handleFilterChange,
+          rowColorDependence: {
+            key: "status",
+            condition: [
+              { value: OrderStatus.PENDING, borderColor: "border-yellow-400" },
+              { value: OrderStatus.ACCEPTED, borderColor: "border-green-400" },
+              { value: OrderStatus.DELIVERED, borderColor: "border-blue-400" },
+              {
+                value: OrderStatus.CANCELLED,
+                borderColor: "border-red-400",
+              },
+            ],
+          },
+        }}
+      />
+      <ConfirmDialog
+        isOpen={isOpen}
+        onOpenChange={setOpen}
+        title="Cancel order"
+        content="Are you sure you want to cancel this order ?"
+        onAccept={() => {
+          setOpen(false);
+          if (dataStatusChange)
+            onStatusChange(dataStatusChange.id, dataStatusChange.status);
+        }}
+        onCancel={() => setOpen(false)}
+      />
+      {orderToRate && (
+        <RateForm
+          order={orderToRate}
+          closeForm={() => setOrderToRate(undefined)}
+        />
+      )}
+    </>
   );
 };
 

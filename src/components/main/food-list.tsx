@@ -9,19 +9,28 @@ import { useSession } from "next-auth/react";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
 import { Cart } from "@/src/models/Cart";
 import { AddCart } from "@/src/actions/cart";
+import { ChangeStateFavouriteFood } from "@/src/actions/food";
+import { User } from "@/src/models/User";
 
-export const FoodList = ({ foods }: { foods: Food[] }) => {
+export const FoodList = ({
+  foods,
+  favoriteFoodIds,
+  user,
+}: {
+  foods: Food[];
+  favoriteFoodIds: number[];
+  user: User;
+}) => {
   const { data: session } = useSession();
   const [emblaRef] = useEmblaCarousel({}, [Autoplay()]);
   const [isOpen, setOpen] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food>();
   const [selectedSize, setSelectedSize] = useState<FoodSize>();
   const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
-  const [favoriteFoodIds, setFavoriteFoodIds] = useState<number[]>([]);
-  const isLogin = false;
 
   const handleFoodClick = (food: Food) => {
     setSelectedFood(food);
+    setSelectedFoodQuantity(1);
     if (selectedFood !== food) setSelectedSize(food.foodSizes[0]);
     setOpen(!isOpen);
   };
@@ -49,23 +58,15 @@ export const FoodList = ({ foods }: { foods: Food[] }) => {
       setOpen(!isOpen);
     }
     setOpen(!isOpen);
-    // await CartService.AddCart(newCartItem)
-    //   .then((res) => {
-    //     console.log(res);
-    //     dispatch(addCartItem(res.data));
-    //     showSuccessToast("Added to cart successfully");
-    //     setOpen(!isOpen);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     showErrorToast("Failed to add to cart");
-    //   });
   };
   const handleFoodSizeChange = (foodSize: FoodSize) => {
     if (selectedSize !== foodSize) setSelectedSize(foodSize);
   };
-  const handleFavoriteFoodIdsChange = (foodId: number) => {
-    console.log(foodId);
+  const handleFavoriteFoodIdsChange = async (id: number) => {
+    const res = await ChangeStateFavouriteFood(id);
+    if (res.error) {
+      showErrorToast(res.error);
+    }
   };
 
   return (
@@ -88,17 +89,13 @@ export const FoodList = ({ foods }: { foods: Food[] }) => {
             onOpenChange={() => setOpen(!isOpen)}
             food={selectedFood}
             foodQuantity={selectedFoodQuantity}
-            onFoodQuantityChange={(quantity: number) =>
-              setSelectedFoodQuantity(quantity)
-            }
+            onFoodQuantityChange={setSelectedFoodQuantity}
             selectedSize={selectedSize}
-            onFoodSizeChange={(foodSize: any) => handleFoodSizeChange(foodSize)}
+            onFoodSizeChange={handleFoodSizeChange}
             isFavorite={favoriteFoodIds.includes(selectedFood.id)}
-            // onFavoriteChange={(isFavorite: boolean) =>
-            //   onFavoriteFoodIdsChange &&
-            //   onFavoriteFoodIdsChange(selectedFood.id)
-            // }
+            onFavoriteChange={handleFavoriteFoodIdsChange}
             onAddToCart={() => handleAddToCart(selectedFood)}
+            user={user}
           />
         )}
       </div>

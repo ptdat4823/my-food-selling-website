@@ -20,7 +20,10 @@ const config = {
     },
     extend: {
       backgroundImage: {
-        "auth-bg": "url('/images/auth-bg.jpg')",
+        auth: "url('/images/auth-bg.jpg')",
+        main: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8) ), url('/images/bg-main-page.jpg')",
+        favourite:
+          "linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4) ), url('/images/bg-favourite.jpg')",
       },
       colors: {
         primary: "#fc8019",
@@ -34,6 +37,11 @@ const config = {
         "momo-border": "#d82d8b",
         "momo-bg": "#fff0f6",
         "sidebar-bg": "#12192c",
+      },
+      boxShadow: {
+        "report-card":
+          "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+        "primary-shadow": "0 0 45px -15px rgba(0,0,0,0.3)",
       },
       fontFamily: {
         "web-name": [

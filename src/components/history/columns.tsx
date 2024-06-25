@@ -15,7 +15,10 @@ import { cn, displayNumber } from "@/src/utils/func";
 import { Button } from "../ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { showSuccessToast } from "../ui/toast";
-import { defaultColumn } from "../table/my_table_default_column";
+import {
+  defaultColumn,
+  defaultIndexColumn,
+} from "../table/my_table_default_column";
 
 export const orderColumnTitles = {
   id: "Order ID",
@@ -85,7 +88,7 @@ const actionColumn = (
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="bg-transparent hover:bg-gray-200 hover:opacity-100 text-black">
+            <Button className="w-6 h-6 p-0 bg-transparent hover:bg-gray-200 hover:opacity-100 text-black">
               <span className="sr-only">See actions</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
@@ -142,7 +145,7 @@ export const orderTableColumns = (
   rowUpdating: number[],
   onStatusChange: (id: number, status: OrderStatus) => void
 ): ColumnDef<Order>[] => {
-  const columns: ColumnDef<Order>[] = [];
+  const columns: ColumnDef<Order>[] = [defaultIndexColumn<Order>()];
 
   for (let key in orderColumnTitles) {
     let col: ColumnDef<Order>;

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 export const GetAllCategories = async () => {
   const accessToken = cookies().get("access-token")?.value;
@@ -11,9 +12,14 @@ export const GetAllCategories = async () => {
       Cookie: `access-token=${accessToken}`,
     },
     credentials: "include",
+  }).catch(() => {
+    return NextResponse.json(
+      {},
+      { status: 500, statusText: "Internal Server Error" }
+    );
   });
-  const data = await res.json();
-  return data;
+  if (res.ok) return await res.json();
+  return [];
 };
 
 export async function CreateCategory(formData: FormData) {

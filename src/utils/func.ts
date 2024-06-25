@@ -104,6 +104,35 @@ function addCommatoStringNumber(strNum: string): string {
   else return integerPart;
 }
 
+const getAllMonthLabels = (fromMonth: number = 1, toMonth: number = 12) => {
+  const monthLabels: string[] = [];
+  Array.from({ length: toMonth - fromMonth + 1 }, (_, i) => {
+    monthLabels.push(format(new Date(0, i + fromMonth - 1), "MMM"));
+  });
+  return monthLabels;
+};
+
+const getMonthLabel = (month: number) => {
+  return format(new Date(0, month - 1), "MMMM");
+};
+
+const getColorList = () => {
+  //return some main colors that easy to see
+  return [
+    "#fcd34d",
+    "#fca5a5",
+    "#fdba74",
+    "#bef264",
+    "#86efac",
+    "#67e8f9",
+    "#5eead4",
+    "#c4b5fd",
+    "#a5b4fc",
+    "#fda4af",
+    "#f0abfc",
+  ];
+};
+
 export {
   cn,
   displayNumber,
@@ -112,4 +141,7 @@ export {
   isValidPhoneNumberInput,
   removeCharNAN,
   addCommatoStringNumber,
+  getColorList,
+  getMonthLabel,
+  getAllMonthLabels,
 };

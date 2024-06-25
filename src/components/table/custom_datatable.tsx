@@ -130,7 +130,7 @@ export function CustomDatatable<TData>({
     <div ref={tableContainerRef} className="w-full space-y-2">
       <div
         className={cn(
-          "flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between lg:gap-0",
+          "flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-0",
           config.className
         )}
       >

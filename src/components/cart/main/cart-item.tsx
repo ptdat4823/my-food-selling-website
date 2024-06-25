@@ -8,7 +8,7 @@ import { Edit, FileText, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { TextArea } from "../../ui/textarea";
 import { NumberInput } from "../../ui/number-input";
-import LoadingCircle from "../../icons/custom/LoadingCircle/loading_circle";
+import LoadingCircle from "../../icons/custom-with-css/LoadingCircle/loading_circle";
 
 export const CartItem = ({
   cart,

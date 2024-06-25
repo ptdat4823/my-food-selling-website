@@ -19,7 +19,7 @@ import {
   showSuccessToast,
 } from "../ui/toast";
 import { UserToUpdate } from "@/src/convertor/userConvertor";
-import LoadingCircle from "../icons/custom/LoadingCircle/loading_circle";
+import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 
 export type UserSettingFormData = {
   name: string;

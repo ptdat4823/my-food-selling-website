@@ -12,7 +12,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-screen h-screen bg-auth-bg bg-cover bg-center">
+    <div className="w-screen h-screen bg-auth bg-cover bg-center">
       {children}
     </div>
   );
