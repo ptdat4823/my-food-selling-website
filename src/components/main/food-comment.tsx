@@ -1,13 +1,13 @@
 "use client";
 
+import { DeleteComment } from "@/src/actions/food";
 import { Comment } from "@/src/models/Comment";
 import { cn } from "@/src/utils/func";
-import { StarsIcon } from "../icons/normal-custom/stars-icon";
-import { Button } from "../ui/button";
-import { Pen, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useState } from "react";
 import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
-import { DeleteComment } from "@/src/actions/food";
+import { StarsIcon } from "../icons/normal-custom/stars-icon";
+import { Button } from "../ui/button";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
 
 export const FoodComment = ({
@@ -69,17 +69,19 @@ export const FoodComment = ({
         </div>
       </div>
 
-      <Button
-        className="absolute top-2 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 opacity-0 pointer-events-none -translate-y-2 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0 ease-linear duration-200"
-        iconAfter={
-          isDeleting ? (
-            <LoadingCircle />
-          ) : (
-            <X className="w-4 h-4 text-red-400" />
-          )
-        }
-        onClick={handleDeleteComment}
-      />
+      {isFromUser && (
+        <Button
+          className="absolute top-2 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 opacity-0 pointer-events-none -translate-y-2 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0 ease-linear duration-200"
+          iconAfter={
+            isDeleting ? (
+              <LoadingCircle />
+            ) : (
+              <X className="w-4 h-4 text-red-400" />
+            )
+          }
+          onClick={handleDeleteComment}
+        />
+      )}
     </div>
   );
 };

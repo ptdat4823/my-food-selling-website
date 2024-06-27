@@ -1,3 +1,8 @@
+import {
+  HasAccessToken,
+  LoginWithGoogle,
+  RegisterWithGoogle,
+} from "@/src/actions/auth";
 import type { AuthOptions } from "next-auth";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -50,7 +55,24 @@ export const authOptions: AuthOptions = {
   ],
 
   session: {
+    strategy: "jwt",
     maxAge: 3600, // 1 hour
+  },
+
+  callbacks: {
+    async signIn({ user }) {
+      if (!user.email) return false;
+      if (!user.name) return false;
+
+      const hasAccessToken = await HasAccessToken();
+      if (hasAccessToken) return true;
+
+      const email = user.email;
+      const name = user.name;
+      await RegisterWithGoogle(name, email);
+      await LoginWithGoogle(email);
+      return true;
+    },
   },
 };
 

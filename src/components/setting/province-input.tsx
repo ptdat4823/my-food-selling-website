@@ -1,15 +1,14 @@
 "use client";
+import AddressService from "@/src/services/addressService";
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/react";
-import { Input } from "../ui/input";
-import AddressService from "@/src/services/addressService";
-import { UseFormRegister, useFormContext } from "react-hook-form";
-import { UserSettingFormData } from "./user-info-form";
 import { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
+import { Input } from "../ui/input";
 
 interface Props {
   errorMessage?: string;

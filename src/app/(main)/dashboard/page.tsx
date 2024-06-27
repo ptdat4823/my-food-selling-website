@@ -9,9 +9,12 @@ import {
   GetTopFoodByOrder,
   GetTopFoodByRevenue,
 } from "@/src/actions/dashboard";
+import { GetInfo } from "@/src/actions/user";
 import MainDashboard from "@/src/components/dashboard/main/main-dashboard";
 import { ToFoodReport, ToMonthlyReport } from "@/src/convertor/reportConvertor";
 import { FoodReport, MonthlyReport } from "@/src/models/Report";
+import { User } from "@/src/models/User";
+import { notFound } from "next/navigation";
 
 export default async function DashboardPage() {
   const [
@@ -24,6 +27,7 @@ export default async function DashboardPage() {
     customerTransactionReportRes,
     topFoodByRevenueReportRes,
     topFoodByOrderReportRes,
+    userResults,
   ] = await Promise.allSettled([
     GetOrderByMonth("6-month"),
     GetCompletedOrderByMonth("6-month"),
@@ -34,6 +38,7 @@ export default async function DashboardPage() {
     GetCustomerTransactionByMonth("6-month"),
     GetTopFoodByRevenue("6-month"),
     GetTopFoodByOrder("6-month"),
+    GetInfo(),
   ]);
 
   const defaultMonthlyReport: MonthlyReport = {
@@ -80,6 +85,10 @@ export default async function DashboardPage() {
     topFoodByOrderReportRes.status === "fulfilled"
       ? ToFoodReport(topFoodByOrderReportRes.value)
       : defaultFoodReport;
+
+  const user =
+    userResults.status === "fulfilled" ? (userResults.value as User) : null;
+  if (!user || !user.isAdmin) return notFound();
 
   return (
     <MainDashboard

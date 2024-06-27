@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { Feedback, Order } from "../models/Order";
 import { NextResponse } from "next/server";
@@ -10,7 +10,6 @@ export const CreateOrder = async (order: Order) => {
 
   try {
     const res = await fetch(process.env.BACKEND_HOST + "/api/orders", {
-      cache: "no-cache",
       method: "POST",
       headers: {
         Cookie: `access-token=${accessToken}`,
@@ -41,7 +40,6 @@ export const CreateOrder = async (order: Order) => {
 export const GetAllOrders = async () => {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.BACKEND_HOST + "/api/orders", {
-    cache: "no-cache",
     method: "GET",
     headers: {
       Cookie: `access-token=${accessToken}`,
@@ -66,7 +64,6 @@ export const UpdateOrder = async (id: number, order: Order) => {
 
   try {
     const res = await fetch(process.env.BACKEND_HOST + `/api/orders/${id}`, {
-      cache: "no-cache",
       method: "PUT",
       headers: {
         Cookie: `access-token=${accessToken}`,
@@ -101,7 +98,6 @@ export const RateOrder = async (id: number, feedback: Feedback) => {
     const res = await fetch(
       process.env.BACKEND_HOST + `/api/orders/${id}/feedback`,
       {
-        cache: "no-cache",
         method: "POST",
         headers: {
           Cookie: `access-token=${accessToken}`,

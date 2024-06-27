@@ -13,11 +13,6 @@ export const FoodTitleBar = ({ className }: { className?: ClassValue }) => {
   const cartData = useAppSelector((state) => state.cart.cartItems);
   const activeCarts = cartData.filter((cart) => !cart.foodSize.deleted);
 
-  console.log("selectedCart", selectedCart);
-  console.log("selectedCartIds", selectedCartIds);
-  console.log("cartData", cartData);
-  console.log("activeCarts", activeCarts);
-
   return (
     <div
       className={cn(

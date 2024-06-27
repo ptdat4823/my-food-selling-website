@@ -28,43 +28,50 @@ import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Separate } from "./separate";
 import { SidebarLink } from "./sidebar-link";
+import { useTheme } from "next-themes";
+import { Button } from "./button";
+import SunIcon from "../icons/normal-custom/sun-icon";
+import NightIcon from "../icons/normal-custom/night-icon";
+import { LogOutAction } from "@/src/actions/auth";
+import { showErrorToast } from "./toast";
+import { User } from "@/src/models/User";
 
 interface Props {
   cartQuantity: number;
   favouriteQuantity: number;
+  user: User | null;
 }
-export default function Sidebar({ cartQuantity, favouriteQuantity }: Props) {
+export default function Sidebar({
+  cartQuantity,
+  favouriteQuantity,
+  user,
+}: Props) {
   const { data: session } = useSession();
   if (!session) {
     redirect("/login");
   }
 
+  const { resolvedTheme, theme, setTheme } = useTheme();
+
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  // const isLogin = useAppSelector((state) => state.profile.isLogin);
-  // const cart = useAppSelector((state) => state.cart.cartItems);
   const [showPopover, setShowPopover] = useState(false);
-  // const [isLoggingOut, setIsLoggingOut] = useState(false);
-  // const handleLogout = async () => {
-  //   setIsLoggingOut(true);
-  //   await AuthService.logOut()
-  //     .then(() => {
-  //       dispatch(setProfile(null));
-  //       showSuccessToast("Logout successfully");
-  //       router.push("/login");
-  //     })
-  //     .catch((err) => showErrorToast(err.message))
-  //     .finally(() => {
-  //       setIsLoggingOut(false);
-  //     });
-  // };
+
+  const handleLogOut = async (e: any) => {
+    e.preventDefault();
+    signOut().then(() => {
+      LogOutAction();
+    });
+
+    setShowPopover(false);
+  };
 
   return (
     // this is a trick to make the fixed sidebar shrink and grow
     // the div outside is to make the sidebar flex when it's shrink or grow
     <div
       className={cn(
-        "w-[72px] h-full bg-transparent transition-all duration-700 ease-in-out shrink-0 grow-0",
+        "w-[72px] h-full bg-transparent transition-all duration-700 ease-in-out shrink-0",
         isSidebarOpen ? "w-[calc(72px+6rem)]" : "w-[72px]",
         "max-sm:w-[72px]"
       )}
@@ -72,14 +79,14 @@ export default function Sidebar({ cartQuantity, favouriteQuantity }: Props) {
       {/* the div inside is the fixed sidebar itself to the left of the screen */}
       <div
         className={cn(
-          "fixed top-0 left-0 w-[72px] h-full bg-sidebar-bg text-white transition-all duration-700 ease-in-out shrink-0 grow-0",
+          "fixed top-0 left-0 w-[72px] h-screen bg-sidebar-bg text-white transition-all duration-700 ease-in-out shrink-0",
           isSidebarOpen ? "w-[calc(72px+6rem)]" : "w-[72px]",
           "max-sm:w-[72px]"
         )}
       >
-        <nav className="h-full flex flex-col p-4 pb-8 pr-2 justify-between overflow-x-hidden overflow-y-scroll white-scrollbar">
+        <nav className="h-full flex flex-col gap-2 justify-between p-4 pb-8 overflow-x-visible white-scrollbar">
           <div className="space-y-8">
-            <div className="flex flex-row items-center gap-2 whitespace-nowrap select-none">
+            <div className="min-w-10 flex flex-row items-center gap-1 whitespace-nowrap overflow-hidden select-none">
               <Image src={Logo} alt="logo" width={40} height={40} />
               <span
                 className={cn(
@@ -89,134 +96,61 @@ export default function Sidebar({ cartQuantity, favouriteQuantity }: Props) {
                 Fresh Mart
               </span>
             </div>
-            {/* {thisUser && thisUser.isAdmin === true ? (
-            <div className={cn(style["nav__brand"], "select-none pl-1")}>
-              <Image src={Logo} alt="logo" width={40} height={40} />
-              <span
-                className={cn(style["nav__logo"], "text-nowrap max-sm:hidden")}
-              >
-                Fresh Mart
-              </span>
-            </div>
-          ) : (
-            <a href="/" className={cn(style["nav__brand"], "cursor-pointer")}>
-              <Image src={Logo} alt="logo" width={40} height={40} />
-              <span
-                className={cn(style["nav__logo"], "text-nowrap max-sm:hidden")}
-              >
-                Fresh Mart
-              </span>
-            </a>
-          )} */}
 
-            <div className="flex flex-col gap-2 mb-2">
-              <SidebarLink
-                href="/home"
-                content="Home"
-                icon={<Home />}
-                isSidebarOpen={isSidebarOpen}
-              />
-              <SidebarLink
-                href="/dashboard"
-                content="Dashboard"
-                icon={<LayoutDashboard />}
-                isSidebarOpen={isSidebarOpen}
-              />
-              <SidebarLink
-                href="/inventory"
-                content="Inventory"
-                icon={<LayoutList />}
-                isSidebarOpen={isSidebarOpen}
-              />
+            {user && user.isAdmin ? (
+              <div className="flex flex-col gap-2 mb-2">
+                <SidebarLink
+                  href="/dashboard"
+                  content="Dashboard"
+                  icon={<LayoutDashboard />}
+                  isSidebarOpen={isSidebarOpen}
+                />
+                <SidebarLink
+                  href="/inventory"
+                  content="Inventory"
+                  icon={<LayoutList />}
+                  isSidebarOpen={isSidebarOpen}
+                />
 
-              <SidebarLink
-                href="/order-management"
-                content="Orders"
-                icon={<ListOrderedIcon />}
-                isSidebarOpen={isSidebarOpen}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <SidebarLink
-                href="/cart"
-                content="Your cart"
-                icon={<ShoppingCart />}
-                isSidebarOpen={isSidebarOpen}
-                notification={cartQuantity}
-              />
+                <SidebarLink
+                  href="/order-management"
+                  content="Orders"
+                  icon={<ListOrderedIcon />}
+                  isSidebarOpen={isSidebarOpen}
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <SidebarLink
+                  href="/home"
+                  content="Home"
+                  icon={<Home />}
+                  isSidebarOpen={isSidebarOpen}
+                />
+                <SidebarLink
+                  href="/cart"
+                  content="Your cart"
+                  icon={<ShoppingCart />}
+                  isSidebarOpen={isSidebarOpen}
+                  notification={cartQuantity}
+                />
 
-              <SidebarLink
-                href="/favourite"
-                content="Favourites"
-                icon={<Heart />}
-                isSidebarOpen={isSidebarOpen}
-                notification={favouriteQuantity}
-              />
+                <SidebarLink
+                  href="/favourite"
+                  content="Favourites"
+                  icon={<Heart />}
+                  isSidebarOpen={isSidebarOpen}
+                  notification={favouriteQuantity}
+                />
 
-              <SidebarLink
-                href="/history"
-                content="History"
-                icon={<History />}
-                isSidebarOpen={isSidebarOpen}
-              />
-            </div>
-
-            {/* {thisUser && thisUser.isAdmin ? (
-            <div className={style["nav__list"]}>
-              <CustomLink
-                href="/dashboard"
-                content="Dashboard"
-                icon={<LayoutDashboard />}
-                selectedLink={selectedLink}
-                isSidebarOpen={isSidebarOpen}
-              />
-              <CustomLink
-                href="/inventory/menu"
-                content="Inventory"
-                icon={<LayoutList />}
-                selectedLink={selectedLink}
-                isSidebarOpen={isSidebarOpen}
-              />
-
-              <CustomLink
-                href="/order-management"
-                content="Orders"
-                icon={<OrderIcon />}
-                selectedLink={selectedLink}
-                isSidebarOpen={isSidebarOpen}
-                className={cn(
-                  thisUser && thisUser.isAdmin === true ? "" : "hidden"
-                )}
-              />
-            </div>
-          ) : (
-            <div className={style["nav__list"]}>
-              <CustomLink
-                href="/cart"
-                content="Your cart"
-                icon={<CartIcon />}
-                selectedLink={selectedLink}
-                isSidebarOpen={isSidebarOpen}
-                notification={cart.length}
-              />
-
-              <CustomLink
-                href="/favourite"
-                content="Favourites"
-                icon={<FavouriteIcon />}
-                selectedLink={selectedLink}
-                isSidebarOpen={isSidebarOpen}
-              />
-
-              <CustomLink
-                href="/history"
-                content="History"
-                icon={<HistoryIcon />}
-                selectedLink={selectedLink}
-                isSidebarOpen={isSidebarOpen}
-              />
-            </div>
-          )} */}
+                <SidebarLink
+                  href="/history"
+                  content="History"
+                  icon={<History />}
+                  isSidebarOpen={isSidebarOpen}
+                />
+              </div>
+            )}
           </div>
           <div className="space-y-4">
             {session && (
@@ -226,7 +160,7 @@ export default function Sidebar({ cartQuantity, favouriteQuantity }: Props) {
                 placement="right-end"
               >
                 <PopoverTrigger>
-                  <div className="flex flex-row gap-4 items-center hover:bg-white/10 rounded-lg py-2 pl-2 cursor-pointer shrink-0">
+                  <div className="min-w-10 shrink-0 flex flex-row gap-2 items-center hover:bg-white/10 rounded-lg p-2 cursor-pointer overflow-hidden">
                     <Image
                       width={400}
                       height={400}
@@ -234,7 +168,7 @@ export default function Sidebar({ cartQuantity, favouriteQuantity }: Props) {
                       alt="image"
                       className="w-[24px] h-[24px] flex-shrink-0 rounded-full object-cover overflow-hidden cursor-pointer select-none"
                     />
-                    <span className="font-semibold">
+                    <span className="w-[100px] h-full font-semibold shrink-0 truncate">
                       {session && session.user ? session.user.name : "Ptdat"}
                     </span>
                   </div>
@@ -270,11 +204,7 @@ export default function Sidebar({ cartQuantity, favouriteQuantity }: Props) {
                     <Separate classname="my-2" />
                     <div
                       className="flex flex-row gap-2 items-center text-red-500 cursor-pointer hover:bg-gray-100 rounded-lg p-2"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        signOut();
-                        setShowPopover(false);
-                      }}
+                      onClick={handleLogOut}
                     >
                       <LogOut />
                       <span>Log Out</span>
@@ -295,7 +225,18 @@ export default function Sidebar({ cartQuantity, favouriteQuantity }: Props) {
               </div>
             )}
 
-            <div>
+            <div className="flex flex-col gap-2">
+              <Button
+                className={cn(
+                  "w-8 h-8 bg-transparent hover:bg-transparent hover:opacity-100"
+                )}
+                iconAfter={
+                  resolvedTheme === "dark" ? <SunIcon /> : <NightIcon />
+                }
+                onClick={() => {
+                  setTheme(resolvedTheme === "dark" ? "light" : "dark");
+                }}
+              />
               <Tooltip
                 content={
                   <span className="px-2">
@@ -310,12 +251,14 @@ export default function Sidebar({ cartQuantity, favouriteQuantity }: Props) {
                   "text-white font-sans px-1 border-0 rounded-[999px] bg-blue-500 "
                 )}
               >
-                <AlignJustify
-                  className="cursor-pointer ml-2"
+                <Button
+                  className="bg-transparent hover:bg-transparent hover:opacity-100"
                   onClick={() => {
                     setIsSidebarOpen(!isSidebarOpen);
                   }}
-                />
+                >
+                  <AlignJustify />
+                </Button>
               </Tooltip>
             </div>
           </div>

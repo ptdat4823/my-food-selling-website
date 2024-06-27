@@ -31,4 +31,5 @@ export type Food = {
   status: FoodStatus;
   createdAt: Date;
   purchased: boolean;
+  totalSold: number;
 };

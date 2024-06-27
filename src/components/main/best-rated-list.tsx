@@ -1,14 +1,26 @@
 "use client";
 import { useState } from "react";
 import { FoodList } from "./food-list";
+import { Food } from "@/src/models/Food";
+import { User } from "@/src/models/User";
 
-const BestRatedList = () => {
-  const [foods, setFoods] = useState([]);
-  const [favoriteFoodIds, setFavoriteFoodIds] = useState<number[]>([]);
+interface Props {
+  foods: Food[];
+  favoriteFoodIds: number[];
+  user: User;
+}
+const BestRatedList = ({ foods, favoriteFoodIds, user }: Props) => {
+  const bestRatedList = foods
+    .filter((food) => food.rating > 0)
+    .sort((a, b) => b.rating - a.rating);
   return (
     <div>
       <h3 className="text-4xl font-semibold mb-4 text-white">Best rated</h3>
-      <FoodList foods={foods} />
+      <FoodList
+        foods={bestRatedList}
+        favoriteFoodIds={favoriteFoodIds}
+        user={user}
+      />
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import { ChangeStateFavouriteFood } from "@/src/actions/food";
 import { Food } from "@/src/models/Food";
 import { cn } from "@/src/utils/func";
 import { SolidHeartIcon } from "../icons/solid";
@@ -6,20 +7,18 @@ import { FoodPrice } from "../main/food-price";
 import FoodRating from "../main/food-rating";
 import FoodTag from "../main/food-tag";
 import { Button } from "../ui/button";
-import { HeartIcon } from "lucide-react";
+import { showErrorToast } from "../ui/toast";
 
 export default function FavouriteFoodItem({
   food,
   className,
   onClick,
   isFavorite = false,
-  onFavoriteChange,
 }: {
   food: Food;
   className?: string;
   onClick?: () => void;
   isFavorite?: boolean;
-  onFavoriteChange?: (id: number) => void;
 }) {
   const getMinAndMaxPrice = (food: Food) => {
     const tempSortedPriceList = food.foodSizes
@@ -32,6 +31,13 @@ export default function FavouriteFoodItem({
   };
 
   const sortedPriceList = getMinAndMaxPrice(food);
+
+  const handleFavoriteFoodIdsChange = async (id: number) => {
+    const res = await ChangeStateFavouriteFood(id);
+    if (res.error) {
+      showErrorToast(res.error);
+    }
+  };
 
   return (
     <div
@@ -57,9 +63,7 @@ export default function FavouriteFoodItem({
                 <SolidHeartIcon color="pink" />
               )
             }
-            onClick={() => {
-              if (onFavoriteChange) onFavoriteChange(food.id);
-            }}
+            onClick={() => handleFavoriteFoodIdsChange(food.id)}
           />
         </div>
         <FoodPrice

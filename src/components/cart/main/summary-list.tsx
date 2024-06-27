@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import path from "path";
 import { ClassValue } from "clsx";
-import { cn } from "@/src/utils/func";
+import { cn, isValidString } from "@/src/utils/func";
 import animation from "src/style/animation.module.css";
 import { Order, PaymentMethod } from "@/src/models/Order";
 import { CartsToOrder } from "@/src/convertor/orderConvertor";
@@ -51,6 +51,16 @@ const SummaryList = ({ foods, thisUser }: Props) => {
     }
   };
 
+  const checkInfo = (user: User) => {
+    if (
+      !isValidString(user.name) ||
+      !isValidString(user.phoneNumber) ||
+      !isValidString(user.address)
+    )
+      return false;
+    return true;
+  };
+
   const SetOrder = (cart: Cart[]) => {
     const order: Order = CartsToOrder(cart, PaymentMethod.CASH, "", thisUser);
     dispatch(setCurrentOrder(order));
@@ -70,12 +80,15 @@ const SummaryList = ({ foods, thisUser }: Props) => {
         showDefaultToast("Please select at least one item to order");
         return;
       }
-      if (!currentOrder) {
-        showErrorToast("Error: Order is not set");
+      if (!checkInfo(thisUser)) {
+        showDefaultToast("Please fill in your information");
         return;
       }
+      if (!currentOrder) {
+        SetOrder(selectedCart);
+      }
 
-      const res = await CreateOrder(currentOrder);
+      const res = await CreateOrder(currentOrder!);
       if (res.error) {
         showErrorToast(res.error);
       }

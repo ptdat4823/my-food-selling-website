@@ -58,7 +58,7 @@ export const CommentSection = ({
               <FoodComment
                 key={index}
                 comment={comment}
-                isFromUser={hasCommented}
+                isFromUser={comment.user.id === user.id}
                 handleAfterDelete={handleAfterDelete}
               />
             ))

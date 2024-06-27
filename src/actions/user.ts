@@ -7,7 +7,6 @@ import { NextResponse } from "next/server";
 export const GetInfo = async () => {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.BACKEND_HOST + "/api/user/me", {
-    cache: "no-cache",
     headers: {
       Cookie: `access-token=${accessToken}`,
     },
@@ -27,7 +26,6 @@ export const UpdateInfo = async (formData: FormData) => {
 
   try {
     const res = await fetch(process.env.BACKEND_HOST + "/api/user/me", {
-      cache: "no-cache",
       method: "PUT",
       headers: {
         Cookie: `access-token=${accessToken}`,
@@ -61,7 +59,6 @@ export const ChangePassword = async (formData: FormData) => {
     const res = await fetch(
       process.env.BACKEND_HOST + "/api/user/me/change-password",
       {
-        cache: "no-cache",
         method: "POST",
         headers: {
           Cookie: `access-token=${accessToken}`,

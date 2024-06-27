@@ -55,6 +55,7 @@ const FoodFormDataToFood = (formData: FoodFormData, category: FoodCategory) => {
     status: formData.status as FoodStatus,
     createdAt: new Date(),
     purchased: false,
+    totalSold: 0,
   };
   return food;
 };
@@ -73,6 +74,7 @@ const FoodToReceive = (data: any): Food => {
     status: data.status === "true" ? FoodStatus.ACTIVE : FoodStatus.DISABLE,
     createdAt: new Date(data.createdAt),
     purchased: data.purchased,
+    totalSold: data.totalSold,
   };
   return foodReceived;
 };

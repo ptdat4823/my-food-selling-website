@@ -7,7 +7,6 @@ import { NextResponse } from "next/server";
 export const GetAllCategories = async () => {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.BACKEND_HOST + "/api/categories", {
-    cache: "no-cache",
     headers: {
       Cookie: `access-token=${accessToken}`,
     },

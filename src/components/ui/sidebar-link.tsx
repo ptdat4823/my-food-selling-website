@@ -75,12 +75,12 @@ const CustomLink = ({
     <Link
       href={href}
       className={cn(
-        "w-full flex flex-row items-center gap-4 justify-start whitespace-nowrap p-2 text-white rounded-md transition-all cursor-pointer",
+        "min-w-10 flex flex-row items-center gap-2 justify-start p-2 text-white whitespace-nowrap overflow-hidden rounded-md transition-all cursor-pointer",
         path.startsWith(href) ? "bg-blue-600" : "hover:bg-white/10",
         className
       )}
     >
-      <div className="relative">
+      <div className="relative shrink-0">
         <div
           className={cn(
             "absolute -right-1.5 -top-1 w-4 h-4 rounded-full shrink-0 text-xs bg-red-600 text-white flex items-center justify-center",
@@ -91,7 +91,9 @@ const CustomLink = ({
         </div>
         {icon}
       </div>
-      <span className={cn("w-fit font-sans font-semibold")}>{content}</span>
+      <span className={cn("w-fit font-sans font-semibold text-nowrap")}>
+        {content}
+      </span>
     </Link>
   );
 };

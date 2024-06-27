@@ -16,7 +16,12 @@ export const PaymentStepBar = ({ className }: { className?: ClassValue }) => {
     >
       <CartTab tabNum={1} tabName="Shopping Cart" href="/cart" />
       <ChevronRight className="text-primary" />
-      <CartTab tabNum={2} tabName="Checkout Details" href="/cart/checkout" />
+      <CartTab
+        tabNum={2}
+        tabName="Checkout Details"
+        href="/cart/checkout"
+        disabled={path === "/cart"}
+      />
       <ChevronRight className="text-primary" />
       <CartTab
         tabNum={3}

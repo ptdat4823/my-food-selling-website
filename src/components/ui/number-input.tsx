@@ -1,4 +1,5 @@
 import { cn } from "@/src/utils/func";
+import { ClassValue } from "clsx";
 import { Minus, Plus } from "lucide-react";
 import { forwardRef } from "react";
 
@@ -38,7 +39,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       >
         <span
           className={cn(
-            "cursor-pointer text-primary hover:text-hover-primary",
+            "cursor-pointer text-primary-word hover:text-hover-primary ease-linear duration-100",
             disabled ? "opacity-0" : ""
           )}
           onClick={onDecrease}
@@ -62,7 +63,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         />
         <span
           className={cn(
-            "cursor-pointer text-primary hover:text-hover-primary",
+            "cursor-pointer text-primary-word hover:text-hover-primary ease-linear duration-100",
             disabled ? "opacity-0" : ""
           )}
           onClick={onIncrease}

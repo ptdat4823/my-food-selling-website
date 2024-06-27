@@ -1,14 +1,26 @@
 "use client";
 import { useState } from "react";
 import { FoodList } from "./food-list";
+import { User } from "@/src/models/User";
+import { Food } from "@/src/models/Food";
 
-const FavoriteList = () => {
-  const [foods, setFoods] = useState([]);
-  const [favoriteFoodIds, setFavoriteFoodIds] = useState<number[]>([]);
+interface Props {
+  foods: Food[];
+  favoriteFoodIds: number[];
+  user: User;
+}
+const FavoriteList = ({ foods, favoriteFoodIds, user }: Props) => {
+  const favoriteList = foods.filter((food) =>
+    favoriteFoodIds.includes(food.id)
+  );
   return (
     <div>
-      <h3 className="text-4xl font-semibold mb-4 text-white">Best rated</h3>
-      <FoodList foods={foods} />
+      <h3 className="text-4xl font-semibold mb-4 text-white">Your favourite</h3>
+      <FoodList
+        foods={favoriteList}
+        favoriteFoodIds={favoriteFoodIds}
+        user={user}
+      />
     </div>
   );
 };

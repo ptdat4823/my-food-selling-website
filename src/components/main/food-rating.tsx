@@ -1,6 +1,6 @@
 import { cn } from "@/src/utils/func";
 import { ClassValue } from "clsx";
-import Image from "next/image";
+import { StarsIcon } from "../icons/normal-custom/stars-icon";
 
 const FoodRating = ({
   rating,
@@ -11,8 +11,7 @@ const FoodRating = ({
 }) => {
   return (
     <div className={cn("flex flex-row items-center select-none", className)}>
-      {rating}
-      <Image src={"/svgs/star.svg"} width={24} height={24} alt="star" />
+      <StarsIcon rating={rating} />
     </div>
   );
 };

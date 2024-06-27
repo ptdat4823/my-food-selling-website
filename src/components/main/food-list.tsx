@@ -1,16 +1,11 @@
 "use client";
-import { Food, FoodSize } from "@/src/models/Food";
-import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
-import FoodItem from "./food-item";
-import { useEffect, useState } from "react";
-import { FoodDetail } from "./food-detail";
-import { useSession } from "next-auth/react";
-import { showErrorToast, showSuccessToast } from "../ui/toast";
-import { Cart } from "@/src/models/Cart";
-import { AddCart } from "@/src/actions/cart";
-import { ChangeStateFavouriteFood } from "@/src/actions/food";
+import { Food } from "@/src/models/Food";
 import { User } from "@/src/models/User";
+import Autoplay from "embla-carousel-autoplay";
+import useEmblaCarousel from "embla-carousel-react";
+import { useState } from "react";
+import { FoodDetail } from "./food-detail";
+import FoodItem from "./food-item";
 
 export const FoodList = ({
   foods,
@@ -21,52 +16,13 @@ export const FoodList = ({
   favoriteFoodIds: number[];
   user: User;
 }) => {
-  const { data: session } = useSession();
   const [emblaRef] = useEmblaCarousel({}, [Autoplay()]);
   const [isOpen, setOpen] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food>();
-  const [selectedSize, setSelectedSize] = useState<FoodSize>();
-  const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
 
   const handleFoodClick = (food: Food) => {
     setSelectedFood(food);
-    setSelectedFoodQuantity(1);
-    if (selectedFood !== food) setSelectedSize(food.foodSizes[0]);
     setOpen(!isOpen);
-  };
-
-  const handleAddToCart = async (food: Food) => {
-    if (!selectedSize) return;
-    if (!session) {
-      showErrorToast("Please login to add to cart");
-      return;
-    }
-    const newCartItem: Cart = {
-      id: -1,
-      quantity: selectedFoodQuantity,
-      price: selectedFoodQuantity * selectedSize.price,
-      food: food,
-      foodSize: selectedSize,
-      note: "",
-    };
-    const res = await AddCart(newCartItem);
-    if (res.error) {
-      showErrorToast(res.error);
-    }
-    if (res.message) {
-      showSuccessToast(res.message);
-      setOpen(!isOpen);
-    }
-    setOpen(!isOpen);
-  };
-  const handleFoodSizeChange = (foodSize: FoodSize) => {
-    if (selectedSize !== foodSize) setSelectedSize(foodSize);
-  };
-  const handleFavoriteFoodIdsChange = async (id: number) => {
-    const res = await ChangeStateFavouriteFood(id);
-    if (res.error) {
-      showErrorToast(res.error);
-    }
   };
 
   return (
@@ -78,23 +34,16 @@ export const FoodList = ({
             className="xl:flex-[0_0_33%] max-xl:flex-[0_0_50%] max-md:flex-[0_0_100%] min-w-0"
             food={food}
             isFavorite={favoriteFoodIds.includes(food.id)}
-            onFavoriteChange={handleFavoriteFoodIdsChange}
-            onClick={handleFoodClick}
+            onClick={() => handleFoodClick(food)}
           />
         ))}
 
-        {selectedFood && selectedSize && (
+        {selectedFood && (
           <FoodDetail
             isOpen={isOpen}
-            onOpenChange={() => setOpen(!isOpen)}
+            onOpenChange={setOpen}
             food={selectedFood}
-            foodQuantity={selectedFoodQuantity}
-            onFoodQuantityChange={setSelectedFoodQuantity}
-            selectedSize={selectedSize}
-            onFoodSizeChange={handleFoodSizeChange}
             isFavorite={favoriteFoodIds.includes(selectedFood.id)}
-            onFavoriteChange={handleFavoriteFoodIdsChange}
-            onAddToCart={() => handleAddToCart(selectedFood)}
             user={user}
           />
         )}

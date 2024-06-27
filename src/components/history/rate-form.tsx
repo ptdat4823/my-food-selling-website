@@ -120,17 +120,6 @@ export const RateForm = ({
     if (res.message) {
       showSuccessToast(res.message);
     }
-
-    // await OrderService.SendFeedback(order.id, newFeedback)
-    //   .then((res) => {
-    //     const updatedOrder = res.data;
-    //     dispatch(updateOrder(updatedOrder));
-    //     showSuccessToast("Feedback was sent successfully!");
-    //   })
-    //   .catch((e) => showErrorToast("Failed to send feedback"))
-    //   .finally(() => {
-    //     closeForm();
-    //   });
   };
 
   return (

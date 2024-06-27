@@ -1,30 +1,28 @@
 "use client";
-import { cn } from "@/src/utils/func";
-import FoodImageFrame from "./food-image-frame";
-import { Button } from "../ui/button";
-import { showDefaultToast } from "../ui/toast";
+import { ChangeStateFavouriteFood } from "@/src/actions/food";
 import { Food } from "@/src/models/Food";
+import { cn } from "@/src/utils/func";
 import { ClassValue } from "clsx";
+import { useSession } from "next-auth/react";
+import { SolidHeartIcon } from "../icons/solid";
+import { Button } from "../ui/button";
+import { showDefaultToast, showErrorToast } from "../ui/toast";
+import FoodImageFrame from "./food-image-frame";
 import { FoodPrice } from "./food-price";
 import FoodRating from "./food-rating";
-import FoodTag from "./food-tag";
-import { HeartIcon } from "lucide-react";
-import { SolidHeartIcon } from "../icons/solid";
-import { useSession } from "next-auth/react";
 
 export default function FoodItem({
   food,
   className,
   onClick,
   isFavorite = false,
-  onFavoriteChange,
 }: {
   food: Food;
   className?: ClassValue;
-  onClick?: (food: Food) => void;
+  onClick?: () => void;
   isFavorite?: boolean;
-  onFavoriteChange?: (foodId: number) => void;
 }) {
+  const { data: session } = useSession();
   const getMinAndMaxPrice = (food: Food) => {
     const tempSortedPriceList = food.foodSizes
       .map((foodSize) => foodSize.price)
@@ -37,6 +35,17 @@ export default function FoodItem({
 
   const sortedPriceList = getMinAndMaxPrice(food);
 
+  const handleFavoriteFoodIdsChange = async (id: number) => {
+    if (!session) {
+      showDefaultToast("Please login to add your favourite food");
+      return;
+    }
+    const res = await ChangeStateFavouriteFood(id);
+    if (res.error) {
+      showErrorToast(res.error);
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -45,12 +54,7 @@ export default function FoodItem({
       )}
     >
       <div className="w-full h-40 overflow-hidden cursor-pointer">
-        <FoodImageFrame
-          food={food}
-          onClick={() => {
-            if (onClick) onClick(food);
-          }}
-        />
+        <FoodImageFrame food={food} onClick={onClick} />
       </div>
       <div className="flex flex-col m-2 gap-2 text-white">
         <div className="w-full flex flex-row items-center justify-between">
@@ -63,25 +67,29 @@ export default function FoodItem({
               isFavorite ? <SolidHeartIcon /> : <SolidHeartIcon color="white" />
             }
             onClick={() => {
-              if (onFavoriteChange) onFavoriteChange(food.id);
+              handleFavoriteFoodIdsChange(food.id);
             }}
           />
         </div>
-        <FoodPrice
-          currency="$"
-          defaultPrice={sortedPriceList[0]}
-          secondPrice={sortedPriceList[sortedPriceList.length - 1]}
-        />
-        <div className="flex items-center">
-          <FoodRating
-            rating={food.rating}
-            className={cn("mt-2 hidden", food.rating > 0 && "visible")}
+        <div className="flex items-center justify-between">
+          <FoodPrice
+            currency="$"
+            defaultPrice={sortedPriceList[0]}
+            secondPrice={sortedPriceList[sortedPriceList.length - 1]}
           />
-          <div className="flex flex-row gap-1">
-            {food.tags.map((tag) => {
-              return <FoodTag key={tag} name={tag} theme="dark" />;
-            })}
+          <div
+            className={cn(
+              "flex gap-1 text-sm font-semibold",
+              food.rating === 0 && "hidden"
+            )}
+          >
+            <span>{food.rating}</span>
+            <FoodRating rating={food.rating} />
           </div>
+        </div>
+
+        <div className="flex items-center">
+          <span className="">{food.totalSold + " sold"}</span>
         </div>
       </div>
     </div>

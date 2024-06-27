@@ -1,7 +1,9 @@
+import { AddCart } from "@/src/actions/cart";
+import { ChangeStateFavouriteFood } from "@/src/actions/food";
+import { Cart } from "@/src/models/Cart";
 import { Food, FoodSize } from "@/src/models/Food";
-import { ClassValue } from "clsx";
-import { useDotButton } from "../carousel/carousel_dot_button";
-import useEmblaCarousel from "embla-carousel-react";
+import { User } from "@/src/models/User";
+import { cn, displayNumber } from "@/src/utils/func";
 import {
   Modal,
   ModalBody,
@@ -9,56 +11,93 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/react";
-import { cn, displayNumber } from "@/src/utils/func";
+import { ClassValue } from "clsx";
+import useEmblaCarousel from "embla-carousel-react";
+import { ShoppingCart } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { useDotButton } from "../carousel/carousel_dot_button";
 import ImageCarousel from "../carousel/image_carousel";
+import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
+import { SolidHeartIcon } from "../icons/solid";
 import { Button } from "../ui/button";
-import { HeartIcon, ShoppingCart } from "lucide-react";
-import { showDefaultToast } from "../ui/toast";
 import { NumberInput } from "../ui/number-input";
+import {
+  showDefaultToast,
+  showErrorToast,
+  showSuccessToast,
+} from "../ui/toast";
+import { CommentSection } from "./comment-section";
 import { FoodProperty } from "./food-property";
 import FoodRating from "./food-rating";
-import FoodTag from "./food-tag";
-import { SolidHeartIcon } from "../icons/solid";
-import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
-import { useState } from "react";
-import { CommentSection } from "./comment-section";
-import { User } from "@/src/models/User";
 
 export const FoodDetail = ({
   isOpen,
   onOpenChange,
   food,
-  foodQuantity,
-  onFoodQuantityChange,
-  selectedSize,
-  onFoodSizeChange,
   isFavorite = false,
-  onFavoriteChange,
-  onAddToCart,
   user,
   className,
 }: {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   food: Food;
-  foodQuantity: number;
-  onFoodQuantityChange: (quantity: number) => void;
-  selectedSize: FoodSize;
-  onFoodSizeChange: (foodSize: FoodSize) => void;
   isFavorite?: boolean;
-  onFavoriteChange?: (id: number) => void;
-  onAddToCart?: () => Promise<void>;
   user: User;
   className?: ClassValue;
 }) => {
+  const { data: session } = useSession();
   const [emblaRef, emplaApi] = useEmblaCarousel({
     loop: false,
     watchDrag: false,
   });
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
     useDotButton(emplaApi);
-  const isLogin = false;
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedSize, setSelectedSize] = useState<FoodSize>(food.foodSizes[0]);
+  const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
+
+  useEffect(() => {
+    setSelectedSize(food.foodSizes[0]);
+    setSelectedFoodQuantity(1);
+  }, [food]);
+
+  const handleAddToCart = async (food: Food) => {
+    if (!selectedSize) return;
+    if (!session) {
+      showErrorToast("Please login to add to cart");
+      return;
+    }
+    const newCartItem: Cart = {
+      id: -1,
+      quantity: selectedFoodQuantity,
+      price: selectedFoodQuantity * selectedSize.price,
+      food: food,
+      foodSize: selectedSize,
+      note: "",
+    };
+    const res = await AddCart(newCartItem);
+    if (res.error) {
+      showErrorToast(res.error);
+    }
+    if (res.message) {
+      showSuccessToast(res.message);
+      onOpenChange(!isOpen);
+    }
+  };
+  const handleFoodSizeChange = (foodSize: FoodSize) => {
+    if (selectedSize !== foodSize) setSelectedSize(foodSize);
+  };
+  const handleFavoriteFoodIdsChange = async (id: number) => {
+    if (!session) {
+      showDefaultToast("Please login to add your favourite food");
+      return;
+    }
+    const res = await ChangeStateFavouriteFood(id);
+    if (res.error) {
+      showErrorToast(res.error);
+    }
+  };
 
   return (
     <Modal
@@ -88,46 +127,54 @@ export const FoodDetail = ({
                       <ImageCarousel images={food.images} />
                     </div>
                     <div className="w-2/3 flex flex-col gap-1">
-                      <div className="flex flex-col items-start">
-                        <div className="flex flex-row items-center gap-2">
-                          <span>{food.name}</span>
-                          <Button
+                      <div className="w-full flex flex-col items-start">
+                        <div className="w-full flex flex-row items-center justify-between">
+                          <div className="flex flex-row items-center gap-2">
+                            <span>{food.name}</span>
+                            <Button
+                              className={cn(
+                                "rounded-full ease-linear duration-100 bg-transparent hover:bg-transparent hover:opacity-60",
+                                !isFavorite && "opacity-50"
+                              )}
+                              iconBefore={<SolidHeartIcon color="pink" />}
+                              onClick={() => {
+                                handleFavoriteFoodIdsChange(food.id);
+                              }}
+                            />
+                          </div>
+
+                          <div
                             className={cn(
-                              "rounded-full ease-linear duration-100 bg-transparent hover:bg-transparent hover:opacity-60",
-                              !isFavorite && "opacity-50"
+                              "flex gap-1 font-semibold text-sm",
+                              food.rating === 0 && "hidden"
                             )}
-                            iconBefore={<SolidHeartIcon color="pink" />}
-                            onClick={() => {
-                              if (!isLogin) {
-                                {
-                                  showDefaultToast(
-                                    "Please login to add your favourite food"
-                                  );
-                                  return;
-                                }
-                              }
-                              if (onFavoriteChange) onFavoriteChange(food.id);
-                            }}
-                          />
+                          >
+                            <span>{food.rating}</span>
+                            <FoodRating rating={food.rating} />
+                          </div>
                         </div>
                         <div className="w-full flex flex-row items-center justify-between">
-                          <p className="text-xl">
+                          <p className="text-xl font-normal">
                             {displayNumber(selectedSize.price, "$")}
                           </p>
                           <div className="w-min font-sans">
                             <NumberInput
                               className="outline-0 text-primary-word"
-                              value={foodQuantity}
+                              value={selectedFoodQuantity}
                               onDecrease={() =>
-                                onFoodQuantityChange(
-                                  foodQuantity <= 1 ? 1 : foodQuantity - 1
+                                setSelectedFoodQuantity(
+                                  selectedFoodQuantity <= 1
+                                    ? 1
+                                    : selectedFoodQuantity - 1
                                 )
                               }
                               onIncrease={() =>
-                                onFoodQuantityChange(foodQuantity + 1)
+                                setSelectedFoodQuantity(
+                                  selectedFoodQuantity + 1
+                                )
                               }
                               onChange={(e) =>
-                                onFoodQuantityChange(
+                                setSelectedFoodQuantity(
                                   Number.parseInt(e.target.value)
                                 )
                               }
@@ -143,7 +190,7 @@ export const FoodDetail = ({
                               key={size.name}
                               isSelected={selectedSize === size}
                               name={size.name}
-                              onClick={() => onFoodSizeChange(size)}
+                              onClick={() => handleFoodSizeChange(size)}
                             />
                           );
                         })}
@@ -159,13 +206,9 @@ export const FoodDetail = ({
                             food.rating > 0 && "visible"
                           )}
                         />
-                        <div className="flex flex-row gap-1">
-                          {food.tags.map((tag) => {
-                            return (
-                              <FoodTag key={tag} name={tag} theme="dark" />
-                            );
-                          })}
-                        </div>
+                        <span className="font-normal">
+                          {food.totalSold + " sold"}
+                        </span>
                       </div>
                     </div>
                   </ModalHeader>
@@ -210,10 +253,8 @@ export const FoodDetail = ({
                 }
                 className="w-min justify-self-end gap-2 font-sans text-nowrap text-primary-word bg-transparent hover:text-primary hover:bg-transparent ease-linear duration-100"
                 onClick={() => {
-                  if (onAddToCart) {
-                    setIsLoading(true);
-                    onAddToCart().finally(() => setIsLoading(false));
-                  }
+                  setIsLoading(true);
+                  handleAddToCart(food).finally(() => setIsLoading(false));
                 }}
               >
                 {!isLoading && "Add to cart"}

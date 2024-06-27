@@ -12,6 +12,12 @@ import { Input } from "../ui/input";
 import { Separate } from "../ui/separate";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
 import { ZodType, z } from "zod";
+import { Session } from "next-auth";
+import {
+  HasAccessToken,
+  LoginWithGoogle,
+  RegisterWithGoogle,
+} from "@/src/actions/auth";
 
 export type LoginFormData = {
   email: string;
@@ -26,12 +32,23 @@ export const loginSchema: ZodType<LoginFormData> = z.object({
 const LoginForm = () => {
   const { data: session } = useSession();
   if (session) {
-    redirect("/home");
+    if (
+      session.user?.name === "admin" ||
+      session.user?.email === "admin@gmail.com"
+    )
+      redirect("/dashboard");
+    else redirect("/home");
   }
   const router = useRouter();
   const form = useForm<LoginFormData>();
   const { register } = form;
   const [fieldErrors, setFieldErrors] = useState<any>();
+
+  const handleSignInWithGoogle = async () => {
+    await signIn("google", {
+      redirect: false,
+    });
+  };
 
   const clientAction = async (data: FormData) => {
     //create request object
@@ -62,6 +79,7 @@ const LoginForm = () => {
       }
     }
   };
+
   return (
     <form action={clientAction}>
       <div className="flex flex-col items-center gap-10 pt-10">
@@ -115,12 +133,7 @@ const LoginForm = () => {
             type="button"
             className="w-full bg-white hover:bg-gray-200 border text-primary-word gap-2"
             iconBefore={<Google />}
-            onClick={() =>
-              signIn("google", {
-                redirect: true,
-                callbackUrl: "/home",
-              })
-            }
+            onClick={handleSignInWithGoogle}
           >
             Sign in with google
           </Button>

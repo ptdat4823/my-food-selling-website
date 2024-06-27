@@ -133,6 +133,21 @@ const getColorList = () => {
   ];
 };
 
+const alphabet =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const generateKey = (prefix: string = "", length: number = 10) => {
+  let key = prefix;
+  for (let i = 0; i < length; i++) {
+    key += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+  }
+  return key;
+};
+
+const isValidString = (data: string | null | undefined) => {
+  if (data === null || data === undefined || data.length === 0) return false;
+  return true;
+};
+
 export {
   cn,
   displayNumber,
@@ -144,4 +159,6 @@ export {
   getColorList,
   getMonthLabel,
   getAllMonthLabels,
+  generateKey,
+  isValidString,
 };

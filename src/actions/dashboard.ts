@@ -34,7 +34,6 @@ const GetOrderByMonth = async (range: "3-month" | "6-month" | "1-year") => {
         startDate
       )}&end=${dateToUrlPath(endDate)}`,
     {
-      cache: "no-cache",
       headers: {
         Cookie: `access-token=${accessToken}`,
       },
@@ -59,7 +58,6 @@ const GetCompletedOrderByMonth = async (range: ReportRange) => {
         startDate
       )}&end=${dateToUrlPath(endDate)}`,
     {
-      cache: "no-cache",
       headers: {
         Cookie: `access-token=${accessToken}`,
       },
@@ -86,7 +84,6 @@ const GetAverageRevenueByMonth = async (
         startDate
       )}&end=${dateToUrlPath(endDate)}`,
     {
-      cache: "no-cache",
       headers: {
         Cookie: `access-token=${accessToken}`,
       },
@@ -113,7 +110,6 @@ const GetCancelledOrderByMonth = async (
         startDate
       )}&end=${dateToUrlPath(endDate)}`,
     {
-      cache: "no-cache",
       headers: {
         Cookie: `access-token=${accessToken}`,
       },
@@ -140,7 +136,6 @@ const GetCancellationRateByMonth = async (
         startDate
       )}&end=${dateToUrlPath(endDate)}`,
     {
-      cache: "no-cache",
       headers: {
         Cookie: `access-token=${accessToken}`,
       },
@@ -165,7 +160,6 @@ const GetRevenueByMonth = async (range: "3-month" | "6-month" | "1-year") => {
         startDate
       )}&end=${dateToUrlPath(endDate)}`,
     {
-      cache: "no-cache",
       headers: {
         Cookie: `access-token=${accessToken}`,
       },
@@ -192,7 +186,6 @@ const GetCustomerTransactionByMonth = async (
         startDate
       )}&end=${dateToUrlPath(endDate)}`,
     {
-      cache: "no-cache",
       headers: {
         Cookie: `access-token=${accessToken}`,
       },
@@ -217,7 +210,6 @@ const GetTopFoodByRevenue = async (range: "3-month" | "6-month" | "1-year") => {
         startDate
       )}&end=${dateToUrlPath(endDate)}`,
     {
-      cache: "no-cache",
       headers: {
         Cookie: `access-token=${accessToken}`,
       },
@@ -242,7 +234,6 @@ const GetTopFoodByOrder = async (range: "3-month" | "6-month" | "1-year") => {
         startDate
       )}&end=${dateToUrlPath(endDate)}`,
     {
-      cache: "no-cache",
       headers: {
         Cookie: `access-token=${accessToken}`,
       },

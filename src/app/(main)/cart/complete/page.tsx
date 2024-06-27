@@ -62,7 +62,7 @@ const CartCompletePage = () => {
             </Button>
             <Button
               className="w-1/2 whitespace-nowrap"
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/home")}
             >
               Continue shopping
             </Button>

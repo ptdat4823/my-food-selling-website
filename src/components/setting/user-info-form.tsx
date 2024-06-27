@@ -5,21 +5,19 @@ import DistrictInput from "@/src/components/setting/district-input";
 import ProvinceInput from "@/src/components/setting/province-input";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
+import { UserToUpdate } from "@/src/convertor/userConvertor";
 import { User } from "@/src/models/User";
-import AddressService from "@/src/services/addressService";
-import UserService from "@/src/services/userService";
 import { isValidPhoneNumberInput } from "@/src/utils/func";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
+import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 import {
   showDefaultToast,
   showErrorToast,
   showSuccessToast,
 } from "../ui/toast";
-import { UserToUpdate } from "@/src/convertor/userConvertor";
-import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 
 export type UserSettingFormData = {
   name: string;

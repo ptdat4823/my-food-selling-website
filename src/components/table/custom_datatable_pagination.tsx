@@ -1,3 +1,4 @@
+"use client";
 import { Table } from "@tanstack/react-table";
 import {
   ChevronLeftIcon,
@@ -15,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useEffect, useState } from "react";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
@@ -29,6 +31,16 @@ export function CustomDataTablePagination<TData>({
   table,
   config,
 }: DataTablePaginationProps<TData>) {
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+
+  useEffect(() => {
+    if (table.getState().pagination.pageIndex !== currentPageIndex)
+      table.setPageIndex(currentPageIndex);
+  }, [currentPageIndex, table.getState().pagination.pageIndex]);
+
+  const handlePageChange = (pageIndex: number) => {
+    setCurrentPageIndex(pageIndex);
+  };
   return (
     <div
       className={cn(
@@ -50,13 +62,13 @@ export function CustomDataTablePagination<TData>({
         <div className="flex flex-row gap-2">
           <Button
             className="hidden h-8 w-8 p-0 lg:flex whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white"
-            onClick={() => table.setPageIndex(0)}
+            onClick={() => handlePageChange(0)}
             disabled={!table.getCanPreviousPage()}
             iconAfter={<ChevronsLeft className="h-4 w-4" />}
           ></Button>
           <Button
             className="h-8 w-8 p-0 whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white"
-            onClick={() => table.previousPage()}
+            onClick={() => handlePageChange(currentPageIndex - 1)}
             disabled={!table.getCanPreviousPage()}
             iconAfter={<ChevronLeftIcon className="h-4 w-4" />}
           ></Button>
@@ -66,13 +78,13 @@ export function CustomDataTablePagination<TData>({
           </div>
           <Button
             className="h-8 w-8 p-0 whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white"
-            onClick={() => table.nextPage()}
+            onClick={() => handlePageChange(currentPageIndex + 1)}
             disabled={!table.getCanNextPage()}
             iconAfter={<ChevronRightIcon className="h-4 w-4" />}
           ></Button>
           <Button
             className="hidden h-8 w-8 p-0 lg:flex whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            onClick={() => handlePageChange(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
             iconAfter={<ChevronsRight className="h-4 w-4" />}
           ></Button>
