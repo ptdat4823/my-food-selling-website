@@ -2,29 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.white-scrollbar {
-  overflow-y: auto;
-}
-.white-scrollbar::-webkit-scrollbar {
-  width: 8px;
-  scroll-behavior: smooth;
-}
-
-.white-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.white-scrollbar::-webkit-scrollbar-thumb {
-  background: #e5e7eb;
-  border-radius: 5px;
-}
-
-.white-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #d1d5db;
-}
-
 .default-scrollbar {
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 .default-scrollbar::-webkit-scrollbar {
   width: 8px;
@@ -42,6 +21,27 @@
 
 .default-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #5e5e5e;
+}
+
+.dark\:white-scrollbar:is(.dark *) {
+  overflow-y: scroll;
+}
+.dark\:white-scrollbar:is(.dark *)::-webkit-scrollbar {
+  width: 8px;
+  scroll-behavior: smooth;
+}
+
+.dark\:white-scrollbar:is(.dark *)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark\:white-scrollbar:is(.dark *)::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 5px;
+}
+
+.dark\:white-scrollbar:is(.dark *)::-webkit-scrollbar-thumb:hover {
+  background: #d1d5db;
 }
 
 /* for removing defaut arrow in number input */

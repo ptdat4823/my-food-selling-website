@@ -3,6 +3,7 @@ import LayoutCard from "../card/layout-card";
 import { LayoutCompareCard } from "../card/compare-card";
 import { CircleDollarSign } from "lucide-react";
 import { MonthlyReport } from "@/src/models/Report";
+import { cn } from "@/src/utils/func";
 
 interface Props {
   averageRevenueEachOrderReport: MonthlyReport;
@@ -22,13 +23,19 @@ const AverageEachOrderReport = ({ averageRevenueEachOrderReport }: Props) => {
   return (
     <LayoutCard>
       <LayoutCompareCard
-        title="Average sale each order"
+        title="Revenue per order"
         value={value}
         valueOffset={valueOffset}
         unit="$"
         className="border-0 p-0"
         icon={
-          <div className="flex flex-row items-center justify-center w-10 h-10 bg-yellow-300 rounded-full justify-self-end text-white border-2 border-white outline outline-2 outline-yellow-300">
+          <div
+            className={cn(
+              "h-fit p-2 flex flex-row items-center justify-center rounded-full justify-self-end border-2 outline outline-2",
+              "bg-yellow-300 text-white border-white outline-yellow-300",
+              "dark:text-yellow-300 dark:bg-transparent dark:border-transparent"
+            )}
+          >
             <CircleDollarSign size={20} />
           </div>
         }

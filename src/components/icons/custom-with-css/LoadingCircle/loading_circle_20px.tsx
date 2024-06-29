@@ -1,9 +1,13 @@
 import { twMerge } from "tailwind-merge";
 import style from "./loading_circle_style.module.css";
 
-const LoadingCircle = ({ className }: { className?: string }) => (
+const LoadingCircle20px = ({ className }: { className?: string }) => (
   <div
-    className={twMerge(style["profile-main-loader"], "!w-4 !h-4", className)}
+    className={twMerge(
+      style["profile-main-loader"],
+      "!w-[20px] !h-[20px]",
+      className
+    )}
   >
     <div className={style["loader"]}>
       <svg className={style["circular-loader"]} viewBox="25 25 50 50">
@@ -21,4 +25,4 @@ const LoadingCircle = ({ className }: { className?: string }) => (
   </div>
 );
 
-export default LoadingCircle;
+export default LoadingCircle20px;

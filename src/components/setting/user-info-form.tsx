@@ -7,7 +7,7 @@ import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { UserToUpdate } from "@/src/convertor/userConvertor";
 import { User } from "@/src/models/User";
-import { isValidPhoneNumberInput } from "@/src/utils/func";
+import { cn, isValidPhoneNumberInput } from "@/src/utils/func";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -234,7 +234,7 @@ export default function UserInfoForm({ thisUser }: Props) {
         className="w-full h-full flex flex-col items-center justify-between"
         action={clientAction}
       >
-        <main className="w-full flex flex-col items-center p-1 pl-3 overflow-y-scroll default-scrollbar">
+        <main className="w-full flex flex-col items-center p-1 pl-3 overflow-x-hidden default-scrollbar dark:white-scrollbar">
           <h4 className="w-full font-bold text-lg mb-2">Your profile</h4>
 
           <section className="w-full flex flex-row items-stretch gap-8 rounded-md border-2 border-borderColor pt-4 py-6 px-6">
@@ -246,7 +246,6 @@ export default function UserInfoForm({ thisUser }: Props) {
                 <Input
                   id="username"
                   label="Name"
-                  labelColor="text-secondary-word"
                   className="text-secondary-word"
                   errorMessages={fieldErrors?.name ? fieldErrors.name[0] : ""}
                   {...register("name")}
@@ -255,7 +254,6 @@ export default function UserInfoForm({ thisUser }: Props) {
                   id="email"
                   label="Email"
                   placeholder="demo@gmail.com"
-                  labelColor="text-secondary-word"
                   className="text-secondary-word"
                   errorMessages={fieldErrors?.email ? fieldErrors.email[0] : ""}
                   {...register("email")}
@@ -266,7 +264,6 @@ export default function UserInfoForm({ thisUser }: Props) {
                 <Input
                   id="phonenumber"
                   label="Phonenumber"
-                  labelColor="text-secondary-word"
                   className="text-secondary-word"
                   type="tel"
                   maxLength={10}
@@ -302,7 +299,6 @@ export default function UserInfoForm({ thisUser }: Props) {
                 <Input
                   id="street"
                   label="Street"
-                  labelColor="text-secondary-word"
                   className="text-secondary-word"
                   errorMessages={
                     fieldErrors?.street ? fieldErrors.street[0] : ""
@@ -313,7 +309,6 @@ export default function UserInfoForm({ thisUser }: Props) {
                 <Input
                   id="house-number"
                   label="House number"
-                  labelColor="text-secondary-word"
                   className="text-secondary-word"
                   errorMessages={
                     fieldErrors?.houseNumber ? fieldErrors.houseNumber[0] : ""
@@ -329,7 +324,6 @@ export default function UserInfoForm({ thisUser }: Props) {
                 <Input
                   id="current-password"
                   label="Current password"
-                  labelColor="text-secondary-word"
                   className="text-secondary-word"
                   errorMessages={
                     fieldErrors?.currentPassword
@@ -343,7 +337,6 @@ export default function UserInfoForm({ thisUser }: Props) {
                 <Input
                   id="new-password"
                   label="New password"
-                  labelColor="text-secondary-word"
                   className="text-secondary-word"
                   errorMessages={
                     fieldErrors?.newPassword ? fieldErrors.newPassword[0] : ""
@@ -355,7 +348,6 @@ export default function UserInfoForm({ thisUser }: Props) {
                 <Input
                   id="confirm-password"
                   label="Confirm password"
-                  labelColor="text-secondary-word"
                   className="text-secondary-word"
                   errorMessages={
                     fieldErrors?.confirmPassword
@@ -373,7 +365,10 @@ export default function UserInfoForm({ thisUser }: Props) {
         <footer className="flex flex-row items-center self-end gap-2 pr-3">
           <Button
             type="button"
-            className="w-[100px] self-end text-sm font-extrabold text-white bg-gray-400 hover:bg-gray-300/80 disabled:bg-gray-300/60"
+            className={cn(
+              "w-[100px] self-end text-sm font-extrabold text-white bg-gray-400 hover:bg-gray-300/80 disabled:bg-gray-300/60",
+              "dark:hover:bg-gray-300/80"
+            )}
             onClick={() => {
               setInitialValues(thisUser);
               resetPasswordFields();

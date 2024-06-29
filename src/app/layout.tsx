@@ -8,6 +8,7 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import ReduxProvider from "../redux/provider";
 import { cn } from "../utils/func";
 import { ThemeProvider } from "next-themes";
+import { NextUIProvider } from "@nextui-org/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,20 +24,21 @@ export default async function RootLayout({
 }>) {
   const session = await getServerSession(authOptions);
   return (
-    <html lang="en">
-      <body
-        className={cn(inter.className, "overflow-x-hidden default-scrollbar")}
+    <Provider session={session}>
+      <html
+        lang="en"
+        className={cn("w-screen h-screen overflow-hidden", inter.className)}
       >
-        <Provider session={session}>
-          <ReduxProvider>
-            <ThemeProvider defaultTheme="system" attribute="class">
-              {children}
-            </ThemeProvider>
-          </ReduxProvider>
-        </Provider>
-
-        <Toast />
-      </body>
-    </html>
+        <body className={cn("w-screen h-screen overflow-hidden")}>
+          <ThemeProvider defaultTheme="system" attribute="class">
+            {/* client side from here */}
+            <NextUIProvider>
+              <ReduxProvider>{children}</ReduxProvider>
+            </NextUIProvider>
+            <Toast />
+          </ThemeProvider>
+        </body>
+      </html>
+    </Provider>
   );
 }

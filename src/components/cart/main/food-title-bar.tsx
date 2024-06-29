@@ -52,7 +52,7 @@ const Title = ({
   return (
     <span
       className={cn(
-        "text-secondary-word text-lg font-semibold text-center",
+        "text-secondary-word dark:text-dark-secondary-word text-lg font-semibold text-center",
         className
       )}
     >

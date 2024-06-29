@@ -105,6 +105,7 @@ export const FoodDetail = ({
       onOpenChange={() => onOpenChange(!isOpen)}
       className={cn(
         "z-50 text-primary-word rounded-lg overflow-hidden",
+        "dark:text-dark-primary-word dark:bg-dark-secondart-bg",
         className
       )}
       hideCloseButton
@@ -218,7 +219,7 @@ export const FoodDetail = ({
                     <p>{food.description}</p>
                   </ModalBody>
                 </div>
-                <div className="flex-[0_0_100%] h-full default-scrollbar font-sans pt-4">
+                <div className="flex-[0_0_100%] h-full scrollbar font-sans pt-4">
                   <CommentSection
                     foodId={food.id}
                     hasPurchased={food.purchased}
@@ -229,7 +230,7 @@ export const FoodDetail = ({
             </div>
 
             <ModalFooter className="relative w-full flex flex-row items-center font-sans">
-              <div className="absolute left-1/2 -translate-x-1/2 w-fit h-fit flex flex-row items-center justify-center rounded-2xl overflow-hidden border-2 border-black">
+              <div className="absolute left-1/2 -translate-x-1/2 w-fit h-fit flex flex-row items-center justify-center rounded-2xl overflow-hidden border-2 border-black dark:border-white">
                 <Tab
                   selectedIndex={selectedIndex}
                   index={0}
@@ -251,7 +252,10 @@ export const FoodDetail = ({
                     <ShoppingCart className="w-4 h-4" />
                   )
                 }
-                className="w-min justify-self-end gap-2 font-sans text-nowrap text-primary-word bg-transparent hover:text-primary hover:bg-transparent ease-linear duration-100"
+                className={cn(
+                  "w-min justify-self-end gap-2 font-sans text-nowrap text-primary-word bg-transparent hover:text-primary hover:bg-transparent ease-linear duration-100",
+                  "dark:text-dark-primary-word dark:hover:text-primary dark:hover:bg-transparent"
+                )}
                 onClick={() => {
                   setIsLoading(true);
                   handleAddToCart(food).finally(() => setIsLoading(false));
@@ -282,8 +286,10 @@ const Tab = ({
   setSelectedIndex: (index: number) => void;
   onClick?: () => void;
 }) => {
-  const defaultTabStyle = "text-white bg-black hover:text-primary";
-  const selectedTabStyle = "text-primary-word bg-white hover:text-primary-word";
+  const defaultTabStyle =
+    "text-white bg-black dark:bg-white hover:text-primary dark:text-black dark:hover:text-primary";
+  const selectedTabStyle =
+    "text-primary-word bg-white hover:text-primary-word dark:bg-dark-secondary-bg dark:text-dark-primary-word";
 
   return (
     <span

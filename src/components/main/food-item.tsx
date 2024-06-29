@@ -49,11 +49,12 @@ export default function FoodItem({
   return (
     <div
       className={cn(
-        "rounded overflow-hidden shadow-lg bg-[#12192C] bg-opacity-75 p-0",
+        "rounded overflow-hidden shadow-lg bg-[#575656a6] dark:bg-[#12192ca6] bg-opacity-75 hover:scale-105 p-0 transition-all ease-linear duration-100 cursor-pointer",
         className
       )}
+      onClick={onClick}
     >
-      <div className="w-full h-40 overflow-hidden cursor-pointer">
+      <div className="w-full h-48 overflow-hidden cursor-pointer">
         <FoodImageFrame food={food} onClick={onClick} />
       </div>
       <div className="flex flex-col m-2 gap-2 text-white">
@@ -61,12 +62,14 @@ export default function FoodItem({
           <span className="font-semibold">{food.name}</span>
           <Button
             className={cn(
-              "rounded-full ease-linear duration-100 bg-transparent hover:bg-transparent hover:opacity-60"
+              "rounded-full ease-linear duration-100 bg-transparent hover:bg-transparent hover:opacity-60",
+              "dark:hover:bg-transparent"
             )}
             iconBefore={
               isFavorite ? <SolidHeartIcon /> : <SolidHeartIcon color="white" />
             }
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               handleFavoriteFoodIdsChange(food.id);
             }}
           />

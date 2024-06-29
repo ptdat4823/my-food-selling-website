@@ -6,18 +6,12 @@ import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { ZodType, z } from "zod";
 import { Google } from "../icons/brand";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separate } from "../ui/separate";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
-import { ZodType, z } from "zod";
-import { Session } from "next-auth";
-import {
-  HasAccessToken,
-  LoginWithGoogle,
-  RegisterWithGoogle,
-} from "@/src/actions/auth";
 
 export type LoginFormData = {
   email: string;
@@ -92,7 +86,7 @@ const LoginForm = () => {
           </div>
           <div className="w-2/3 flex flex-row items-center justify-between gap-4">
             <Separate classname="h-[1px]" />
-            <span className="text-nowrap text-secondary-word font-semibold text-xl">
+            <span className="text-nowrap text-secondary-word dark:text-dark-secondary-word font-semibold text-xl">
               Sign In
             </span>
             <Separate classname="h-[1px]" />
@@ -131,14 +125,14 @@ const LoginForm = () => {
 
           <Button
             type="button"
-            className="w-full bg-white hover:bg-gray-200 border text-primary-word gap-2"
+            className="w-full bg-white hover:bg-gray-200 border text-primary-word gap-2 dark:text-dark-secondary-word dark:bg-white/10 dark:hover:bg-white/20"
             iconBefore={<Google />}
             onClick={handleSignInWithGoogle}
           >
             Sign in with google
           </Button>
 
-          <span className="text-sm text-secondary-word">
+          <span className="text-sm text-secondary-word dark:text-dark-secondary-word">
             Don&#39;t have an account
             <span
               onClick={() => router.push("/register")}

@@ -5,6 +5,7 @@ import { GetAllCategories } from "@/src/actions/category";
 import { GetInfo } from "@/src/actions/user";
 import { User } from "@/src/models/User";
 import { notFound } from "next/navigation";
+import MySteryBackground from "@/src/components/ui/mystery-background";
 
 const InventoryPage = async () => {
   const [foodsResult, categoriesResult, userResults] = await Promise.allSettled(
@@ -23,9 +24,11 @@ const InventoryPage = async () => {
   if (!user || !user.isAdmin) return notFound();
 
   return (
-    <div className="h-screen flex flex-col p-8 text-primary-word default-scrollbar overflow-hidden">
+    <div className="h-screen flex flex-col p-8 text-primary-word dark:text-dark-primary-word overflow-x-hidden default-scrollbar dark:white-scrollbar">
       <div className="flex flex-row justify-between mb-4">
-        <h1 className="text-4xl font-bold text-primary">Inventory</h1>
+        <h1 className="text-4xl font-bold text-primary dark:text-dark-primary-word">
+          Inventory
+        </h1>
       </div>
       <InventoryDataTable foods={foods} categories={categories} />
     </div>

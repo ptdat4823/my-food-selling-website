@@ -1,6 +1,7 @@
 import { GetAllCarts } from "@/src/actions/cart";
 import { GetFavouriteFood } from "@/src/actions/food";
 import { GetInfo } from "@/src/actions/user";
+import MySteryBackground from "@/src/components/ui/mystery-background";
 import Sidebar from "@/src/components/ui/sidebar";
 import { Cart } from "@/src/models/Cart";
 import { User } from "@/src/models/User";
@@ -23,13 +24,16 @@ export default async function RootLayout({
     userResults.status === "fulfilled" ? (userResults.value as User) : null;
 
   return (
-    <div className="w-screen flex flex-row">
+    <div className="w-screen flex flex-row h-screen overflow-hidden">
       <Sidebar
         cartQuantity={carts.length}
         favouriteQuantity={favouriteFoods.length}
         user={user}
       />
-      <div className="flex-1">{children}</div>
+      <div className="relative flex-1 h-full">
+        <MySteryBackground />
+        <div className="relative w-full h-full">{children}</div>
+      </div>
     </div>
   );
 }

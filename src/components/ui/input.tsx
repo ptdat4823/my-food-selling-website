@@ -18,6 +18,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className={cn(
             "font-semibold cursor-pointer mb-2",
             labelColor ? labelColor : "text-primary-word",
+            "dark:text-dark-primary-word",
             label ? "" : "hidden"
           )}
         >
@@ -27,7 +28,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={id}
           className={cn(
-            "border-0 outline outline-1 outline-border rounded py-1 px-3 focus:outline-primary disabled:outline-disable font-normal text-primary-word",
+            "border-0 outline outline-1 outline-border rounded py-1 px-3 bg-transparent focus:outline-primary disabled:outline-disable font-normal text-primary-word dark:text-dark-primary-word",
             errorMessages ? "outline-red-500" : "",
             className
           )}

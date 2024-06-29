@@ -46,8 +46,15 @@ export const CommentSection = ({
   }, []);
 
   return (
-    <div className="w-3/5 mx-auto h-full bg-white text-black rounded-lg px-2">
-      <h2 className="text-3xl font-bold mb-2 text-gray-800">Comments</h2>
+    <div
+      className={cn(
+        "w-3/5 mx-auto h-full bg-transparent text-black rounded-lg px-2",
+        "dark:text-dark-primary-word"
+      )}
+    >
+      <h2 className="text-3xl font-bold mb-2 text-primary-word dark:text-dark-primary-word">
+        Comments
+      </h2>
       {hasPurchased && !hasCommented ? (
         <CommentForm foodId={foodId} handleAfterComment={handleAfterComment} />
       ) : null}

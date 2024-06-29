@@ -57,7 +57,7 @@ const CartList = ({ carts, className }: CartListProps) => {
       {cartData.length > 0 && (
         <>
           <FoodTitleBar />
-          <div className="h-full flex flex-col items-center gap-2 overflow-y-scroll default-scrollbar">
+          <div className="h-full flex flex-col items-center gap-2 overflow-x-hidden default-scrollbar dark:white-scrollbar">
             {cartData.map((cart) => {
               const handleQuantityChange = (value: number) => {
                 //for updating the cart in the local state

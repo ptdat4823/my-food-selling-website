@@ -83,7 +83,7 @@ const RegisterForm = () => {
           </div>
           <div className="w-2/3 flex flex-row items-center justify-between gap-4">
             <Separate classname="h-[1px]" />
-            <span className="text-nowrap text-secondary-word font-semibold text-xl">
+            <span className="text-nowrap text-secondary-word dark:text-dark-secondary-word font-semibold text-xl">
               Sign up your account
             </span>
             <Separate classname="h-[1px]" />
@@ -138,7 +138,7 @@ const RegisterForm = () => {
             {isSigningUp ? "" : "Sign Up"}
           </Button>
 
-          <span className="text-sm text-secondary-word">
+          <span className="text-sm text-secondary-word dark:text-dark-secondary-word">
             Already have an account
             <span
               onClick={() => router.push("/login")}

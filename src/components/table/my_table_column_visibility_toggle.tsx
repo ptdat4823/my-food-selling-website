@@ -10,6 +10,7 @@ import {
 import { Settings2 } from "lucide-react";
 import { Checkbox } from "@nextui-org/react";
 import { Button } from "../ui/button";
+import { cn } from "@/src/utils/func";
 
 interface DataTableViewOptionsProps<TData> {
   title: string;
@@ -37,14 +38,17 @@ function DataTableViewOptions<TData>({
       <DropdownMenuTrigger asChild>
         <Button
           iconBefore={<Settings2 className="h-4 w-4" />}
-          className="gap-2 whitespace-nowrap text-secondary-word bg-gray-100 hover:bg-gray-200 ease-linear duration-100 py-2 rounded-md cursor-pointer select-none"
+          className={cn(
+            "gap-2 whitespace-nowrap text-secondary-word bg-gray-100 hover:bg-gray-200 ease-linear duration-100 py-2 rounded-md cursor-pointer select-none",
+            "dark:bg-white/10 dark:hover:bg-dark-hover-secondary"
+          )}
         >
           {title}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="font-sans flex flex-row justify-between space-x-2 bg-white text-secondary-word"
+        className="font-sans flex flex-row justify-between space-x-2 bg-white text-secondary-word dark:bg-dark-secondary-bg dark:text-dark-secondary-word"
       >
         {arrColIndex.map((col) => {
           return (
@@ -64,7 +68,7 @@ function DataTableViewOptions<TData>({
                     if (colIndex === col) {
                       return (
                         <div
-                          className="flex select-none flex-row items-center space-x-2 rounded-md p-2 duration-100 ease-linear hover:cursor-pointer hover:bg-[#f5f5f4]"
+                          className="flex select-none flex-row items-center space-x-2 rounded-md p-2 duration-100 ease-linear hover:cursor-pointer hover:bg-[#f5f5f4] dark:hover:bg-white/10"
                           key={column.id}
                           onClick={() =>
                             column.toggleVisibility(!column.getIsVisible())

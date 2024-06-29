@@ -3,6 +3,7 @@ import LayoutCard from "../card/layout-card";
 import { LayoutCompareCard } from "../card/compare-card";
 import { MonthlyReport } from "@/src/models/Report";
 import { CircleOff } from "lucide-react";
+import { cn } from "@/src/utils/func";
 
 interface Props {
   cancelledOrderReport: MonthlyReport;
@@ -31,7 +32,13 @@ const CancelledOrderReport = ({ cancelledOrderReport }: Props) => {
         className="border-0 p-0"
         isInvertColor={true}
         icon={
-          <div className="flex flex-row items-center justify-center w-10 h-10 bg-red-300 rounded-full justify-self-end text-white border-2 border-white outline outline-2 outline-red-300">
+          <div
+            className={cn(
+              "h-fit p-2 flex flex-row items-center justify-center rounded-full justify-self-end border-2 outline outline-2",
+              "bg-red-300 text-white border-white outline-red-300",
+              "dark:text-red-300 dark:bg-transparent dark:border-transparent"
+            )}
+          >
             <CircleOff size={20} />
           </div>
         }

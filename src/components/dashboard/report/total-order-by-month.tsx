@@ -64,14 +64,15 @@ export const OrderReport = ({ report }: { report: TotalOrderReport }) => {
               </div>
             </div>
             <div className="w-fit flex flex-row gap-10">
-              <div className="flex-1 text-xl text-secondary-word">
+              <div className="flex-1 text-xl text-secondary-word dark:text-dark-secondary-word">
                 {displayNumber(value, value > 1 ? " orders" : " order")}
               </div>
               <div
                 className={cn(
                   "flex flex-row gap-2 items-end",
                   value > prevValue && "text-green-500",
-                  value === prevValue && "text-secondary-word",
+                  value === prevValue &&
+                    "text-secondary-word dark:text-dark-secondary-word",
                   value < prevValue && "text-red-500"
                 )}
               >
@@ -81,7 +82,7 @@ export const OrderReport = ({ report }: { report: TotalOrderReport }) => {
                 {value >= prevValue && "+"}
                 {value < prevValue && "-"}
                 {formattedOffset}
-                <span className="text-secondary-word">
+                <span className="text-secondary-word dark:text-dark-secondary-word">
                   {" "}
                   from {getMonthLabel(current.getMonth())}
                 </span>

@@ -88,18 +88,17 @@ const actionColumn = (
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="w-6 h-6 p-0 bg-transparent hover:bg-gray-200 hover:opacity-100 text-black">
-              <span className="sr-only">See actions</span>
+            <Button className="w-6 h-6 p-0 bg-transparent hover:bg-gray-200 dark:hover:bg-white/10 hover:opacity-100 text-black">
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="bg-white text-primary-word font-sans z-50"
+            className="bg-white text-primary-word dark:bg-dark-secondary-bg dark:text-dark-primary-word font-sans z-50"
           >
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              className="hover:bg-gray-100 cursor-pointer ease-linear duration-100"
+              className="hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer ease-linear duration-100"
               onClick={() => {
                 navigator.clipboard.writeText(row.original.id.toString());
                 showSuccessToast("Order ID copied to clipboard");
@@ -109,7 +108,7 @@ const actionColumn = (
             </DropdownMenuItem>
             <DropdownMenuItem
               className={cn(
-                "text-red-500 hover:bg-gray-100 cursor-pointer ease-linear duration-100",
+                "text-red-500 hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer ease-linear duration-100",
                 (status as OrderStatus) === OrderStatus.PENDING ? "" : "hidden"
               )}
               onClick={() => handleStatusChange(OrderStatus.CANCELLED)}

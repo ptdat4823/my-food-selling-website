@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 const TestPage = () => {
   return (
     <div
-      className="h-screen w-full bg-blue-200 overflow-y-scroll default-scrollbar"
+      className="h-screen w-full bg-blue-200 overflow-y-scroll scrollbar"
       onScroll={(e) => {
         console.log("scrolling", e);
       }}

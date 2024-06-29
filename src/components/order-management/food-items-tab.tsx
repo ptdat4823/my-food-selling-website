@@ -20,7 +20,7 @@ export const FoodItemTab = ({
 }) => {
   const selectedStyle = "bg-primary text-white hover:opacity-100";
   const defaultStyle =
-    "bg-gray-100 hover:bg-gray-100 text-secondary-word hover:text-primary-word";
+    "bg-gray-100 hover:bg-gray-100 text-secondary-word hover:text-primary-word dark:bg-white/10";
   return (
     <Button
       className={cn(

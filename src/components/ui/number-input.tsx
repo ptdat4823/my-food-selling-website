@@ -40,6 +40,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         <span
           className={cn(
             "cursor-pointer text-primary-word hover:text-hover-primary ease-linear duration-100",
+            "dark:text-dark-primary-word",
             disabled ? "opacity-0" : ""
           )}
           onClick={onDecrease}
@@ -55,7 +56,8 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           onChange={onChange}
           disabled={disabled}
           className={cn(
-            "w-[60px] border-0 outline outline-1 outline-border rounded py-1 px-3 focus:outline-primary disabled:outline-disable font-normal text-center text-primary-word",
+            "w-[60px] border-0 outline outline-1 outline-border rounded py-1 px-3 bg-transparent focus:outline-primary disabled:outline-disable font-normal text-center text-primary-word",
+            "dark:text-dark-primary-word dark:focus:outline-dark-primary",
             errorMessages ? "outline-red-500" : "",
             className
           )}
@@ -64,6 +66,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         <span
           className={cn(
             "cursor-pointer text-primary-word hover:text-hover-primary ease-linear duration-100",
+            "dark:text-dark-primary-word",
             disabled ? "opacity-0" : ""
           )}
           onClick={onIncrease}

@@ -3,6 +3,7 @@ import LayoutCard from "../card/layout-card";
 import { LayoutCompareCard } from "../card/compare-card";
 import { MonthlyReport } from "@/src/models/Report";
 import { Percent } from "lucide-react";
+import { cn } from "@/src/utils/func";
 
 interface Props {
   cancellationRateReport: MonthlyReport;
@@ -30,7 +31,13 @@ const CancellationRateReport = ({ cancellationRateReport }: Props) => {
         className="border-0 p-0"
         isInvertColor={true}
         icon={
-          <div className="flex flex-row items-center justify-center w-10 h-10 bg-orange-300 rounded-full justify-self-end text-white border-2 border-white outline outline-2 outline-orange-300">
+          <div
+            className={cn(
+              "h-fit p-2 flex flex-row items-center justify-center rounded-full justify-self-end border-2 outline outline-2",
+              "bg-orange-300 text-white border-white outline-orange-300",
+              "dark:text-orange-300 dark:bg-transparent dark:border-transparent"
+            )}
+          >
             <Percent size={20} />
           </div>
         }

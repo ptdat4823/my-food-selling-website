@@ -17,9 +17,11 @@ export default async function OrderManagementPage() {
   console.log("user", user);
   if (!user || !user.isAdmin) return notFound();
   return (
-    <div className="h-screen flex flex-col p-8 text-primary-word overflow-y-scroll default-scrollbar">
+    <div className="h-screen flex flex-col p-8 text-primary-word dark:text-dark-primary-word overflow-y-scroll scrollbar">
       <div className="flex flex-row justify-between mb-4">
-        <h1 className="text-4xl font-bold text-primary">Order management</h1>
+        <h1 className="text-4xl font-bold text-primary dark:text-dark-primary-word">
+          Order management
+        </h1>
       </div>
       <OrderManagementDataTable orders={orders} />
     </div>

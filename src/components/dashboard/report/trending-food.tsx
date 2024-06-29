@@ -13,7 +13,12 @@ interface Props {
 export const TrendingFoodReport = ({ data, className }: Props) => {
   return (
     <LayoutCard className={cn("h-full flex flex-col gap-2", className)}>
-      <span className="font-semibold text-primary-word text-xl">
+      <span
+        className={cn(
+          "font-semibold text-primary-word text-2xl mb-4",
+          "dark:text-dark-primary-word"
+        )}
+      >
         Trending foods
       </span>
       <HeaderRow />
@@ -28,7 +33,7 @@ export const TrendingFoodReport = ({ data, className }: Props) => {
 
 const HeaderRow = () => {
   return (
-    <div className="bg-purple-100 rounded-md flex flex-row justify-between py-3 px-4">
+    <div className="bg-purple-100 dark:bg-[#8b26a2] rounded-md flex flex-row justify-between py-3 px-4">
       <span>Food name</span>
       <span>Orders</span>
     </div>
@@ -51,7 +56,12 @@ const FoodRow = ({ food, count }: { food: Food; count: number }) => {
       displayNumber(minPrice, "$") + " - " + displayNumber(maxPrice, "$");
   }
   return (
-    <div className="rounded-md bg-white hover:bg-white/10 flex flex-row justify-between py-3 pr-4 text-primary-word">
+    <div
+      className={cn(
+        "rounded-md bg-white hover:bg-white/10 flex flex-row justify-between py-3 pr-4 text-primary-word",
+        "dark:bg-[#412b6d] dark:hover:bg-[#412b6d]/80 dark:text-dark-primary-word"
+      )}
+    >
       <div className="flex flex-row gap-4">
         <Image
           src={food.images[0]}
@@ -63,11 +73,15 @@ const FoodRow = ({ food, count }: { food: Food; count: number }) => {
         <div className="flex-1">
           <div className="flex flex-col">
             <span className="font-semibold">{food.name}</span>
-            <span className="text-secondary-word">{formattedPrice}</span>
+            <span className="text-secondary-word dark:text-dark-secondary-word">
+              {formattedPrice}
+            </span>
           </div>
         </div>
       </div>
-      <span className="text-secondary-word">{count}</span>
+      <span className="text-secondary-word dark:text-dark-secondary-word">
+        {count}
+      </span>
     </div>
   );
 };

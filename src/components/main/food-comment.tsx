@@ -50,28 +50,35 @@ export const FoodComment = ({
             <div className="flex items-center gap-4">
               <h4
                 className={cn(
-                  "text-sm font-semibold ",
-                  isFromUser ? "text-primary-word" : "text-secondary-word"
+                  "text-sm font-semibold text-primary-word",
+                  "dark:text-dark-primary-word"
                 )}
               >
                 {comment.user.name}
               </h4>
-              <StarsIcon rating={comment.rating} />
+              <div className="flex">
+                <StarsIcon rating={comment.rating} />
+              </div>
             </div>
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-gray-600 dark:text-white">
               {new Date(comment.createdAt).toLocaleString()}
             </p>
           </div>
-          <h5 className="text-md font-semibold text-gray-800 mt-1">
+          <h5 className="text-md font-semibold text-gray-800 dark:text-white mt-1">
             {comment.title}
           </h5>
-          <p className="text-gray-700 text-sm">{comment.content}</p>
+          <p className="text-gray-700 dark:text-white text-sm">
+            {comment.content}
+          </p>
         </div>
       </div>
 
       {isFromUser && (
         <Button
-          className="absolute top-2 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 opacity-0 pointer-events-none -translate-y-2 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0 ease-linear duration-200"
+          className={cn(
+            "absolute top-2 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 opacity-0 pointer-events-none -translate-y-2 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0 ease-linear duration-200",
+            "dark:bg-gray-100 dark:hover:bg-gray-300"
+          )}
           iconAfter={
             isDeleting ? (
               <LoadingCircle />

@@ -31,7 +31,7 @@ export const FoodItemSearch = ({
   return (
     <div
       onMouseDown={onMouseDown}
-      className="px-4 py-2 text-sm flex flex-row items-center bg-white hover:bg-gray-100 hover:cursor-pointer ease-linear duration-100"
+      className="px-4 py-2 text-sm flex flex-row items-center hover:bg-gray-100 dark:hover:bg-white/10 bg-transparent hover:cursor-pointer ease-linear duration-100"
     >
       <div className="rounded-md overflow-hidden">
         <Image

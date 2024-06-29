@@ -1,14 +1,14 @@
 "use client";
-import { Cart } from "@/src/models/Cart";
-import { Checkbox, Tooltip, divider } from "@nextui-org/react";
 import foodDefaultImage from "@/public/images/default_food.jpg";
-import Image from "next/image";
+import { Cart } from "@/src/models/Cart";
 import { cn, displayNumber } from "@/src/utils/func";
+import { Checkbox, Tooltip } from "@nextui-org/react";
 import { Edit, FileText, X } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { TextArea } from "../../ui/textarea";
-import { NumberInput } from "../../ui/number-input";
 import LoadingCircle from "../../icons/custom-with-css/LoadingCircle/loading_circle";
+import { NumberInput } from "../../ui/number-input";
+import { TextArea } from "../../ui/textarea";
 
 export const CartItem = ({
   cart,
@@ -53,6 +53,7 @@ export const CartItem = ({
       ref={cartRef}
       className={cn(
         "w-full group text-primary-word rounded-md bg-slate-50 flex flex-row items-center justify-end p-2",
+        "dark:text-dark-primary-word dark:bg-dark-bg",
         isOutOfStock ? "" : "cursor-pointer"
       )}
       onClick={() => {
@@ -64,8 +65,12 @@ export const CartItem = ({
         isSelected={isSelected}
         isDisabled={isOutOfStock}
         className="mr-2"
+        classNames={{
+          wrapper: "dark:bg-dark-secondary-bg",
+        }}
         onClick={onSelected}
       />
+
       <div className="flex-1 flex md:flex-row max-md:flex-col md:items-center md:gap-4 max-md:items-start text-center font-semibold text-lg">
         <Image
           src={foodDefaultImage}
@@ -134,7 +139,7 @@ export const CartItem = ({
                 >
                   {isEdittingNote ? (
                     <TextArea
-                      className="outline-0 rounded-lg resize-none"
+                      className="outline-1 outline-cyan-500 rounded-lg resize-none dark:bg-black"
                       value={tempCartNote}
                       onChange={(e) => setTempCartNote(e.currentTarget.value)}
                       onKeyDown={(e) => {
@@ -167,7 +172,7 @@ export const CartItem = ({
                 ],
                 // tooltip color
                 content: [
-                  "bg-cyan-500 text-white font-sans px-1 focus-within:bg-cyan-500",
+                  "bg-cyan-500 text-white font-sans p-0 focus-within:bg-cyan-500",
                 ],
               }}
             >
@@ -186,7 +191,7 @@ export const CartItem = ({
                 {cart.note && cart.note.length > 0 ? (
                   <FileText className="text-cyan-500" />
                 ) : (
-                  <Edit />
+                  <Edit className="dark:text-dark-primary-word" />
                 )}
               </span>
             </Tooltip>

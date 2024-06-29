@@ -18,13 +18,15 @@ const CartTab = ({
   href: string;
   disabled?: boolean;
 }) => {
-  const selectedNumStyle = "bg-primary";
-  const selectedStepStyle = "text-primary-word";
-  const defaultNumStyle = "bg-disable";
-  const defaultStepStyle = "text-secondary-word";
-  const disableNumStyle = "cursor-default bg-disable hover:bg-disable";
+  const selectedNumStyle = "bg-primary dark:bg-dark-primary";
+  const selectedStepStyle = "text-primary-word dark:text-dark-primary-word";
+  const defaultNumStyle = "bg-disable dark:bg-dark-disable";
+  const defaultStepStyle =
+    "text-secondary-word hover:text-primary-word dark:text-dark-secondary-word dark:hover:text-dark-primary-word";
+  const disableNumStyle =
+    "cursor-default bg-disable dark:bg-dark-disable hover:bg-disable dark:hover:bg-dark-disable";
   const disableStepStyle =
-    "cursor-default text-secondary-word hover:text-secondary-word";
+    "cursor-default text-secondary-word hover:text-secondary-word dark:text-dark-secondary-word dark:hover:text-dark-secondary-word";
   const path = usePathname();
   return (
     <Link
@@ -42,7 +44,7 @@ const CartTab = ({
       </div>
       <span
         className={cn(
-          "cursor-pointer font-semibold text-lg whitespace-nowrap hover:text-primary-word ease-linear duration-100",
+          "cursor-pointer font-semibold text-lg whitespace-nowrap ease-linear duration-100",
           path === href ? selectedStepStyle : defaultStepStyle,
           disabled && disableStepStyle
         )}

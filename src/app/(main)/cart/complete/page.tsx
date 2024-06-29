@@ -1,11 +1,10 @@
 "use client";
 import { PaymentStepBar } from "@/src/components/cart/main/payment-step-bar";
 import { Button } from "@/src/components/ui/button";
+import { cn } from "@/src/utils/func";
 import { CircleCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import animation from "src/style/animation.module.css";
-import React, { use, useEffect } from "react";
-import { cn } from "@/src/utils/func";
 
 const CartCompletePage = () => {
   const router = useRouter();
@@ -17,8 +16,10 @@ const CartCompletePage = () => {
       )}
     >
       <div className={cn("min-h-screen flex-1 p-8")}>
-        <div className="bg-white flex flex-col gap-8 items-start mb-4 font-sans">
-          <h1 className="text-primary text-3xl font-bold">Your cart</h1>
+        <div className="bg-transparent flex flex-col gap-8 items-start mb-4 font-sans">
+          <h1 className="text-primary dark:text-dark-primary-word text-3xl font-bold">
+            Your cart
+          </h1>
         </div>
         <div
           className={cn(
@@ -55,7 +56,10 @@ const CartCompletePage = () => {
             )}
           >
             <Button
-              className="w-1/2 bg-gray-50 text-secondary-word hover:bg-gray-100 hover:text-primary-word whitespace-nowrap"
+              className={cn(
+                "w-1/2 bg-gray-50 text-secondary-word hover:bg-gray-100 hover:text-primary-word whitespace-nowrap",
+                "dark:bg-white/10 dark:hover:bg-white/20"
+              )}
               onClick={() => router.push("/history")}
             >
               View order

@@ -61,13 +61,19 @@ export function CustomDataTablePagination<TData>({
       {table.getPageCount() > 0 ? (
         <div className="flex flex-row gap-2">
           <Button
-            className="hidden h-8 w-8 p-0 lg:flex whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white"
+            className={cn(
+              "hidden h-8 w-8 p-0 lg:flex whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white",
+              "dark:bg-white/10 dark:hover:bg-white/20 dark:text-dark-primary-word dark:disabled:hover:bg-white/10"
+            )}
             onClick={() => handlePageChange(0)}
             disabled={!table.getCanPreviousPage()}
             iconAfter={<ChevronsLeft className="h-4 w-4" />}
           ></Button>
           <Button
-            className="h-8 w-8 p-0 whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white"
+            className={cn(
+              "h-8 w-8 p-0 whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white",
+              "dark:bg-white/10 dark:hover:bg-white/20 dark:text-dark-primary-word dark:disabled:hover:bg-white/10"
+            )}
             onClick={() => handlePageChange(currentPageIndex - 1)}
             disabled={!table.getCanPreviousPage()}
             iconAfter={<ChevronLeftIcon className="h-4 w-4" />}
@@ -77,13 +83,19 @@ export function CustomDataTablePagination<TData>({
             {table.getPageCount()}
           </div>
           <Button
-            className="h-8 w-8 p-0 whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white"
+            className={cn(
+              "h-8 w-8 p-0 whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white",
+              "dark:bg-white/10 dark:hover:bg-white/20 dark:text-dark-primary-word dark:disabled:hover:bg-white/10"
+            )}
             onClick={() => handlePageChange(currentPageIndex + 1)}
             disabled={!table.getCanNextPage()}
             iconAfter={<ChevronRightIcon className="h-4 w-4" />}
           ></Button>
           <Button
-            className="hidden h-8 w-8 p-0 lg:flex whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white"
+            className={cn(
+              "hidden h-8 w-8 p-0 lg:flex whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white",
+              "dark:bg-white/10 dark:hover:bg-white/20 dark:text-dark-primary-word dark:disabled:hover:bg-white/10"
+            )}
             onClick={() => handlePageChange(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
             iconAfter={<ChevronsRight className="h-4 w-4" />}
@@ -104,13 +116,13 @@ export function CustomDataTablePagination<TData>({
             </SelectTrigger>
             <SelectContent
               side="top"
-              className="font-sans bg-white text-primary-word"
+              className="font-sans bg-white text-primary-word dark:bg-dark-secondary-bg dark:text-dark-primary-word"
             >
               {[10, 20, 30, 40, 50].map((pageSize) => (
                 <SelectItem
                   key={pageSize}
                   value={`${pageSize}`}
-                  className="cursor-pointer hover:bg-gray-100"
+                  className="cursor-pointer hover:bg-gray-100 dark:hover:bg-white/10"
                 >
                   {pageSize}
                 </SelectItem>

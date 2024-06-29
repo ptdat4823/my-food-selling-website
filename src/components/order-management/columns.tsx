@@ -58,16 +58,16 @@ const statusColumn = (
       //styles of each status
       if (value === OrderStatus.PENDING)
         styleButton =
-          "text-yellow-400 bg-yellow-50 hover:bg-yellow-100 outline-yellow-300";
+          "text-yellow-400 bg-yellow-50 hover:bg-yellow-100 outline-yellow-300 dark:text-yellow-400 dark:bg-transparent dark:hover:bg-white/10";
       if (value === OrderStatus.ACCEPTED)
         styleButton =
-          "text-green-400 bg-green-50 hover:bg-green-100 outline-green-300";
+          "text-green-400 bg-green-50 hover:bg-green-100 outline-green-300 dark:text-green-400 dark:bg-transparent dark:hover:bg-white/10";
       if (value === OrderStatus.CANCELLED)
         styleButton =
-          "text-red-500 bg-red-50 hover:bg-red-50 focus:outline-red-300";
+          "text-red-500 bg-red-50 hover:bg-red-50 focus:outline-red-300 dark:text-red-400 dark:bg-transparent dark:hover:bg-white/10";
       if (value === OrderStatus.DELIVERED)
         styleButton =
-          "text-blue-500 bg-blue-50 hover:bg-blue-50 focus:outline-blue-300";
+          "text-blue-500 bg-blue-50 hover:bg-blue-50 focus:outline-blue-300 dark:text-blue-400 dark:bg-transparent dark:hover:bg-white/10";
       const handleStatusChange = async (status: OrderStatus) => {
         const id = row.original.id;
         onStatusChange(id, status);
@@ -93,7 +93,7 @@ const statusColumn = (
                 : (value as OrderStatus)}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="font-sans bg-white text-secondary-word">
+          <DropdownMenuContent className="font-sans bg-white text-secondary-word dark:bg-dark-secondary-bg">
             {Object.keys(OrderStatus).map((key) => (
               <DropdownMenuCheckboxItem
                 key={key}
@@ -102,18 +102,18 @@ const statusColumn = (
                   handleStatusChange(key as OrderStatus);
                 }}
                 className={cn(
-                  "cursor-pointer ease-linear duration-100 bg-white",
+                  "cursor-pointer ease-linear duration-100",
                   key === OrderStatus.PENDING
-                    ? "text-yellow-400 hover:bg-yellow-100"
+                    ? "text-yellow-400 hover:bg-yellow-100 dark:hover:bg-white/10"
                     : "",
                   key === OrderStatus.ACCEPTED
-                    ? "text-green-400 hover:bg-green-100"
+                    ? "text-green-400 hover:bg-green-100 dark:hover:bg-white/10"
                     : "",
                   key === OrderStatus.CANCELLED
-                    ? "text-red-400 hover:bg-red-100"
+                    ? "text-red-400 hover:bg-red-100 dark:hover:bg-white/10"
                     : "",
                   key === OrderStatus.DELIVERED
-                    ? "text-blue-400 hover:bg-blue-100"
+                    ? "text-blue-400 hover:bg-blue-100 dark:hover:bg-white/10"
                     : ""
                 )}
               >

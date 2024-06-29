@@ -24,7 +24,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     ref
   ) => {
     return (
-      <div className="relative w-full flex flex-col">
+      <div className="relative w-full flex flex-col bg-transparent">
         <label
           htmlFor={id}
           className={cn(
@@ -41,7 +41,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           name={name}
           placeholder={placeholder}
           className={cn(
-            "border-0 outline outline-1 outline-border rounded py-1 px-3 focus:outline-primary disabled:outline-disable font-normal text-primary-word",
+            "border-0 outline outline-1 bg-transparent outline-border rounded py-1 px-3 focus:outline-primary disabled:outline-disable font-normal text-primary-word dark:text-dark-primary-word",
             className
           )}
           {...props}

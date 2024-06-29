@@ -6,12 +6,14 @@ import { useState } from "react";
 import { FoodDetail } from "../main/food-detail";
 import { EmptyItem } from "./empty-item";
 import FavouriteFoodItem from "./favorite-food-item";
+import FoodItem from "../main/food-item";
 
 interface Props {
   foods: Food[];
   user: User;
 }
 const FavoriteFoodList = ({ foods, user }: Props) => {
+  console.log("FavouriteFood", foods);
   const [isOpen, setOpen] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food>();
 
@@ -25,17 +27,17 @@ const FavoriteFoodList = ({ foods, user }: Props) => {
       {foods.length === 0 && <EmptyItem />}
       <div
         className={cn(
-          "grid grid-cols-4 gap-4 max-md:grid-cols-1 max-lg:grid-cols-2",
+          "grid grid-cols-3 gap-2 max-md:grid-cols-1 max-lg:grid-cols-2",
           foods.length === 0 ? "hidden" : ""
         )}
       >
         {foods.map((food) => {
           return (
-            <FavouriteFoodItem
+            <FoodItem
               key={food.id}
               food={food}
-              isFavorite={true}
               onClick={() => handleFoodClick(food)}
+              isFavorite={true}
             />
           );
         })}

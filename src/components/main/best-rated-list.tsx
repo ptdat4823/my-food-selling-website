@@ -15,7 +15,9 @@ const BestRatedList = ({ foods, favoriteFoodIds, user }: Props) => {
     .sort((a, b) => b.rating - a.rating);
   return (
     <div>
-      <h3 className="text-4xl font-semibold mb-4 text-white">Best rated</h3>
+      <h3 className="text-4xl font-semibold mb-4 text-primary dark:text-dark-primary-word">
+        Best rated
+      </h3>
       <FoodList
         foods={bestRatedList}
         favoriteFoodIds={favoriteFoodIds}

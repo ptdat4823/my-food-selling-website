@@ -15,7 +15,9 @@ const BestSellerList = ({ foods, favoriteFoodIds, user }: Props) => {
     .sort((a, b) => b.totalSold - a.totalSold);
   return (
     <div>
-      <h3 className="text-4xl font-semibold mb-4 text-white">Best sellers</h3>
+      <h3 className="text-4xl font-semibold mb-4 text-primary dark:text-dark-primary-word">
+        Best sellers
+      </h3>
       <FoodList
         foods={bestSellerFoods}
         favoriteFoodIds={favoriteFoodIds}

@@ -2,6 +2,7 @@ import { MonthlyReport } from "@/src/models/Report";
 import { CircleCheckBig } from "lucide-react";
 import { LayoutCompareCard } from "../card/compare-card";
 import LayoutCard from "../card/layout-card";
+import { cn } from "@/src/utils/func";
 
 interface Props {
   completedOrderReport: MonthlyReport;
@@ -29,7 +30,13 @@ const CompletedOrderReport = ({ completedOrderReport }: Props) => {
         hasSpace={true}
         className="border-0 p-0 "
         icon={
-          <div className="flex flex-row items-center justify-center w-10 h-10 bg-green-300 rounded-full justify-self-end text-white border-2 border-white outline outline-2 outline-green-300">
+          <div
+            className={cn(
+              "h-fit p-2 flex flex-row items-center justify-center rounded-full justify-self-end border-2 outline outline-2",
+              "bg-green-300 text-white border-white outline-green-300",
+              "dark:text-green-300 dark:bg-transparent dark:border-transparent"
+            )}
+          >
             <CircleCheckBig size={20} />
           </div>
         }

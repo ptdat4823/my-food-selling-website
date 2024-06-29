@@ -22,9 +22,9 @@ const FoodImageFrame = ({ food, onClick }: Props) => {
       <Image
         src={food.images[0] || "/images/default_food.jpg"}
         alt={food.name + " image"}
-        width={200}
+        width={450}
         height={200}
-        className="h-40 bg-center bg-cover bg-no-repeat object-center"
+        className="h-52 bg-center bg-cover bg-no-repeat object-center"
       />
     </div>
   );

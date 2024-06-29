@@ -73,6 +73,7 @@ function defaultSelectColumn<T>(): ColumnDef<T> {
         onValueChange={(value) => row.toggleSelected(!!value)}
         onClick={(e) => e.stopPropagation()}
         className="mr-5"
+        color="primary"
       />
     ),
     enableSorting: false,

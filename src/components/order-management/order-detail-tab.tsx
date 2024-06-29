@@ -66,7 +66,7 @@ export const OrderDetailTab = ({
       <div className="h-fit flex flex-col gap-4">
         <div className="flex flex-row items-center gap-2">
           <div className="flex flex-row gap-2 items-center">
-            <Button className="text-sm rounded-md py-1 bg-gray-100 text-secondary-word hover:bg-gray-100 hover:opacity-100">
+            <Button className="text-sm rounded-md py-1 bg-gray-100 text-secondary-word hover:bg-gray-100 hover:opacity-100 dark:bg-white/10 dark:hover:bg-white/20">
               Items
             </Button>
             <ChevronRight className="w-5 h-5 text-secondary-word" />

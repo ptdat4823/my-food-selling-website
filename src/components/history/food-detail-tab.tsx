@@ -67,13 +67,13 @@ export const FoodDetailTab = ({
               {order.feedback ? "Rated" : "Rate this order"}
             </Button>
           )}
-          <span className="text-secondary-word italic">
+          <span className="text-secondary-word dark:text-dark-secondary-word italic">
             VAT:{" "}
             <span className="w-fit text-primary font-normal">
               {displayNumber(order.total - order.total / 1.1, "$")}
             </span>
           </span>
-          <span className="text-secondary-word italic">
+          <span className="text-secondary-word dark:text-dark-secondary-word italic">
             Total:{" "}
             <span className="w-fit text-primary font-normal">
               {displayNumber(order.total, "$")}

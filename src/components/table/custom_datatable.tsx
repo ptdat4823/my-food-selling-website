@@ -152,19 +152,22 @@ export function CustomDatatable<TData>({
               <DropdownMenuTrigger asChild>
                 <Button
                   iconBefore={<Filter className="h-4 w-4" />}
-                  className="gap-2 whitespace-nowrap text-secondary-word bg-gray-100 hover:bg-gray-200 ease-linear duration-100 py-2 rounded-md cursor-pointer outline-none select-none"
+                  className={cn(
+                    "gap-2 whitespace-nowrap text-secondary-word bg-gray-100 hover:bg-gray-200 ease-linear duration-100 py-2 rounded-md cursor-pointer outline-none select-none",
+                    "dark:bg-white/10 dark:hover:bg-dark-hover-secondary"
+                  )}
                 >
                   {columnTitles[selectedFilterKey] || "Filter"}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="font-sans bg-white text-secondary-word z-50">
+              <DropdownMenuContent className="font-sans bg-white text-secondary-word dark:bg-dark-secondary-bg dark:text-dark-primary-word z-50">
                 <DropdownMenuCheckboxItem
                   key="all"
                   checked={selectedFilterKey === ""}
                   onClick={(checked) => {
                     handleFilterChange(colFilterInput, "");
                   }}
-                  className="cursor-pointer hover:bg-gray-100 ease-linear duration-100"
+                  className="cursor-pointer hover:bg-gray-100 dark:hover:bg-white/10 ease-linear duration-100"
                 >
                   All columns
                 </DropdownMenuCheckboxItem>
@@ -175,7 +178,7 @@ export function CustomDatatable<TData>({
                     onClick={(checked) => {
                       handleFilterChange(colFilterInput, key);
                     }}
-                    className="cursor-pointer hover:bg-gray-100 ease-linear duration-100"
+                    className="cursor-pointer hover:bg-gray-100 dark:hover:bg-white/10 ease-linear duration-100"
                   >
                     {columnTitles[key]}
                   </DropdownMenuCheckboxItem>

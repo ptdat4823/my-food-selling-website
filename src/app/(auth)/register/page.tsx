@@ -8,6 +8,7 @@ const RegisterPage = () => {
       <div
         className={cn(
           "h-full col-start-3 col-span-8 bg-white p-8 rounded-xl shadow",
+          "dark:bg-dark-bg transition-all ease-linear duration-200",
           animation["fade-in"]
         )}
       >

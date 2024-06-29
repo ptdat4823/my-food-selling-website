@@ -7,7 +7,8 @@ interface LineChartDataConfigProps {
 }
 const LineChartConfig = (
   datasets: LineChartDataConfigProps[],
-  options?: any
+  options?: any,
+  isDarkMode: boolean = false
 ) => {
   const currentMonth = new Date().getMonth() + 1;
   const monthList = getAllMonthLabels(
@@ -33,6 +34,7 @@ const LineChartConfig = (
           };
           return line;
         }),
+        backgroundColor: "#347aeb",
         barThickness: 40,
         segment: {
           pointBorderColor: (ctx: any) => "#4169E1",

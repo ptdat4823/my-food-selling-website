@@ -6,9 +6,8 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 interface Props {
   children: ReactNode;
   className?: ClassValue;
-  isScrollingUp?: boolean;
 }
-const FadeInSection = ({ children, className, isScrollingUp }: Props) => {
+const FadeInSection = ({ children, className }: Props) => {
   const [countIntersection, setCountIntersection] = useState(0);
   const ref = useRef<HTMLSelectElement>(null);
 
@@ -25,10 +24,6 @@ const FadeInSection = ({ children, className, isScrollingUp }: Props) => {
       if (ref.current) observer.unobserve(ref.current);
     };
   }, []);
-
-  //   useEffect(() => {
-  //     console.log("child scroll", isScrollingUp);
-  //   }, [isScrollingUp]);
 
   return (
     <section

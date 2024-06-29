@@ -42,9 +42,10 @@ export default function FavouriteFoodItem({
   return (
     <div
       className={cn(
-        "w-full h-min flex flex-col rounded overflow-hidden shadow-lg bg-white/70",
+        "w-full h-min flex flex-col rounded overflow-hidden shadow-lg bg-white/90 hover:scale-105 dark:bg-dark-secondary dark:text-dark-primary-word transition-all duration-100 ease-linear cursor-pointer",
         className
       )}
+      onClick={onClick}
     >
       <div className="w-full h-40 overflow-hidden cursor-pointer">
         <FoodImageFrame food={food} onClick={onClick} />
@@ -54,7 +55,8 @@ export default function FavouriteFoodItem({
           <span className="font-semibold">{food.name}</span>
           <Button
             className={cn(
-              "rounded-full ease-linear duration-100 bg-transparent hover:bg-transparent hover:opacity-60"
+              "rounded-full ease-linear duration-100 bg-transparent hover:bg-transparent hover:opacity-60",
+              "dark:bg-transparent hover:dark:bg-transparent"
             )}
             iconBefore={
               isFavorite ? (
@@ -66,20 +68,30 @@ export default function FavouriteFoodItem({
             onClick={() => handleFavoriteFoodIdsChange(food.id)}
           />
         </div>
-        <FoodPrice
-          currency="$"
-          defaultPrice={sortedPriceList[0]}
-          secondPrice={sortedPriceList[sortedPriceList.length - 1]}
-        />
+        <div className="flex items-center justify-between">
+          <FoodPrice
+            currency="$"
+            defaultPrice={sortedPriceList[0]}
+            secondPrice={sortedPriceList[sortedPriceList.length - 1]}
+          />
+          <div
+            className={cn(
+              "flex gap-1 text-sm font-semibold",
+              food.rating === 0 && "hidden"
+            )}
+          >
+            <span>{food.rating}</span>
+            <FoodRating rating={food.rating} />
+          </div>
+        </div>
 
         <div className={cn("flex items-center")}>
-          <FoodRating
-            rating={food.rating}
-            className={cn("mt-2", food.rating === 0 && "hidden")}
-          />
           {food.tags.map((tag) => {
             return <FoodTag key={tag} name={tag} theme="light" />;
           })}
+        </div>
+        <div className="flex items-center">
+          <span className="">{food.totalSold + " sold"}</span>
         </div>
       </div>
     </div>

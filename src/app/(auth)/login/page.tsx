@@ -8,6 +8,7 @@ const LoginPage = () => {
       <div
         className={cn(
           "h-full col-start-5 col-span-3 bg-white p-8 rounded-xl shadow",
+          "dark:bg-dark-bg transition-all ease-linear duration-200",
           animation["fade-in"]
         )}
       >

@@ -40,12 +40,15 @@ const CheckoutDetail = ({ thisUser }: Props) => {
       dispatch(setCurrentOrder(order));
     }
   };
+  const handlePayMethodChange = (payMethod: PaymentMethod) => {
+    setSelectedPayMethod(payMethod);
+  };
   return (
     <div className="h-fit px-2 flex flex-col gap-8">
       <div className="w-full flex flex-col gap-2">
         <Button
           iconBefore={<Pen className="w-4 h-4" strokeWidth={2} />}
-          className="self-end bg-gray-50 shadow-primaryShadow text-primary hover:bg-primary hover:text-white hover:opacity-100 ease-linear duration-100"
+          className="self-end bg-gray-50 dark:bg-white/10 shadow-primaryShadow text-primary hover:bg-primary hover:text-white hover:opacity-100 ease-linear duration-100"
           onClick={() => {
             router.push("/setting");
           }}
@@ -55,23 +58,21 @@ const CheckoutDetail = ({ thisUser }: Props) => {
           id="full-name"
           label="Full name"
           placeholder={thisUser ? thisUser.name : ""}
-          labelColor="text-secondary-word"
-          className="text-primary-word"
+          labelColor="text-primary-word dark:text-dark-primary-word"
           disabled
         />
         <Input
           id="address"
           label="Address"
           placeholder={thisUser ? thisUser.address : ""}
-          labelColor="text-secondary-word"
-          className="text-primary-word"
+          labelColor="text-primary-word dark:text-dark-primary-word"
           disabled
         />
         <Input
           id="phone-number"
           label="Phone number"
           placeholder={thisUser ? thisUser.phoneNumber : ""}
-          labelColor="text-secondary-word"
+          labelColor="text-primary-word dark:text-dark-primary-word"
           disabled
         />
       </div>
@@ -82,7 +83,7 @@ const CheckoutDetail = ({ thisUser }: Props) => {
           id="note"
           label="Note"
           placeholder="Your note here"
-          labelColor="text-primary-word"
+          labelColor="text-primary-word dark:text-dark-primary-word"
           className="resize-none h-24"
           value={orderNote ? orderNote : ""}
           onChange={(e) => handleOrderNoteChange(e.currentTarget.value)}
@@ -104,22 +105,22 @@ const CheckoutDetail = ({ thisUser }: Props) => {
               />
             }
             selectedButton={selectedPayMethod}
-            // onClick={() => handlePayMethodChange(PaymentMethod.CASH)}
+            onClick={() => handlePayMethodChange(PaymentMethod.CASH)}
           />
-          {/* <PayMethodButton
-              content={PaymentMethod.MOMO}
-              icon={
-                <Image
-                  src="/images/momo_logo.svg"
-                  alt="momo"
-                  className="rounded-lg"
-                  width={40}
-                  height={40}
-                />
-              }
-              selectedButton={selectedPayMethod}
-              onClick={() => handlePayMethodChange(PaymentMethod.MOMO)}
-            /> */}
+          <PayMethodButton
+            content={PaymentMethod.MOMO}
+            icon={
+              <Image
+                src="/images/momo_logo.svg"
+                alt="momo"
+                className="rounded-lg"
+                width={40}
+                height={40}
+              />
+            }
+            selectedButton={selectedPayMethod}
+            onClick={() => handlePayMethodChange(PaymentMethod.MOMO)}
+          />
         </div>
       </div>
     </div>

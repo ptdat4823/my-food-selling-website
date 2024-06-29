@@ -1,17 +1,13 @@
 import { GetAllCategories } from "@/src/actions/category";
-import { GetTopFoodByOrder } from "@/src/actions/dashboard";
 import { GetAllFood, GetFavouriteFood } from "@/src/actions/food";
 import { GetInfo } from "@/src/actions/user";
-import Banners from "@/src/components/main/banners";
 import BestRatedList from "@/src/components/main/best-rated-list";
 import BestSellerList from "@/src/components/main/best-seller-list";
 import FavoriteList from "@/src/components/main/favorite-list";
 import { FoodList } from "@/src/components/main/food-list";
 import SearchBar from "@/src/components/main/search-bar";
 import { FoodToReceive } from "@/src/convertor/foodConvertor";
-import { ToFoodReport } from "@/src/convertor/reportConvertor";
 import { Food, FoodCategory } from "@/src/models/Food";
-import { FoodReport } from "@/src/models/Report";
 
 const HomePage = async () => {
   const [foodsResult, categoriesResult, favouriteResults, userResults] =
@@ -42,7 +38,7 @@ const HomePage = async () => {
   const user = userResults.status === "fulfilled" ? userResults.value : null;
 
   return (
-    <div className="relative w-full h-screen overflow-y-scroll white-scrollbar bg-main bg-cover">
+    <div className="w-full h-screen default-scrollbar dark:white-scrollbar bg-light bg-cover dark:bg-dark">
       <div className="w-full h-fit px-4 py-8 space-y-4 overflow-hidden">
         <SearchBar
           foods={getActiveFood(foods)}

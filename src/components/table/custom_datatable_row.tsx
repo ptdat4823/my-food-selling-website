@@ -94,12 +94,12 @@ export default function CustomDatatableRow<TData, TValue>({
                       className={cn(
                         "flex h-full flex-row items-center justify-center rounded-t-sm p-2 px-4 duration-200 ease-linear hover:cursor-pointer",
                         showTabIndex === tabIdx
-                          ? "bg-white font-semibold text-black"
+                          ? "bg-transparent font-semibold"
                           : ""
                       )}
                       onClick={(e) => setShowTabIndex(tabIdx)}
                     >
-                      <Button className="flex-1 text-sm rounded-xl py-1 bg-gray-100 hover:bg-gray-50 text-secondary-word">
+                      <Button className="flex-1 text-sm rounded-xl py-1 bg-gray-100 hover:bg-gray-50 text-secondary-word dark:bg-white/10 dark:hover:bg-white/20">
                         {tab.tabName}
                       </Button>
                     </div>

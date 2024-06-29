@@ -45,7 +45,6 @@ const DistrictInput = ({
           <Input
             id="district"
             label="District"
-            labelColor="text-secondary-word"
             className="text-secondary-word text-left cursor-pointer"
             errorMessages={errorMessage}
             value={value}

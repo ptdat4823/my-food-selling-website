@@ -40,7 +40,6 @@ const ProvinceInput = ({
           <Input
             id="province"
             label="Province/City"
-            labelColor="text-secondary-word"
             className="text-secondary-word text-left cursor-pointer"
             errorMessages={errorMessage}
             value={value}

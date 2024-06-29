@@ -91,16 +91,22 @@ export default async function DashboardPage() {
   if (!user || !user.isAdmin) return notFound();
 
   return (
-    <MainDashboard
-      completedOrderReport={completedOrderReport}
-      averageRevenueReport={averageRevenueReport}
-      cancelledOrderReport={cancelledOrderReport}
-      cancellationRateReport={cancellationRateReport}
-      orderReport={orderReport}
-      revenueReport={revenueReport}
-      topFoodByRevenueReport={topFoodByRevenueReport}
-      topFoodByOrderReport={topFoodByOrderReport}
-      customerTransactionReport={customerTransactionReport}
-    />
+    <div className="w-full h-screen p-10 space-y-6 overflow-x-hidden default-scrollbar dark:white-scrollbar">
+      <h1 className="text-4xl font-bold text-primary dark:text-dark-primary-word">
+        Dashboard
+      </h1>
+
+      <MainDashboard
+        completedOrderReport={completedOrderReport}
+        averageRevenueReport={averageRevenueReport}
+        cancelledOrderReport={cancelledOrderReport}
+        cancellationRateReport={cancellationRateReport}
+        orderReport={orderReport}
+        revenueReport={revenueReport}
+        topFoodByRevenueReport={topFoodByRevenueReport}
+        topFoodByOrderReport={topFoodByOrderReport}
+        customerTransactionReport={customerTransactionReport}
+      />
+    </div>
   );
 }
