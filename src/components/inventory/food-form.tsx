@@ -21,6 +21,7 @@ import {
 import { FoodSizeList } from "./food-size-list";
 import { X } from "lucide-react";
 import { UploadImage } from "@/src/actions/image-upload";
+import { uploadImage } from "@/src/utils/func";
 
 export type FoodFormData = {
   name: string;
@@ -155,11 +156,6 @@ export const FoodForm = ({
     if (food) setInitialValues();
   }, []);
 
-  const uploadImage = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    return await UploadImage(formData);
-  };
   // if newFileUrl == null, it means the user removed image
   const handleImageChosen = async (newFileUrl: File | null, index: number) => {
     if (newFileUrl) {

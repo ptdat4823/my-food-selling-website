@@ -7,7 +7,12 @@ import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { UserToUpdate } from "@/src/convertor/userConvertor";
 import { User } from "@/src/models/User";
-import { cn, isValidPhoneNumberInput } from "@/src/utils/func";
+import {
+  cn,
+  deleteImage,
+  isValidPhoneNumberInput,
+  uploadImage,
+} from "@/src/utils/func";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -77,7 +82,7 @@ export default function UserInfoForm({ thisUser }: Props) {
   const [isSaving, setIsSaving] = useState(false);
   const [isLoadingAvatar, setIsLoadingAvatar] = useState(true);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
-  const [chosenImageFile, setChosenImageFile] = useState<File | null>(null);
+  const [oldFileUrl, setOldFileUrl] = useState<string | null>(null);
 
   const form = useForm<UserSettingFormData>({
     resolver: zodResolver(schema),
@@ -120,7 +125,7 @@ export default function UserInfoForm({ thisUser }: Props) {
     const { name, email, phoneNumber, address } = thisUser;
     const { houseNumber, street, district, province } = splitAddress(address);
     return (
-      chosenImageFile !== null ||
+      fileUrl !== thisUser.profileImage ||
       name !== watch("name") ||
       email !== watch("email") ||
       phoneNumber !== watch("phonenumber") ||
@@ -133,12 +138,6 @@ export default function UserInfoForm({ thisUser }: Props) {
       watch("confirmPassword")
     );
   }, [thisUser, watch, form.getValues()]);
-
-  const uploadImage = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    return await UploadImage(formData);
-  };
 
   const clientAction = async (data: FormData) => {
     //this is to prevent sending request when no changes
@@ -192,10 +191,14 @@ export default function UserInfoForm({ thisUser }: Props) {
     );
 
     setIsSaving(true);
-    const [userRes, passRes] = await Promise.all([
+    const [userRes, passRes, deleteRes] = await Promise.all([
       UpdateInfo(updatedUserFormData),
       canUpdatePassword ? ChangePassword(changePassFormData) : null,
+      oldFileUrl ? deleteImage(oldFileUrl) : null,
     ]).finally(() => setIsSaving(false));
+    if (deleteRes?.error) {
+      showErrorToast(deleteRes.error);
+    }
     if (passRes && passRes.error) {
       showErrorToast(passRes.error);
     } else if (userRes.error) {
@@ -215,12 +218,15 @@ export default function UserInfoForm({ thisUser }: Props) {
   };
 
   const handleImageChanged = async (newFileUrl: File | null) => {
-    setChosenImageFile(newFileUrl);
     if (newFileUrl) {
+      if (thisUser.profileImage) setOldFileUrl(thisUser.profileImage);
+
       setIsLoadingAvatar(true);
+
       const res = await uploadImage(newFileUrl).finally(() =>
         setIsLoadingAvatar(false)
       );
+
       if (res.error) {
         showErrorToast(res.error);
         return;

@@ -1,6 +1,7 @@
 import { ClassValue, clsx } from "clsx";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
+import { DeleteImage, UploadImage } from "../actions/image-upload";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -148,6 +149,24 @@ const isValidString = (data: string | null | undefined) => {
   return true;
 };
 
+//http://res.cloudinary.com/dggtc5ucv/image/upload/v1720082993/jlqkd6dqyx4mrbsqhe31.jpg
+const getPublicIdFromCloudinaryUrl = (url: string) => {
+  const parts = url.split("/");
+  const publicId = parts[parts.length - 1].split(".")[0];
+  return publicId;
+};
+
+const uploadImage = async (file: File) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  return await UploadImage(formData);
+};
+
+const deleteImage = async (imageUrl: string) => {
+  const publicId = getPublicIdFromCloudinaryUrl(imageUrl);
+  return await DeleteImage(publicId);
+};
+
 export {
   cn,
   displayNumber,
@@ -161,4 +180,7 @@ export {
   getAllMonthLabels,
   generateKey,
   isValidString,
+  uploadImage,
+  deleteImage,
+  getPublicIdFromCloudinaryUrl,
 };
