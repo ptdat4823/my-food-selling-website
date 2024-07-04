@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# My Food Selling Website
 
-## Getting Started
+### A Comprehensive Solution for Online Food Ordering
 
-First, run the development server:
+Welcome to My Food Selling Website! This project is a robust online food ordering system designed to streamline the operations of food businesses. With an intuitive dashboard, efficient inventory and order management for administrators, and a user-friendly interface for customers, our platform ensures a seamless food ordering experience.
+
+### Features
+
+- **Admin Dashboard:** Gain insights and manage your business efficiently with a comprehensive dashboard.
+- **Inventory Management:** Keep track of your stock levels and ensure you never run out of essential ingredients.
+- **Order Management:** Easily handle orders from customers, track their status, and manage deliveries.
+- **User Home Page:** Provide your customers with a welcoming and easy-to-navigate home page.
+- **Cart Functionality**: Allow users to add their favorite foods to a cart and proceed to checkout seamlessly.
+- **Order History:** Enable users to view their past orders and reorder with ease.
+- **Favorite Foods:** Let customers save their favorite dishes for quick access in the future.
+
+### Installation
+
+To get started with My Food Selling Website, follow these simple steps:
+
+**1. Clone the Repository:**
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/ptdat4823/my-food-selling-website.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**2. Frontend Setup (NextJS):**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- _Navigate to the Project Directory:_
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+  ```bash
+  cd my-food-selling-website
+  ```
 
-## Learn More
+- _Install dependencies for nextjs:_
 
-To learn more about Next.js, take a look at the following resources:
+  ```bash
+  npm install
+  ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- _Start the development server NextJS:_
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+  ```bash
+  npm run dev
+  ```
 
-## Deploy on Vercel
+**3. Backend Setup (Spring Boot):**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- _Install jdk and setup JAVAHOME:_ [Installation Guide](https://www.youtube.com/watch?v=jPwrWjEwtrw)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- _Navigate to the backend directory from project directory_
+
+  ```bash
+  cd my-food-selling-website/src/server
+  ```
+
+- _Start the development server Springboot Java_
+
+  ```bash
+  mvn spring-boot:run
+  ```
+
+**4. Access the Website:**
+
+Open your browser and go to http://localhost:3000 to experience the website.

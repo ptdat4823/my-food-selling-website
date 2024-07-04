@@ -25,7 +25,7 @@ export default function SearchAndChooseButton({
     .map((choice, idx) => (
       <li
         key={idx}
-        className="flex flex-row items-center bg-white p-2 hover:cursor-pointer hover:bg-slate-300"
+        className="flex flex-row items-center bg-transparent p-2 hover:cursor-pointer hover:bg-slate-300 dark:hover:bg-white/10"
         onClick={(e) => {
           if (choice === value) onValueChanged(null);
           else onValueChanged(choice);
@@ -57,7 +57,7 @@ export default function SearchAndChooseButton({
     results.unshift(
       <li
         key={results.length + 1}
-        className="flex flex-row items-center bg-white p-2 hover:cursor-pointer hover:bg-slate-300"
+        className="flex flex-row items-center bg-transparent p-2 hover:cursor-pointer hover:bg-slate-300 dark:hover:bg-white/10"
         onClick={(e) => {
           if (value !== undefined) onValueChanged(null);
           setIsPopoverOpen(false);
@@ -73,9 +73,9 @@ export default function SearchAndChooseButton({
   }
 
   return (
-    <div className="text-sm w-full">
+    <div className="text-sm w-full bg-transparent">
       <div
-        className="h-full min-h-[40px] w-full flex items-center hover:cursor-pointer"
+        className="h-full min-h-[40px] w-full flex items-center hover:cursor-pointer bg-transparent"
         onClick={() => setIsPopoverOpen((prev) => !prev)}
       >
         <p className="px-2 text-start leading-4">
@@ -83,10 +83,10 @@ export default function SearchAndChooseButton({
         </p>
       </div>
       {isPopoverOpen && (
-        <div className="absolute max-h-[200px] w-full top-full left-0 right-0 overflow-y-auto !rounded-none bg-white z-[1000] shadow-sm shadow-gray-600 scrollbar small-scrollbar">
+        <div className="absolute max-h-[200px] w-full top-full left-0 right-0 overflow-y-auto !rounded-none bg-white dark:bg-dark-secondary-bg z-[1000] shadow-sm shadow-gray-600 default-scrollbar dark:white-scrollbar">
           <div className="flex flex-col w-full">
             <input
-              className="!m-0 pl-2 h-10 w-full !rounded-none border-0 placeholder:text-xs outline-none"
+              className="bg-transparent !m-0 pl-2 h-10 w-full !rounded-none border-0 placeholder:text-xs outline-none"
               value={searchInput}
               placeholder={searchPlaceholder}
               onChange={(e) => setSearchInput(e.target.value)}
@@ -99,7 +99,7 @@ export default function SearchAndChooseButton({
                 results
               ) : (
                 <li
-                  className="w-full flex flex-row items-center bg-white p-2"
+                  className="w-full flex flex-row items-center bg-transparent p-2"
                   onMouseDown={(e) => {
                     e.preventDefault();
                   }}

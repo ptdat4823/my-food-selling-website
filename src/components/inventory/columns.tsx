@@ -9,6 +9,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import default_food_image from "@/public/images/default_food.jpg";
 import { Food, FoodCategory } from "@/src/models/Food";
+import { CldImage } from "next-cloudinary";
 
 export const menuColumnTitles = {
   id: "Food ID",
@@ -41,13 +42,23 @@ function imageColumn(accessorKey: string, title: string): ColumnDef<Food> {
 
       return (
         <div className="w-fit px-2">
-          <Image
-            alt="food image"
-            width={30}
-            height={30}
-            src={imageSrc}
-            className="mx-auto object-contain"
-          />
+          {typeof imageSrc === "string" ? (
+            <CldImage
+              alt="food image"
+              width={30}
+              height={30}
+              src={imageSrc}
+              className="mx-auto object-contain"
+            />
+          ) : (
+            <Image
+              alt="food image"
+              width={30}
+              height={30}
+              src={imageSrc}
+              className="mx-auto object-contain"
+            />
+          )}
         </div>
       );
     },

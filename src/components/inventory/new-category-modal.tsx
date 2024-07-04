@@ -16,6 +16,7 @@ import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { showErrorToast } from "../ui/toast";
+import { CirclePlus } from "lucide-react";
 
 export type NewCategoryFormData = {
   name: string;
@@ -69,24 +70,15 @@ const NewCategoryModal = ({
   return (
     <form>
       <div>
-        <svg
-          className="mx-2 hover:cursor-pointer"
+        <CirclePlus
+          className="w-4 h-4 mx-2 text-black dark:text-white hover:cursor-pointer"
           onClick={onOpen}
-          xmlns="http://www.w3.org/2000/svg"
-          width="1rem"
-          height="1rem"
-          viewBox="0 0 256 256"
-        >
-          <path
-            fill="black"
-            d="M128 20a108 108 0 1 0 108 108A108.12 108.12 0 0 0 128 20m0 192a84 84 0 1 1 84-84a84.09 84.09 0 0 1-84 84m52-84a12 12 0 0 1-12 12h-28v28a12 12 0 0 1-24 0v-28H88a12 12 0 0 1 0-24h28V88a12 12 0 0 1 24 0v28h28a12 12 0 0 1 12 12"
-          />
-        </svg>
+        />
       </div>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        className="text-black rounded-md font-sans"
+        className="text-black dark:text-dark-primary-word dark:bg-dark-secondary-bg rounded-md font-sans"
       >
         <ModalContent>
           {(onClose) => {
@@ -122,7 +114,7 @@ const NewCategoryModal = ({
                     onClick={() => {
                       handleSubmit(handleFormSubmit)();
                     }}
-                    className="!h-[35px] w-[100px] bg-green-400 text-white hover:bg-green-500 disabled:bg-green-400/60 rounded hover:text-white"
+                    className="!h-[35px] w-[100px] bg-green-400 text-white hover:bg-green-500 dark:hover:bg-green-500 rounded "
                     disabled={isLoading}
                     iconAfter={isLoading ? <LoadingCircle /> : null}
                   >
@@ -131,7 +123,7 @@ const NewCategoryModal = ({
                   <Button
                     type="button"
                     className={
-                      "!h-[35px] w-[100px] border-none bg-red-400 disabled:bg-red-400/60 text-white hover:bg-red-500 rounded px-2 hover:text-white"
+                      "!h-[35px] w-[100px] border-none rounded px-2text-white bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20"
                     }
                     disabled={isLoading}
                     onClick={() => {

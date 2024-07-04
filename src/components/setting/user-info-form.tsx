@@ -18,6 +18,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../ui/toast";
+import { UploadImage } from "@/src/actions/image-upload";
 
 export type UserSettingFormData = {
   name: string;
@@ -74,8 +75,9 @@ interface Props {
 export default function UserInfoForm({ thisUser }: Props) {
   const [fieldErrors, setFieldErrors] = useState<any>();
   const [isSaving, setIsSaving] = useState(false);
-  //   const [chosenImage, setChosenImage] = useState<File | null>(null);
-  //   const [chosenImageUrl, setChosenImageUrl] = useState<string | null>(null);
+  const [isLoadingAvatar, setIsLoadingAvatar] = useState(true);
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [chosenImageFile, setChosenImageFile] = useState<File | null>(null);
 
   const form = useForm<UserSettingFormData>({
     resolver: zodResolver(schema),
@@ -84,7 +86,9 @@ export default function UserInfoForm({ thisUser }: Props) {
 
   const setInitialValues = (user: User) => {
     if (!user) return;
-    // setChosenImageUrl(thisUser.profileImage);
+    setFileUrl(thisUser.profileImage);
+    setIsLoadingAvatar(false);
+
     form.setValue("name", thisUser.name);
     if (thisUser.phoneNumber)
       form.setValue("phonenumber", thisUser.phoneNumber);
@@ -111,16 +115,12 @@ export default function UserInfoForm({ thisUser }: Props) {
     setInitialValues(thisUser);
   }, [thisUser]);
 
-  useEffect(() => {
-    console.log("isSaving: ", isSaving);
-  }, [isSaving]);
-
   const isFormValuesChange = useMemo(() => {
     if (!thisUser) return false;
     const { name, email, phoneNumber, address } = thisUser;
     const { houseNumber, street, district, province } = splitAddress(address);
     return (
-      // chosenImage !== null ||
+      chosenImageFile !== null ||
       name !== watch("name") ||
       email !== watch("email") ||
       phoneNumber !== watch("phonenumber") ||
@@ -133,6 +133,12 @@ export default function UserInfoForm({ thisUser }: Props) {
       watch("confirmPassword")
     );
   }, [thisUser, watch, form.getValues()]);
+
+  const uploadImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return await UploadImage(formData);
+  };
 
   const clientAction = async (data: FormData) => {
     //this is to prevent sending request when no changes
@@ -159,7 +165,6 @@ export default function UserInfoForm({ thisUser }: Props) {
         }
       }
       toValidate[key] = data.get(key);
-      console.log(key, " ", data.get(key));
     }
 
     // validate request object
@@ -167,9 +172,7 @@ export default function UserInfoForm({ thisUser }: Props) {
     if (!validation.success) {
       setFieldErrors(validation.error.formErrors.fieldErrors);
       return;
-    } else {
-      setFieldErrors({});
-    }
+    } else setFieldErrors({});
 
     const currentPassword = data.get("currentPassword");
     const newPassword = data.get("newPassword");
@@ -180,44 +183,26 @@ export default function UserInfoForm({ thisUser }: Props) {
       changePassFormData.append("newPassword", new Blob([newPassword]));
     }
 
-    const userToUpdate = UserToUpdate(thisUser, toValidate, "");
+    //prepare user data to update
+    const userToUpdate = UserToUpdate(thisUser, toValidate, fileUrl || "");
     const updatedUserFormData = new FormData();
     updatedUserFormData.append(
       "data",
       new Blob([JSON.stringify(userToUpdate)], { type: "application/json" })
     );
 
-    if (canUpdatePassword) {
-      setIsSaving(true);
-      const [userRes, passRes] = await Promise.all([
-        UpdateInfo(updatedUserFormData),
-        ChangePassword(changePassFormData),
-      ]).finally(() => setIsSaving(false));
-
-      if (userRes.error) {
-        showErrorToast(userRes.error);
-      }
-      if (passRes.error) {
-        showErrorToast(passRes.error);
-      }
-      if (userRes.message) {
-        showSuccessToast(userRes.message);
-      }
-      if (passRes.message) {
-        resetPasswordFields();
-        showSuccessToast(passRes.message);
-      }
+    setIsSaving(true);
+    const [userRes, passRes] = await Promise.all([
+      UpdateInfo(updatedUserFormData),
+      canUpdatePassword ? ChangePassword(changePassFormData) : null,
+    ]).finally(() => setIsSaving(false));
+    if (passRes && passRes.error) {
+      showErrorToast(passRes.error);
+    } else if (userRes.error) {
+      showErrorToast(userRes.error);
     } else {
-      setIsSaving(true);
-      const userRes = await UpdateInfo(updatedUserFormData).finally(() => {
-        setIsSaving(false);
-      });
-      if (userRes.error) {
-        showErrorToast(userRes.error);
-      }
-      if (userRes.message) {
-        showSuccessToast(userRes.message);
-      }
+      showSuccessToast("Updated successfully!");
+      resetPasswordFields();
     }
   };
 
@@ -227,6 +212,23 @@ export default function UserInfoForm({ thisUser }: Props) {
   };
   const handleDistrictChange = (districtName: string) => {
     form.setValue("district", districtName);
+  };
+
+  const handleImageChanged = async (newFileUrl: File | null) => {
+    setChosenImageFile(newFileUrl);
+    if (newFileUrl) {
+      setIsLoadingAvatar(true);
+      const res = await uploadImage(newFileUrl).finally(() =>
+        setIsLoadingAvatar(false)
+      );
+      if (res.error) {
+        showErrorToast(res.error);
+        return;
+      }
+      if (res.message) {
+        setFileUrl(res.data.url);
+      }
+    } else setFileUrl(null);
   };
   return (
     <FormProvider {...form}>
@@ -239,7 +241,11 @@ export default function UserInfoForm({ thisUser }: Props) {
 
           <section className="w-full flex flex-row items-stretch gap-8 rounded-md border-2 border-borderColor pt-4 py-6 px-6">
             <div className="w-[120px]">
-              <ChooseAvatarButton />
+              <ChooseAvatarButton
+                onImageChanged={handleImageChanged}
+                fileUrl={fileUrl}
+                isLoading={isLoadingAvatar}
+              />
             </div>
             <div className="w-full flex flex-row gap-4">
               <div className="w-1/2 flex flex-col gap-4">
@@ -366,8 +372,7 @@ export default function UserInfoForm({ thisUser }: Props) {
           <Button
             type="button"
             className={cn(
-              "w-[100px] self-end text-sm font-extrabold text-white bg-gray-400 hover:bg-gray-300/80 disabled:bg-gray-300/60",
-              "dark:hover:bg-gray-300/80"
+              "w-[100px] self-end text-sm font-extrabold text-white bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20"
             )}
             onClick={() => {
               setInitialValues(thisUser);

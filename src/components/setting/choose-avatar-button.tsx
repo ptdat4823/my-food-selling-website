@@ -7,15 +7,21 @@ import default_user_image from "@/public/images/default_user.png";
 import { Camera, ImageMinus } from "lucide-react";
 import { showWarningToast } from "../ui/toast";
 import { cn } from "@/src/utils/func";
+import { CldImage } from "next-cloudinary";
+import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 
 export const ChooseAvatarButton = ({
   className,
+  fileUrl,
+  onImageChanged,
+  isLoading,
 }: {
   className?: ClassValue;
+  fileUrl: string | null;
+  onImageChanged: (file: File | null) => void;
+  isLoading: boolean;
 }) => {
   const id = nanoid();
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
-  const [chosenImageFile, setChosenImageFile] = useState<File | null>(null);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (
       e.target.files &&
@@ -28,19 +34,12 @@ export const ChooseAvatarButton = ({
     }
   };
 
-  const onImageChanged = (newFileUrl: File | null) => {
-    setChosenImageFile(newFileUrl);
-    if (newFileUrl) setFileUrl(URL.createObjectURL(newFileUrl));
-    else setFileUrl(null);
-  };
-
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (!fileUrl) {
       inputRef.current!.value = "";
     }
   }, [fileUrl]);
-  ``;
 
   return (
     <div
@@ -50,23 +49,29 @@ export const ChooseAvatarButton = ({
       )}
     >
       <>
-        <label
-          htmlFor={id}
-          className="absolute top-0 left-0 right-0 flex flex-row items-center justify-center w-full h-full cursor-pointer bg-gray-200/60 text-white opacity-0 hover:opacity-100 ease-linear duration-100"
-        >
-          <div
-            className="h-full w-1/2 flex items-center justify-center hover:bg-gray-200/20 ease-linear duration-100"
-            onClick={(e) => {
-              e.preventDefault();
-              onImageChanged(null);
-            }}
+        {isLoading ? (
+          <div className="absolute top-0 left-0 right-0 flex items-center justify-center w-full h-full cursor-default bg-gray-200/60 ease-linear duration-100">
+            <LoadingCircle className="!w-6 !h-6" />
+          </div>
+        ) : (
+          <label
+            htmlFor={id}
+            className="absolute top-0 left-0 right-0 flex flex-row items-center justify-center w-full h-full cursor-pointer bg-gray-200/60 text-white opacity-0 hover:opacity-100 ease-linear duration-100"
           >
-            <ImageMinus />
-          </div>
-          <div className="h-full w-1/2 flex items-center justify-center hover:bg-gray-200/20 ease-linear duration-100">
-            <Camera />
-          </div>
-        </label>
+            <div
+              className="h-full w-1/2 flex items-center justify-center hover:bg-gray-200/20 ease-linear duration-100"
+              onClick={(e) => {
+                e.preventDefault();
+                onImageChanged(null);
+              }}
+            >
+              <ImageMinus />
+            </div>
+            <div className="h-full w-1/2 flex items-center justify-center hover:bg-gray-200/20 ease-linear duration-100">
+              <Camera />
+            </div>
+          </label>
+        )}
         <input
           ref={inputRef}
           id={id}
@@ -87,7 +92,7 @@ export const ChooseAvatarButton = ({
             />
           </>
         ) : (
-          <Image
+          <CldImage
             width={0}
             height={0}
             sizes="100vw"

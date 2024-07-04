@@ -79,7 +79,7 @@ const DescriptionInput = ({ label, register, required, error }: InputProps) => {
       <textarea
         id={id}
         {...register(label, { required })}
-        className="resize-none w-full border border-borderColor focus:border-primary outline-none rounded-md p-2 placeholder:text-sm text-sm"
+        className="resize-none w-full bg-transparent border border-borderColor focus:border-primary outline-none rounded-md p-2 placeholder:text-sm text-sm"
         rows={3}
         placeholder="Description"
       />
@@ -218,7 +218,7 @@ const TagsInput = ({
               } else showDefaultToast("Tag name is empty");
             }
           }}
-          className="h-[35px] min-w-[150px] flex-1 rounded-none border-0 outline-none"
+          className="h-[35px] min-w-[150px] bg-transparent flex-1 rounded-none border-0 outline-none"
         />
       </div>
     </div>

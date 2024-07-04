@@ -5,6 +5,8 @@ import { nanoid } from "nanoid";
 import { ClassValue } from "clsx";
 import { showWarningToast } from "../ui/toast";
 import { cn } from "@/src/utils/func";
+import { X } from "lucide-react";
+import { CldImage } from "next-cloudinary";
 
 export const ChooseImageButton = ({
   fileUrl,
@@ -39,7 +41,7 @@ export const ChooseImageButton = ({
         <>
           <label
             htmlFor={id}
-            className="absolute top-0 left-0 flex items-center justify-center w-full h-full hover:cursor-pointer text-gray-600"
+            className="absolute top-0 left-0 flex items-center justify-center w-full h-full hover:cursor-pointer text-gray-600 dark:text-dark-secondary-word"
           >
             + Image
           </label>
@@ -53,7 +55,7 @@ export const ChooseImageButton = ({
         </>
       ) : (
         <>
-          <Image
+          <CldImage
             width={0}
             height={0}
             sizes="100vw"
@@ -61,22 +63,15 @@ export const ChooseImageButton = ({
             alt="image"
             className="w-full h-full"
           />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1rem"
-            height="1rem"
-            className="absolute top-[-8px] right-[-8px] hover:cursor-pointer"
+          <div
+            className="absolute -right-[0.5rem] -top-[0.5rem] rounded-full bg-gray-100 hover:bg-gray-200 hover:cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               onImageChanged(null);
             }}
-            viewBox="0 0 24 24"
           >
-            <path
-              fill="black"
-              d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"
-            />
-          </svg>
+            <X className="w-4 h-4 cursor-pointer text-black hover:text-red-500 transition-all" />
+          </div>
         </>
       )}
     </div>

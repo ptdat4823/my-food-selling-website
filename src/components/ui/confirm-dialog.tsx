@@ -40,7 +40,7 @@ export const ConfirmDialog = ({
       isOpen={isOpen}
       onOpenChange={() => onOpenChange(!isOpen)}
       className={cn(
-        "h-fit text-primary-word rounded-lg overflow-hidden",
+        "h-fit text-primary-word dark:text-dark-primary-word bg-dark-secondary-bg rounded-lg overflow-hidden",
         className
       )}
       size="md"
@@ -71,7 +71,9 @@ export const ConfirmDialog = ({
                 onClick={onAccept}
                 className={cn(
                   "w-[100px]",
-                  type === "warning" ? "bg-red-500" : "bg-gray-100"
+                  type === "warning"
+                    ? "bg-red-500 hover:bg-red-600 dark:hover:bg-red-600"
+                    : "bg-green-500 hover:bg-green-600 dark:hover:bg-green-600"
                 )}
               >
                 {answerButton}
@@ -79,7 +81,7 @@ export const ConfirmDialog = ({
               <Button
                 type="button"
                 onClick={onCancel}
-                className="w-[100px] bg-gray-100 text-secondary-word"
+                className="w-[100px] bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20 text-secondary-word"
               >
                 Cancel
               </Button>

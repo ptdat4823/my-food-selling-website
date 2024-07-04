@@ -4,6 +4,7 @@ import {
   displayNumber,
   removeCharNAN,
 } from "@/src/utils/func";
+import { X } from "lucide-react";
 
 interface Props {
   sizeName: string;
@@ -32,7 +33,7 @@ export const FoodSizeList = ({
   isFormSubmitted,
 }: Props) => {
   return (
-    <div className="relative px-2 text-[0.85rem] py-4 pb-6 rounded-md bg-white shadow-lg">
+    <div className="relative px-2 text-[0.85rem] py-4 pb-6 rounded-md bg-white dark:bg-white/10 shadow-lg">
       <div className="flex flex-row gap-6">
         <div className="flex flex-col gap-4 justify-between">
           <div className="relative flex flex-row items-baseline">
@@ -150,11 +151,7 @@ export const FoodSizeList = ({
           className="border-slate-400 rounded-md p-1 resize-none flex-1 min-h-full border bg-inherit scrollbar small-scrollbar outline-none focus:border-primary"
         />
       </div>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="1rem"
-        height="1rem"
-        viewBox="0 0 24 24"
+      <div
         className="absolute right-[0.125rem] top-[0.125rem] rounded-full translate-x-1/2 -translate-y-1/2 bg-gray-100 hover:bg-gray-200 hover:cursor-pointer"
         onClick={(e) => {
           e.preventDefault();
@@ -162,11 +159,8 @@ export const FoodSizeList = ({
           onRemoveClick();
         }}
       >
-        <path
-          fill="black"
-          d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"
-        />
-      </svg>
+        <X className="w-4 h-4 cursor-pointer text-black hover:text-red-500 transition-all" />
+      </div>
     </div>
   );
 };

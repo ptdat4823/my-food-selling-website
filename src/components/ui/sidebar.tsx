@@ -2,6 +2,8 @@
 
 import default_user_image from "@/public/images/default_user.png";
 import Logo from "@/public/images/logo.png";
+import { LogOutAction } from "@/src/actions/auth";
+import { User } from "@/src/models/User";
 import { cn } from "@/src/utils/func";
 import {
   Popover,
@@ -25,16 +27,10 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Button } from "./button";
 import { Separate } from "./separate";
 import { SidebarLink } from "./sidebar-link";
-import { useTheme } from "next-themes";
-import { Button } from "./button";
-import SunIcon from "../icons/normal-custom/sun-icon";
-import NightIcon from "../icons/normal-custom/night-icon";
-import { LogOutAction } from "@/src/actions/auth";
-import { showErrorToast } from "./toast";
-import { User } from "@/src/models/User";
 import ThemeSwitch from "./theme-switch";
 
 interface Props {
@@ -159,7 +155,7 @@ export default function Sidebar({
                     className="w-[24px] h-[24px] flex-shrink-0 rounded-full object-cover overflow-hidden cursor-pointer select-none"
                   />
                   <span className="w-[100px] h-full font-semibold shrink-0 truncate">
-                    {session && session.user ? session.user.name : "Ptdat"}
+                    {user ? user.name : "Ptdat"}
                   </span>
                 </div>
               </PopoverTrigger>

@@ -52,7 +52,7 @@ export const FoodDetailTab = ({
       </div>
       <div className="flex flex-row items-center gap-2 justify-end">
         <Button
-          className="bg-green-500 gap-2"
+          className="bg-green-500 hover:bg-green-600 dark:hover:bg-green-600 gap-2"
           onClick={onUpdateFood}
           iconBefore={<RefreshCw size={16} />}
         >
@@ -67,7 +67,7 @@ export const FoodDetailTab = ({
             );
             setOpen(true);
           }}
-          className="bg-red-500 gap-2"
+          className="bg-red-500 hover:bg-red-600 dark:hover:bg-red-600 gap-2"
           iconBefore={<Trash size={16} />}
         >
           Delete

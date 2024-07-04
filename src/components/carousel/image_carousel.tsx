@@ -8,18 +8,21 @@ import { useDotButton } from "./carousel_dot_button";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { cn } from "@/src/utils/func";
+import { CldImage } from "next-cloudinary";
 
 export default function ImageCarousel({
   images,
   className,
   loop = false,
   autoPlay = false,
+  hoverScale = false,
 }: {
   images: string[];
   className?: ClassValue;
   loop?: boolean;
   active?: boolean;
   autoPlay?: boolean;
+  hoverScale?: boolean;
 }) {
   const [emblaRef, emplaApi] = useEmblaCarousel(
     { loop: loop, watchDrag: false },
@@ -33,7 +36,7 @@ export default function ImageCarousel({
       <Button
         iconBefore={<ChevronLeft className="text-white" />}
         className={cn(
-          "absolute h-full left-0 top-0 opacity-0 group-hover:opacity-100 bg-transparent hover:bg-gray-50/20 hover:opacity-100 rounded-none z-50",
+          "absolute h-full left-0 top-0 opacity-0 group-hover:opacity-100 bg-transparent hover:bg-gray-500/50 dark:hover:bg-gray-500/50 hover:opacity-100 rounded-none z-50",
           images.length === 1 ? "hidden" : "",
           selectedIndex === 0 && "hidden"
         )}
@@ -44,7 +47,7 @@ export default function ImageCarousel({
       <Button
         iconBefore={<ChevronRight className="text-white" />}
         className={cn(
-          "absolute h-full right-0 top-0 opacity-0 group-hover:opacity-100 bg-transparent hover:bg-gray-50/20 hover:opacity-100 rounded-none z-50",
+          "absolute h-full right-0 top-0 opacity-0 group-hover:opacity-100 bg-transparent hover:bg-gray-500/50 dark:hover:bg-gray-500/50 hover:opacity-100 rounded-none z-50",
           images.length === 1 ? "hidden" : "",
           selectedIndex === scrollSnaps.length - 1 && "hidden"
         )}
@@ -52,22 +55,21 @@ export default function ImageCarousel({
           if (emplaApi) emplaApi.scrollNext();
         }}
       />
-      <div
-        className="overflow-hidden rounded-md"
-        ref={emblaRef}
-        draggable={false}
-      >
-        <div className="flex items-center">
+      <div className="overflow-hidden rounded-md" ref={emblaRef}>
+        <div className="flex items-center select-none">
           {images.map((image, index) => {
+            console.log("image", image);
             return (
-              <div
+              <CldImage
                 key={index}
-                style={{
-                  backgroundImage: `url(${image})`,
-                }}
+                alt="food image"
+                width={400}
+                height={300}
+                src={image}
                 className={cn(
                   "flex-0_0_100",
-                  "h-48 bg-center bg-cover bg-no-repeat relative hover:scale-125 ease-linear duration-200"
+                  "h-48 bg-center bg-cover bg-no-repeat relative ease-linear duration-100",
+                  hoverScale && "hover:scale-125"
                 )}
               />
             );

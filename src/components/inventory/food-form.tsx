@@ -19,6 +19,8 @@ import {
   TagsInput,
 } from "./custom-input";
 import { FoodSizeList } from "./food-size-list";
+import { X } from "lucide-react";
+import { UploadImage } from "@/src/actions/image-upload";
 
 export type FoodFormData = {
   name: string;
@@ -95,6 +97,7 @@ export const FoodForm = ({
 
   const [chosenImageFiles, setChosenImageFiles] = useState<File[]>([]);
   const [isUploadingFood, setIsUploadingFood] = useState(false);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   const form = useForm<z.infer<typeof foodSchema>>({
@@ -153,17 +156,31 @@ export const FoodForm = ({
     if (food) setInitialValues();
   }, []);
 
+  const uploadImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return await UploadImage(formData);
+  };
   // if newFileUrl == null, it means the user removed image
-  const handleImageChosen = (newFileUrl: File | null, index: number) => {
-    const newChosenImageFiles = [...chosenImageFiles];
-    if (newFileUrl === null) newChosenImageFiles.splice(index, 1);
-    else newChosenImageFiles.push(newFileUrl);
-    setChosenImageFiles(newChosenImageFiles);
-
-    const newImages = [...watch("images")];
-    if (newFileUrl) newImages.push(URL.createObjectURL(newFileUrl));
-    else newImages.splice(index, 1);
-    setValue("images", newImages);
+  const handleImageChosen = async (newFileUrl: File | null, index: number) => {
+    if (newFileUrl) {
+      setIsLoadingImage(true);
+      const res = await uploadImage(newFileUrl).finally(() =>
+        setIsLoadingImage(false)
+      );
+      if (res.error) {
+        showErrorToast(res.error);
+        return;
+      }
+      if (res.message) {
+        const newFileUrl = res.data.url;
+        setChosenImageFiles([...chosenImageFiles, newFileUrl]);
+        setValue("images", [...watch("images"), newFileUrl]);
+      }
+    } else {
+      setChosenImageFiles([...chosenImageFiles].splice(index, 1));
+      setValue("images", [...watch("images")].splice(index, 1));
+    }
   };
 
   const onSubmit = async (values: FoodFormData) => {
@@ -206,29 +223,20 @@ export const FoodForm = ({
   };
 
   return (
-    <div className="fixed left-0 top-0 right-0 bottom-0 z-[50] flex items-center justify-center bg-black bg-opacity-30">
+    <div className="fixed left-0 top-0 right-0 bottom-0 z-[50] flex items-center justify-center bg-black/30">
       <div
         className={
-          "flex max-h-[95%] w-[95%] max-w-[600px] flex-col overflow-y-auto rounded-md bg-white p-4 scrollbar"
+          "flex max-h-[95%] w-[95%] max-w-[600px] flex-col overflow-y-auto rounded-md bg-white dark:bg-dark-secondary-bg p-4 default-scrollbar dark:white-scrollbar"
         }
       >
         <div className="mb-4 flex flex-row items-center justify-between">
           <h3 className="text-base font-semibold">
             {food ? "Update food" : "Add new food"}
           </h3>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1.25rem"
-            height="1.25rem"
-            viewBox="0 0 24 24"
-            className="hover:cursor-pointer"
+          <X
+            className="w-4 h-4 cursor-pointer text-black dark:text-white"
             onClick={closeForm}
-          >
-            <path
-              fill="black"
-              d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"
-            />
-          </svg>
+          />
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex h-full w-full flex-col gap-4">
@@ -266,7 +274,7 @@ export const FoodForm = ({
             <ImagesInput
               fileUrls={watch("images")}
               onImageChanged={handleImageChosen}
-              {...register("images", { required: true })}
+              {...register("images")}
               error={errors.images as FieldError}
             />
             <DescriptionInput
@@ -276,7 +284,7 @@ export const FoodForm = ({
               error={errors.description}
             />
             <div className="flex flex-col rounded overflow-hidden">
-              <div className="bg-gray-200 hover:bg-gray-100 p-3 text-sm w-full">
+              <div className="bg-gray-200 hover:bg-gray-100 dark:bg-white/10 hover:hover:bg-white/20 p-3 text-sm w-full">
                 <div className="flex flex-row items-center gap-10">
                   <p>Food variants</p>
                   {errors && errors.sizes ? (
@@ -334,7 +342,7 @@ export const FoodForm = ({
                 </div>
                 <Button
                   type="button"
-                  className="w-auto mt-4 h-[35px] border bg-green-500 hover:bg-green-600 text-white px-2 text-sm rounded-md"
+                  className="w-auto mt-4 h-[35px] border bg-green-500 hover:bg-green-600 dark:hover:bg-green-600 text-white px-2 text-sm rounded-md"
                   onClick={(e) => {
                     e.preventDefault();
 
@@ -367,7 +375,7 @@ export const FoodForm = ({
             </Button>
             <Button
               type="button"
-              className="w-[100px] bg-gray-400 px-4 hover:bg-gray-500 disabled:bg-gray-400/60"
+              className="w-[100px] px-4 bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
