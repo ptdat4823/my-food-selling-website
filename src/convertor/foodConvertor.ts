@@ -27,7 +27,6 @@ const FoodToSend = (food: Food) => {
 };
 
 const FoodFormDataToFood = (formData: FoodFormData, category: FoodCategory) => {
-  console.log(category);
   const images: string[] = [];
   formData.images.forEach((image) => {
     if (image === null) return;

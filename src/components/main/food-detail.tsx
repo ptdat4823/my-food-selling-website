@@ -125,7 +125,7 @@ export const FoodDetail = ({
                 >
                   <ModalHeader className="flex flex-row gap-2 font-sans">
                     <div className="w-1/3 lg:h-48 max-lg:h-40 max-sm:h-28">
-                      <ImageCarousel images={food.images} />
+                      <ImageCarousel images={food.images} dragable />
                     </div>
                     <div className="w-2/3 flex flex-col gap-1">
                       <div className="w-full flex flex-col items-start">

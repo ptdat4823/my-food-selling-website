@@ -72,7 +72,6 @@ export const OrderManagementDataTable = ({ orders }: Props) => {
     return filteredData;
   };
   const handleFilterChange = (filterInput: string, col: string) => {
-    console.log(filterInput, col);
     let filteredData: Order[] = [];
     if (col === "") filteredData = getFilterAllTableData(filterInput);
     else filteredData = getDataFilter(filterInput, col);

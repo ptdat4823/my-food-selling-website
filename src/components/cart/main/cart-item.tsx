@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import LoadingCircle from "../../icons/custom-with-css/LoadingCircle/loading_circle";
 import { NumberInput } from "../../ui/number-input";
 import { TextArea } from "../../ui/textarea";
+import { CldImage } from "next-cloudinary";
 
 export const CartItem = ({
   cart,
@@ -72,11 +73,22 @@ export const CartItem = ({
       />
 
       <div className="flex-1 flex md:flex-row max-md:flex-col md:items-center md:gap-4 max-md:items-start text-center font-semibold text-lg">
-        <Image
-          src={foodDefaultImage}
-          alt="food image"
-          className="h-20 w-20 rounded justify-seft-start object-cover"
-        />
+        {cart.food.images.length > 0 ? (
+          <CldImage
+            src={cart.food.images[0]}
+            alt="food image"
+            width={500}
+            height={400}
+            crop="scale"
+            className="h-20 w-20 rounded justify-seft-start object-cover"
+          />
+        ) : (
+          <Image
+            src={foodDefaultImage}
+            alt="food image"
+            className="h-20 w-20 rounded justify-seft-start object-cover"
+          />
+        )}
         <div className="w-full flex flex-col items-end justify-start">
           <p className="w-full text-start truncate">{cart.food.name}</p>
           <span

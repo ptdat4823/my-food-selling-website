@@ -13,7 +13,6 @@ interface Props {
   user: User;
 }
 const FavoriteFoodList = ({ foods, user }: Props) => {
-  console.log("FavouriteFood", foods);
   const [isOpen, setOpen] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food>();
 

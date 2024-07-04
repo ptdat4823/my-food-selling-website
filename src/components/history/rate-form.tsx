@@ -102,7 +102,6 @@ export const RateForm = ({
   });
 
   const onSubmit = async (values: RateFormData) => {
-    console.log("values", values);
     if (!order) return;
     const newFeedback: Feedback = {
       id: -1,

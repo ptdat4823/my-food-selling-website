@@ -130,7 +130,6 @@ export const FoodForm = ({
 
   const setInitialValues = () => {
     if (food) {
-      console.log("food: ", food);
       setValue("name", food.name);
       setValue("status", food.status === FoodStatus.ACTIVE ? "true" : "false");
       setValue("category", food.category.name);

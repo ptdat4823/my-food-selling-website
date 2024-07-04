@@ -14,7 +14,6 @@ export default async function OrderManagementPage() {
     orderResults.status === "fulfilled" ? (orderResults.value as Order[]) : [];
   const user =
     userResults.status === "fulfilled" ? (userResults.value as User) : null;
-  console.log("user", user);
   if (!user || !user.isAdmin) return notFound();
   return (
     <div className="h-screen flex flex-col p-8 text-primary-word dark:text-dark-primary-word overflow-y-scroll scrollbar">
