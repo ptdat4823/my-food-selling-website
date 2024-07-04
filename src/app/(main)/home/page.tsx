@@ -8,6 +8,7 @@ import { FoodList } from "@/src/components/main/food-list";
 import SearchBar from "@/src/components/main/search-bar";
 import { FoodToReceive } from "@/src/convertor/foodConvertor";
 import { Food, FoodCategory } from "@/src/models/Food";
+import { getActiveFood } from "@/src/utils/func";
 
 const HomePage = async () => {
   const [foodsResult, categoriesResult, favouriteResults, userResults] =
@@ -32,9 +33,6 @@ const HomePage = async () => {
       : [];
   const favouriteFoodIds = favouriteFoods.map((food) => food.id);
 
-  const getActiveFood = (foods: Food[]) => {
-    return foods.filter((food) => !food.isDeleted && food.name !== null);
-  };
   const user = userResults.status === "fulfilled" ? userResults.value : null;
 
   return (

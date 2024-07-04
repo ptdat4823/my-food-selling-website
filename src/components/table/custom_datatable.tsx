@@ -193,7 +193,7 @@ export function CustomDatatable<TData>({
           {config.onDeleteRowsBtnClick !== undefined &&
           table.getSelectedRowModel().rows.length > 0 ? (
             <Button
-              className="bg-red-500 text-white"
+              className="bg-red-500 hover:bg-red-600 dark:hover:bg-red-600 text-white"
               disabled={isDeletingCodes}
               onClick={() => {
                 setIsDeletingCodes(true);

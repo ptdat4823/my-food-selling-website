@@ -20,8 +20,8 @@ import {
 } from "./custom-input";
 import { FoodSizeList } from "./food-size-list";
 import { X } from "lucide-react";
-import { UploadImage } from "@/src/actions/image-upload";
-import { uploadImage } from "@/src/utils/func";
+import { DeleteImage, UploadImage } from "@/src/actions/image-upload";
+import { getPublicIdFromCloudinaryUrl, uploadImage } from "@/src/utils/func";
 
 export type FoodFormData = {
   name: string;
@@ -94,9 +94,6 @@ export const FoodForm = ({
   closeForm: () => any;
   categories: FoodCategory[];
 }) => {
-  const dispatch = useAppDispatch();
-
-  const [chosenImageFiles, setChosenImageFiles] = useState<File[]>([]);
   const [isUploadingFood, setIsUploadingFood] = useState(false);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -159,6 +156,7 @@ export const FoodForm = ({
   // if newFileUrl == null, it means the user removed image
   const handleImageChosen = async (newFileUrl: File | null, index: number) => {
     if (newFileUrl) {
+      //upload image to cloudinary
       setIsLoadingImage(true);
       const res = await uploadImage(newFileUrl).finally(() =>
         setIsLoadingImage(false)
@@ -168,17 +166,31 @@ export const FoodForm = ({
         return;
       }
       if (res.message) {
+        //update images in form
         const newFileUrl = res.data.url;
-        setChosenImageFiles([...chosenImageFiles, newFileUrl]);
         setValue("images", [...watch("images"), newFileUrl]);
       }
     } else {
-      setChosenImageFiles([...chosenImageFiles].splice(index, 1));
-      setValue("images", [...watch("images")].splice(index, 1));
+      const oldImageUrl = watch("images")[index];
+
+      //update images in form
+      const newImages = [...watch("images")];
+      newImages.splice(index, 1);
+      setValue("images", newImages);
+
+      //delete image in cloudinary
+      if (oldImageUrl) {
+        const publicId = getPublicIdFromCloudinaryUrl(oldImageUrl);
+        const res = await DeleteImage(publicId);
+        if (res.error) {
+          showErrorToast(res.error);
+        }
+      }
     }
   };
 
   const onSubmit = async (values: FoodFormData) => {
+    //put data to form data
     const selectedCategory = categories.find(
       (cat: any) => cat.name === values.category
     );
@@ -189,11 +201,8 @@ export const FoodForm = ({
       "data",
       new Blob([JSON.stringify(foodToSend)], { type: "application/json" })
     );
-    chosenImageFiles
-      .filter((file) => file != null)
-      .forEach((imageFile) => dataForm.append("files", imageFile));
-    setIsUploadingFood(true);
 
+    //if food is existed, it means we are updating food
     if (food) {
       const res = await UpdateFood(food.id, dataForm);
       if (res.error) {
@@ -205,6 +214,7 @@ export const FoodForm = ({
       }
       setIsUploadingFood(false);
     } else {
+      //if food is not existed, it means we are creating new food
       const res = await CreateFood(dataForm);
       if (res.error) {
         showErrorToast(res.error);

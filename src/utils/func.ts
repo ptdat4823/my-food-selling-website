@@ -2,6 +2,7 @@ import { ClassValue, clsx } from "clsx";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import { DeleteImage, UploadImage } from "../actions/image-upload";
+import { Food } from "../models/Food";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -167,6 +168,10 @@ const deleteImage = async (imageUrl: string) => {
   return await DeleteImage(publicId);
 };
 
+const getActiveFood = (foods: Food[]) => {
+  return foods.filter((food) => !food.isDeleted && food.name !== null);
+};
+
 export {
   cn,
   displayNumber,
@@ -183,4 +188,5 @@ export {
   uploadImage,
   deleteImage,
   getPublicIdFromCloudinaryUrl,
+  getActiveFood,
 };

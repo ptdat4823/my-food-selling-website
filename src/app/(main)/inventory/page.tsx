@@ -6,6 +6,7 @@ import { GetInfo } from "@/src/actions/user";
 import { User } from "@/src/models/User";
 import { notFound } from "next/navigation";
 import MySteryBackground from "@/src/components/ui/mystery-background";
+import { getActiveFood } from "@/src/utils/func";
 
 const InventoryPage = async () => {
   const [foodsResult, categoriesResult, userResults] = await Promise.allSettled(
@@ -30,7 +31,10 @@ const InventoryPage = async () => {
           Inventory
         </h1>
       </div>
-      <InventoryDataTable foods={foods} categories={categories} />
+      <InventoryDataTable
+        foods={getActiveFood(foods)}
+        categories={categories}
+      />
     </div>
   );
 };

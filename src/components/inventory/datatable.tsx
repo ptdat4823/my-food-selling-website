@@ -1,7 +1,7 @@
 "use client";
 import { Food, FoodCategory } from "@/src/models/Food";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CustomDatatable } from "../table/custom_datatable";
 import { Button } from "../ui/button";
 import {
@@ -12,21 +12,28 @@ import {
 import { FoodDetailTab } from "./food-detail-tab";
 import { FoodForm } from "./food-form";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
-import { DeleteFood } from "@/src/actions/food";
+import { DeleteFood, DeleteFoods } from "@/src/actions/food";
+import { deleteImage, formatDate, handleFilterColumn } from "@/src/utils/func";
 
 interface Props {
   foods: Food[];
   categories: FoodCategory[];
 }
 const InventoryDataTable = ({ foods, categories }: Props) => {
-  foods = foods.filter((food) => !food.isDeleted && food.name !== null);
+  const [filteredData, setFilteredData] = useState<Food[]>([]);
   const [openNewFoodForm, setOpenNewFoodForm] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food>();
   const filterOptionKeys = Object.keys(menuColumnTitles)
     .filter((key) => key !== "images")
     .map((key) => key);
 
+  useEffect(() => {
+    setFilteredData(foods);
+  }, [foods]);
+
   const handleDeleteFood = async (id: number) => {
+    const imagesToDelete = foods.find((food) => food.id === id)?.images;
+    if (imagesToDelete) imagesToDelete.forEach((image) => deleteImage(image));
     const res = await DeleteFood(id);
     if (res.error) {
       showErrorToast(res.error);
@@ -36,10 +43,61 @@ const InventoryDataTable = ({ foods, categories }: Props) => {
     }
   };
 
+  const handleDeleteSelectedFoods = async (foods: Food[]) => {
+    foods.map((food) => {
+      food.images.forEach((image) => deleteImage(image));
+    });
+    const res = await DeleteFoods(foods.map((food) => food.id));
+    if (res.errors) {
+      res.errors.forEach((error) => showErrorToast(error));
+    }
+    if (res.message) {
+      showSuccessToast(res.message);
+    }
+  };
+
+  const handleCategoryFilter = (filterInput: string, data: Food[]) => {
+    const filteredData = data.filter((food) =>
+      food.category.name.toLowerCase().includes(filterInput.toLowerCase())
+    );
+    return filteredData;
+  };
+  const handleCreatedDateFilter = (filterInput: string, data: Food[]) => {
+    const filteredData = data.filter((food) =>
+      formatDate(food.createdAt).includes(filterInput.toString())
+    );
+    return filteredData;
+  };
+
+  const handleFilterChange = (filterInput: string, col: string) => {
+    console.log(filterInput, col);
+    let filteredData: Food[] = [];
+    if (col === "") filteredData = getFilterAllTableData(filterInput);
+    else filteredData = getDataFilter(filterInput, col);
+    setFilteredData(filteredData);
+  };
+
+  const getDataFilter = (filterInput: string, col: string) => {
+    //special col that cannot filter as default
+    if (col === "category") return handleCategoryFilter(filterInput, foods);
+    if (col === "createdAt") return handleCreatedDateFilter(filterInput, foods);
+    return handleFilterColumn(filterInput, col, foods);
+  };
+  const getFilterAllTableData = (filterInput: string) => {
+    let filteredAllTableData: Set<Food> = new Set();
+    Object.keys(menuColumnTitles).forEach((col) => {
+      if (col === "images") return;
+      const filteredData = getDataFilter(filterInput, col);
+      filteredData.forEach((order) => filteredAllTableData.add(order));
+    });
+    const filteredData = Array.from(filteredAllTableData);
+    return filteredData;
+  };
+
   return (
     <>
       <CustomDatatable
-        data={foods}
+        data={filteredData}
         columns={menuTableColumns()}
         columnTitles={menuColumnTitles}
         buttons={[
@@ -76,8 +134,8 @@ const InventoryDataTable = ({ foods, categories }: Props) => {
           showFilterButton: true,
           filterOptionKeys: filterOptionKeys,
           showDataTableViewOptions: true,
-          //   onFilterChange: handleFilterChange,
-          //   onDeleteRowsBtnClick: handleDeleteSelectedFoods,
+          onFilterChange: handleFilterChange,
+          onDeleteRowsBtnClick: handleDeleteSelectedFoods,
         }}
       />
       {openNewFoodForm && (

@@ -3,7 +3,7 @@ import { GetInfo } from "@/src/actions/user";
 import { PaymentStepBar } from "@/src/components/cart/main/payment-step-bar";
 import SummaryList from "@/src/components/cart/main/summary-list";
 import { Food } from "@/src/models/Food";
-import { cn } from "@/src/utils/func";
+import { cn, getActiveFood } from "@/src/utils/func";
 
 export default async function CartLayout({
   children,
@@ -18,10 +18,6 @@ export default async function CartLayout({
   const foods =
     foodsResult.status === "fulfilled" ? (foodsResult.value as Food[]) : [];
   const user = userResults.status === "fulfilled" ? userResults.value : null;
-
-  const getActiveFood = (foods: Food[]) => {
-    return foods.filter((food) => !food.isDeleted && food.name !== null);
-  };
 
   return (
     <div

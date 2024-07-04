@@ -104,6 +104,30 @@ export async function DeleteFood(id: number) {
   };
 }
 
+export async function DeleteFoods(listId: number[]) {
+  const accessToken = cookies().get("access-token")?.value;
+  const promises = listId.map((id) =>
+    fetch(process.env.NEXTAUTH_URL + `/api/inventory/foods/${id}`, {
+      method: "DELETE",
+      headers: {
+        Cookie: `access-token=${accessToken}`,
+      },
+    })
+  );
+  const res = await Promise.all(promises);
+  const failed = res.filter((result) => !result.ok);
+
+  if (failed.length > 0) {
+    return {
+      errors: failed.map((result) => result.statusText),
+    };
+  }
+  revalidatePath("/(main)/inventory");
+  return {
+    message: "Deleted successfully!",
+  };
+}
+
 export async function ChangeStateFavouriteFood(id: number) {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(

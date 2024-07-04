@@ -60,7 +60,10 @@ export async function DELETE(
     if (!res.ok) {
       return NextResponse.json(
         {},
-        { status: res.status, statusText: "Deleted failed!" }
+        {
+          status: res.status,
+          statusText: "Failed to delete food with id " + params.id,
+        }
       );
     }
   } catch (e: any) {
