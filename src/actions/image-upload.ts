@@ -63,6 +63,21 @@ export async function DeleteImage(publicId: string) {
 
   return {
     message: res.statusText,
-    data: await res.json(),
+  };
+}
+
+export async function DeleteImages(listPublicId: string[]) {
+  const res = listPublicId.map(async (publicId) => await DeleteImage(publicId));
+
+  const failed = res.filter(async (result) => (await result).error);
+
+  if (failed.length > 0) {
+    return {
+      errors: failed.map((result) => (result as any).error),
+    };
+  }
+
+  return {
+    message: "Deleted successfully!",
   };
 }

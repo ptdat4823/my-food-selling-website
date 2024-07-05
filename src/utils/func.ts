@@ -1,7 +1,11 @@
 import { ClassValue, clsx } from "clsx";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
-import { DeleteImage, UploadImage } from "../actions/image-upload";
+import {
+  DeleteImage,
+  DeleteImages,
+  UploadImage,
+} from "../actions/image-upload";
 import { Food } from "../models/Food";
 
 function cn(...inputs: ClassValue[]) {
@@ -168,6 +172,11 @@ const deleteImage = async (imageUrl: string) => {
   return await DeleteImage(publicId);
 };
 
+const deleteImages = async (imageUrls: string[]) => {
+  const publicIds = imageUrls.map((url) => getPublicIdFromCloudinaryUrl(url));
+  return await DeleteImages(publicIds);
+};
+
 const getActiveFood = (foods: Food[]) => {
   return foods.filter((food) => !food.isDeleted && food.name !== null);
 };
@@ -187,6 +196,7 @@ export {
   isValidString,
   uploadImage,
   deleteImage,
+  deleteImages,
   getPublicIdFromCloudinaryUrl,
   getActiveFood,
 };

@@ -5,6 +5,7 @@ import { cn, displayNumber } from "@/src/utils/func";
 import { ClassValue } from "clsx";
 import Image from "next/image";
 import LayoutCard from "../card/layout-card";
+import { CldImage } from "next-cloudinary";
 
 interface Props {
   data: FoodReportData[];
@@ -63,7 +64,7 @@ const FoodRow = ({ food, count }: { food: Food; count: number }) => {
       )}
     >
       <div className="flex flex-row gap-4">
-        <Image
+        <CldImage
           src={food.images[0]}
           width={50}
           height={50}

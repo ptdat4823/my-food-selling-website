@@ -1,6 +1,7 @@
 import { GetAllCategories } from "@/src/actions/category";
 import { GetAllFood, GetFavouriteFood } from "@/src/actions/food";
 import { GetInfo } from "@/src/actions/user";
+import AllFoodsList from "@/src/components/main/all-foods-list";
 import BestRatedList from "@/src/components/main/best-rated-list";
 import BestSellerList from "@/src/components/main/best-seller-list";
 import FavoriteList from "@/src/components/main/favorite-list";
@@ -44,7 +45,7 @@ const HomePage = async () => {
           user={user}
         />
 
-        <FoodList
+        <AllFoodsList
           foods={getActiveFood(foods)}
           favoriteFoodIds={favouriteFoodIds}
           user={user}
@@ -63,7 +64,7 @@ const HomePage = async () => {
         />
 
         <FavoriteList
-          foods={favouriteFoods}
+          foods={getActiveFood(favouriteFoods)}
           favoriteFoodIds={favouriteFoodIds}
           user={user}
         />

@@ -20,8 +20,17 @@ import {
 } from "./custom-input";
 import { FoodSizeList } from "./food-size-list";
 import { X } from "lucide-react";
-import { DeleteImage, UploadImage } from "@/src/actions/image-upload";
-import { getPublicIdFromCloudinaryUrl, uploadImage } from "@/src/utils/func";
+import {
+  DeleteImage,
+  DeleteImages,
+  UploadImage,
+} from "@/src/actions/image-upload";
+import {
+  deleteImage,
+  deleteImages,
+  getPublicIdFromCloudinaryUrl,
+  uploadImage,
+} from "@/src/utils/func";
 
 export type FoodFormData = {
   name: string;
@@ -97,6 +106,7 @@ export const FoodForm = ({
   const [isUploadingFood, setIsUploadingFood] = useState(false);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [oldImageUrls, setOldImageUrls] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof foodSchema>>({
     resolver: zodResolver(foodSchema),
@@ -153,6 +163,19 @@ export const FoodForm = ({
     if (food) setInitialValues();
   }, []);
 
+  const deleteImagesAfterSubmit = async () => {
+    //delete image in cloudinary
+    if (oldImageUrls.length > 0) {
+      const res = await deleteImages(oldImageUrls);
+      if (res.errors) {
+        res.errors.forEach((error) => showErrorToast(error));
+      }
+      if (res.message) {
+        showSuccessToast(res.message);
+      }
+    }
+  };
+
   // if newFileUrl == null, it means the user removed image
   const handleImageChosen = async (newFileUrl: File | null, index: number) => {
     if (newFileUrl) {
@@ -171,21 +194,14 @@ export const FoodForm = ({
         setValue("images", [...watch("images"), newFileUrl]);
       }
     } else {
+      //save old image url to delete later if user submit form
       const oldImageUrl = watch("images")[index];
+      if (oldImageUrl) setOldImageUrls([...oldImageUrls, oldImageUrl]);
 
       //update images in form
       const newImages = [...watch("images")];
       newImages.splice(index, 1);
       setValue("images", newImages);
-
-      //delete image in cloudinary
-      if (oldImageUrl) {
-        const publicId = getPublicIdFromCloudinaryUrl(oldImageUrl);
-        const res = await DeleteImage(publicId);
-        if (res.error) {
-          showErrorToast(res.error);
-        }
-      }
     }
   };
 
@@ -203,28 +219,21 @@ export const FoodForm = ({
     );
 
     //if food is existed, it means we are updating food
-    if (food) {
-      const res = await UpdateFood(food.id, dataForm);
-      if (res.error) {
-        showErrorToast(res.error);
-      }
-      if (res.message) {
-        closeForm();
-        showSuccessToast(res.message);
-      }
-      setIsUploadingFood(false);
-    } else {
-      //if food is not existed, it means we are creating new food
-      const res = await CreateFood(dataForm);
-      if (res.error) {
-        showErrorToast(res.error);
-      }
-      if (res.message) {
-        closeForm();
-        showSuccessToast(res.message);
-      }
-      setIsUploadingFood(false);
+    const res = food
+      ? await UpdateFood(food.id, dataForm)
+      : await CreateFood(dataForm);
+
+    if (res.error) {
+      showErrorToast(res.error);
     }
+
+    if (res.message) {
+      deleteImagesAfterSubmit();
+      closeForm();
+      showSuccessToast(res.message);
+    }
+
+    setIsUploadingFood(false);
   };
 
   return (

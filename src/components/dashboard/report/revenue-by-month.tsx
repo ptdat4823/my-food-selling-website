@@ -44,7 +44,7 @@ export const TotalRevenueReport = ({ report }: { report: RevenueReport }) => {
   let formattedOffset;
   if (prevValue !== 0)
     formattedOffset = displayNumber(
-      Math.abs(((value - prevValue) / prevValue) * 100),
+      ((value - prevValue) / prevValue) * 100,
       "%"
     );
   else formattedOffset = displayNumber(value, "$");
@@ -74,7 +74,6 @@ export const TotalRevenueReport = ({ report }: { report: RevenueReport }) => {
                 {value === prevValue && <MoveRight />}
                 {value < prevValue && <TrendingDownIcon />}
                 {value >= prevValue && "+"}
-                {value < prevValue && "-"}
                 {formattedOffset}
                 <span className="text-secondary-word dark:text-dark-secondary-word">
                   {" "}

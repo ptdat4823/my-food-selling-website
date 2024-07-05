@@ -117,7 +117,7 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "row-disappear": "disappear_to_left .5s linear",
+        "row-disappear": "disappear_to_left .5s linear forwards",
         "col-move-to-right": "move_to_right .3s linear forwards",
         "col-move-to-left": "move_to_left .3s linear forwards",
       },

@@ -10,6 +10,7 @@ import { User } from "@/src/models/User";
 import {
   cn,
   deleteImage,
+  deleteImages,
   isValidPhoneNumberInput,
   uploadImage,
 } from "@/src/utils/func";
@@ -24,6 +25,7 @@ import {
   showSuccessToast,
 } from "../ui/toast";
 import { UploadImage } from "@/src/actions/image-upload";
+import { de } from "date-fns/locale";
 
 export type UserSettingFormData = {
   name: string;
@@ -82,7 +84,7 @@ export default function UserInfoForm({ thisUser }: Props) {
   const [isSaving, setIsSaving] = useState(false);
   const [isLoadingAvatar, setIsLoadingAvatar] = useState(true);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
-  const [oldFileUrl, setOldFileUrl] = useState<string | null>(null);
+  const [oldFileUrls, setOldFileUrls] = useState<string[]>([]);
 
   const form = useForm<UserSettingFormData>({
     resolver: zodResolver(schema),
@@ -194,10 +196,10 @@ export default function UserInfoForm({ thisUser }: Props) {
     const [userRes, passRes, deleteRes] = await Promise.all([
       UpdateInfo(updatedUserFormData),
       canUpdatePassword ? ChangePassword(changePassFormData) : null,
-      oldFileUrl ? deleteImage(oldFileUrl) : null,
+      oldFileUrls.length > 0 ? deleteImages(oldFileUrls) : null,
     ]).finally(() => setIsSaving(false));
-    if (deleteRes?.error) {
-      showErrorToast(deleteRes.error);
+    if (deleteRes?.errors) {
+      deleteRes.errors.forEach((error: string) => showErrorToast(error));
     }
     if (passRes && passRes.error) {
       showErrorToast(passRes.error);
@@ -219,20 +221,20 @@ export default function UserInfoForm({ thisUser }: Props) {
 
   const handleImageChanged = async (newFileUrl: File | null) => {
     if (newFileUrl) {
-      if (thisUser.profileImage) setOldFileUrl(thisUser.profileImage);
+      if (fileUrl) setOldFileUrls([...oldFileUrls, fileUrl]);
 
       setIsLoadingAvatar(true);
 
-      const res = await uploadImage(newFileUrl).finally(() =>
-        setIsLoadingAvatar(false)
-      );
+      const res = await uploadImage(newFileUrl);
 
       if (res.error) {
         showErrorToast(res.error);
+        setIsLoadingAvatar(false);
         return;
       }
       if (res.message) {
         setFileUrl(res.data.url);
+        setIsLoadingAvatar(false);
       }
     } else setFileUrl(null);
   };

@@ -25,6 +25,7 @@ export const GetAllFood = async () => {
 export const GetFavouriteFood = async () => {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.BACKEND_HOST + "/api/food-favorite", {
+    cache: "no-cache",
     headers: {
       Cookie: `access-token=${accessToken}`,
     },

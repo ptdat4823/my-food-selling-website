@@ -97,7 +97,7 @@ const CartList = ({ carts, className }: CartListProps) => {
                 <CartItem
                   key={cart.id}
                   cart={cart}
-                  isOutOfStock={cart.foodSize.deleted}
+                  isOutOfStock={cart.foodSize.deleted || cart.food.isDeleted}
                   onQuantityChange={handleQuantityChange}
                   onNoteChange={handleNoteChange}
                   onDelete={onDelete}

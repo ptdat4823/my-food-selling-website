@@ -154,7 +154,7 @@ export function CustomDatatable<TData>({
                   iconBefore={<Filter className="h-4 w-4" />}
                   className={cn(
                     "gap-2 whitespace-nowrap text-secondary-word bg-gray-100 hover:bg-gray-200 ease-linear duration-100 py-2 rounded-md cursor-pointer outline-none select-none",
-                    "dark:bg-white/10 dark:hover:bg-dark-hover-secondary"
+                    "dark:bg-white/10 dark:hover:bg-white/20"
                   )}
                 >
                   {columnTitles[selectedFilterKey] || "Filter"}

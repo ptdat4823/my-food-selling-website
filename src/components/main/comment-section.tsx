@@ -71,7 +71,7 @@ export const CommentSection = ({
             ))
           ) : (
             <div className="w-full h-20 flex items-center justify-center">
-              <p className="text-gray-700 text-center ">
+              <p className="text-gray-700 dark:text-dark-secondary-word text-center ">
                 No comments yet.
                 {hasPurchased
                   ? " Be the first to comment!"

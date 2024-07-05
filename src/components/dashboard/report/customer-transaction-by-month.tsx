@@ -79,7 +79,6 @@ export const CustomerTransactionReport = ({
                 {value === prevValue && <MoveRight />}
                 {value < prevValue && <TrendingDownIcon />}
                 {value >= prevValue && "+"}
-                {value < prevValue && "-"}
                 {formattedOffset}
                 <span className="text-secondary-word dark:text-dark-secondary-word">
                   {" "}
