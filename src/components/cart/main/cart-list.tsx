@@ -16,6 +16,7 @@ import { showErrorToast, showSuccessToast } from "../../ui/toast";
 import { CartItem } from "./cart-item";
 import { EmptyCart } from "./empty-cart";
 import { FoodTitleBar } from "./food-title-bar";
+import { Skeleton } from "@nextui-org/react";
 
 const getUpdatedCartData = (cartData: Cart[], selectedCart: Cart[]) => {
   const newCartData = cartData.map((cart) => {

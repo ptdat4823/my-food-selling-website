@@ -3,11 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { Comment } from "@/src/models/Comment";
 
 export const GetAllFood = async () => {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.BACKEND_HOST + "/api/foods", {
+    cache: "no-cache",
     headers: {
       Cookie: `access-token=${accessToken}`,
     },
@@ -18,7 +18,9 @@ export const GetAllFood = async () => {
       { status: 500, statusText: "Internal Server Error" }
     );
   });
-  if (res.ok) return await res.json();
+  if (res.ok) {
+    return await res.json();
+  }
   return [];
 };
 

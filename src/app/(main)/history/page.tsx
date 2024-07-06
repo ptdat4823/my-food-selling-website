@@ -1,7 +1,8 @@
 import { GetAllOrders } from "@/src/actions/order";
 import HistoryDataTable from "@/src/components/history/datatable";
-import { Order } from "@/src/models/Order";
 import { cn } from "@/src/utils/func";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 export default async function HistoryPage() {
   const [orderResults] = await Promise.all([GetAllOrders()]);
@@ -18,7 +19,9 @@ export default async function HistoryPage() {
           History
         </h1>
       </div>
-      <HistoryDataTable orders={orders} />
+      <Suspense fallback={<Loading />}>
+        <HistoryDataTable orders={orders} />
+      </Suspense>
     </div>
   );
 }

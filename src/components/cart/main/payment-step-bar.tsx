@@ -14,13 +14,13 @@ export const PaymentStepBar = ({ className }: { className?: ClassValue }) => {
         className
       )}
     >
-      <CartTab tabNum={1} tabName="Shopping Cart" href="/cart" />
+      <CartTab tabNum={1} tabName="Shopping Cart" href="/cart/detail" />
       <ChevronRight className="text-primary dark:text-dark-primary" />
       <CartTab
         tabNum={2}
         tabName="Checkout Details"
         href="/cart/checkout"
-        disabled={path === "/cart"}
+        disabled={path === "/cart/detail"}
       />
       <ChevronRight className="text-primary dark:text-dark-primary" />
       <CartTab

@@ -5,11 +5,11 @@ import AllFoodsList from "@/src/components/main/all-foods-list";
 import BestRatedList from "@/src/components/main/best-rated-list";
 import BestSellerList from "@/src/components/main/best-seller-list";
 import FavoriteList from "@/src/components/main/favorite-list";
-import { FoodList } from "@/src/components/main/food-list";
 import SearchBar from "@/src/components/main/search-bar";
 import { FoodToReceive } from "@/src/convertor/foodConvertor";
-import { Food, FoodCategory } from "@/src/models/Food";
+import { FoodCategory } from "@/src/models/Food";
 import { getActiveFood } from "@/src/utils/func";
+import { Skeleton } from "@nextui-org/react";
 
 const HomePage = async () => {
   const [foodsResult, categoriesResult, favouriteResults, userResults] =

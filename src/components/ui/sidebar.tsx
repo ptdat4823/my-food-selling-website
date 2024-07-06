@@ -114,7 +114,7 @@ export default function Sidebar({
                 isSidebarOpen={isSidebarOpen}
               />
               <SidebarLink
-                href="/cart"
+                href="/cart/detail"
                 content="Your cart"
                 icon={<ShoppingCart />}
                 isSidebarOpen={isSidebarOpen}

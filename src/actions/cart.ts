@@ -20,7 +20,6 @@ export const GetAllCarts = async () => {
     );
   });
   if (res.ok) {
-    revalidatePath("/(main)");
     return await res.json();
   }
   return [];
