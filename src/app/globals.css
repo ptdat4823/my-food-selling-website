@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .default-scrollbar {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .default-scrollbar::-webkit-scrollbar {
   width: 8px;
@@ -24,7 +24,7 @@
 }
 
 .dark\:white-scrollbar:is(.dark *) {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .dark\:white-scrollbar:is(.dark *)::-webkit-scrollbar {
   width: 8px;

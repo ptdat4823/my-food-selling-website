@@ -22,6 +22,7 @@ export default async function OrderManagementPage() {
           Order management
         </h1>
       </div>
+
       <OrderManagementDataTable orders={orders} />
     </div>
   );

@@ -45,6 +45,7 @@ export const GetFavouriteFood = async () => {
 export async function CreateFood(formData: FormData) {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.NEXTAUTH_URL + "/api/inventory/foods", {
+    cache: "no-cache",
     method: "POST",
     headers: {
       Cookie: `access-token=${accessToken}`,
@@ -67,6 +68,7 @@ export async function UpdateFood(id: number, formData: FormData) {
   const res = await fetch(
     process.env.NEXTAUTH_URL + `/api/inventory/foods/${id}`,
     {
+      cache: "no-cache",
       method: "PUT",
       headers: {
         Cookie: `access-token=${accessToken}`,
@@ -90,6 +92,7 @@ export async function DeleteFood(id: number) {
   const res = await fetch(
     process.env.NEXTAUTH_URL + `/api/inventory/foods/${id}`,
     {
+      cache: "no-cache",
       method: "DELETE",
       headers: {
         Cookie: `access-token=${accessToken}`,
@@ -111,6 +114,7 @@ export async function DeleteFoods(listId: number[]) {
   const accessToken = cookies().get("access-token")?.value;
   const promises = listId.map((id) =>
     fetch(process.env.NEXTAUTH_URL + `/api/inventory/foods/${id}`, {
+      cache: "no-cache",
       method: "DELETE",
       headers: {
         Cookie: `access-token=${accessToken}`,
@@ -136,6 +140,7 @@ export async function ChangeStateFavouriteFood(id: number) {
   const res = await fetch(
     process.env.BACKEND_HOST + `/api/food-favorite/${id}`,
     {
+      cache: "no-cache",
       method: "POST",
       headers: {
         Cookie: `access-token=${accessToken}`,
@@ -161,6 +166,7 @@ export async function ChangeStateFavouriteFood(id: number) {
 export const GetFoodComment = async (id: number) => {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.BACKEND_HOST + `/api/comments/${id}`, {
+    cache: "no-cache",
     headers: {
       Cookie: `access-token=${accessToken}`,
     },
@@ -178,6 +184,7 @@ export const GetFoodComment = async (id: number) => {
 export async function UploadComment(id: number, comment: any) {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.BACKEND_HOST + `/api/comments/${id}`, {
+    cache: "no-cache",
     method: "POST",
     headers: {
       Cookie: `access-token=${accessToken}`,
@@ -203,6 +210,7 @@ export async function UploadComment(id: number, comment: any) {
 export async function DeleteComment(id: number) {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.BACKEND_HOST + `/api/comments/${id}`, {
+    cache: "no-cache",
     method: "DELETE",
     headers: {
       Cookie: `access-token=${accessToken}`,

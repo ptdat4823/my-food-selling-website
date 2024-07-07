@@ -13,11 +13,13 @@ import { ConfirmDialog, useConfirmDialog } from "../ui/confirm-dialog";
 import { UpdateOrder } from "@/src/actions/order";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
 import { RateForm } from "./rate-form";
+import TableSkeleton from "../skeleton/table/table-skeleton";
 
 interface Props {
   orders: Order[];
 }
 const HistoryDataTable = ({ orders }: Props) => {
+  const [loaded, setLoaded] = useState(false);
   const [filteredData, setFilteredData] = useState<Order[]>([]);
   const filterOptionKeys = Object.keys(orderColumnTitles)
     .filter((key) => key !== "images")
@@ -30,6 +32,7 @@ const HistoryDataTable = ({ orders }: Props) => {
     id: number;
     status: OrderStatus;
   }>();
+
   const handleConfirmBeforeStatusChange = (id: number, status: OrderStatus) => {
     setDataStatusChange({ id, status });
     setOpen(true);
@@ -112,6 +115,11 @@ const HistoryDataTable = ({ orders }: Props) => {
     const filteredData = Array.from(filteredAllTableData);
     return filteredData;
   };
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
+  if (!loaded) return <TableSkeleton />;
 
   return (
     <>

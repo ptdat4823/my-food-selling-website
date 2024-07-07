@@ -1,0 +1,15 @@
+.scroll-watcher {
+  height: 100%;
+  min-height: fit-content;
+  width: fit-content;
+  z-index: 10;
+  transform-origin: top;
+  animation: scroll-watcher linear;
+  animation-timeline: scroll();
+}
+
+@keyframes scroll-watcher {
+  to {
+    height: 56px;
+  }
+}

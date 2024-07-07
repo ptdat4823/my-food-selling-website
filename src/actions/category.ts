@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 export const GetAllCategories = async () => {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.BACKEND_HOST + "/api/categories", {
+    cache: "no-cache",
     headers: {
       Cookie: `access-token=${accessToken}`,
     },
@@ -26,6 +27,7 @@ export async function CreateCategory(formData: FormData) {
   const res = await fetch(
     process.env.NEXTAUTH_URL + "/api/inventory/categories",
     {
+      cache: "no-cache",
       method: "POST",
       headers: {
         Cookie: `access-token=${accessToken}`,

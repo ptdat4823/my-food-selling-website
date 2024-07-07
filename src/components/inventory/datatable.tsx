@@ -14,12 +14,14 @@ import { FoodForm } from "./food-form";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
 import { DeleteFood, DeleteFoods } from "@/src/actions/food";
 import { deleteImage, formatDate, handleFilterColumn } from "@/src/utils/func";
+import TableSkeleton from "../skeleton/table/table-skeleton";
 
 interface Props {
   foods: Food[];
   categories: FoodCategory[];
 }
 const InventoryDataTable = ({ foods, categories }: Props) => {
+  const [loaded, setLoaded] = useState(false);
   const [filteredData, setFilteredData] = useState<Food[]>([]);
   const [openNewFoodForm, setOpenNewFoodForm] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food>();
@@ -93,6 +95,11 @@ const InventoryDataTable = ({ foods, categories }: Props) => {
     const filteredData = Array.from(filteredAllTableData);
     return filteredData;
   };
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
+  if (!loaded) return <TableSkeleton hasMoreButton={true} />;
 
   return (
     <>

@@ -1,10 +1,10 @@
-import InputSkeleton from "@/src/components/skeleton/cart/checkout/input-skeleton";
-import TextAreaSkeleton from "@/src/components/skeleton/cart/checkout/textarea-skeleton";
-import Skeleton from "@/src/components/skeleton/custom/skeleton";
-import { Separate } from "@/src/components/ui/separate";
 import React from "react";
+import Skeleton from "../../custom/skeleton";
+import { Separate } from "@/src/components/ui/separate";
+import InputSkeleton from "./input-skeleton";
+import TextAreaSkeleton from "./textarea-skeleton";
 
-const Loading = () => {
+const CheckoutSkeleton = () => {
   return (
     <div className="h-fit px-2 flex flex-col gap-8">
       <div className="w-full flex flex-col gap-2">
@@ -31,4 +31,4 @@ const Loading = () => {
   );
 };
 
-export default Loading;
+export default CheckoutSkeleton;

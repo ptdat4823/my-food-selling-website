@@ -12,11 +12,13 @@ import {
 } from "./columns";
 import { OrderDetailTab } from "./order-detail-tab";
 import { notFound } from "next/navigation";
+import TableSkeleton from "../skeleton/table/table-skeleton";
 
 interface Props {
   orders: Order[];
 }
 export const OrderManagementDataTable = ({ orders }: Props) => {
+  const [loaded, setLoaded] = useState(false);
   const [filteredData, setFilteredData] = useState<Order[]>([]);
   const [rowUpdating, setRowUpdating] = useState<number[]>([]);
   const filterOptionKeys = Object.keys(orderColumnTitles)
@@ -96,6 +98,11 @@ export const OrderManagementDataTable = ({ orders }: Props) => {
     const filteredData = Array.from(filteredAllTableData);
     return filteredData;
   };
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
+  if (!loaded) return <TableSkeleton />;
 
   return (
     <CustomDatatable

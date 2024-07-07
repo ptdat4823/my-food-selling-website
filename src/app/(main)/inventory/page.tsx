@@ -1,12 +1,11 @@
+import { GetAllCategories } from "@/src/actions/category";
+import { GetAllFood } from "@/src/actions/food";
+import { GetInfo } from "@/src/actions/user";
 import InventoryDataTable from "@/src/components/inventory/datatable";
 import { Food, FoodCategory } from "@/src/models/Food";
-import { GetAllFood } from "@/src/actions/food";
-import { GetAllCategories } from "@/src/actions/category";
-import { GetInfo } from "@/src/actions/user";
 import { User } from "@/src/models/User";
-import { notFound } from "next/navigation";
-import MySteryBackground from "@/src/components/ui/mystery-background";
 import { getActiveFood } from "@/src/utils/func";
+import { notFound } from "next/navigation";
 
 const InventoryPage = async () => {
   const [foodsResult, categoriesResult, userResults] = await Promise.allSettled(

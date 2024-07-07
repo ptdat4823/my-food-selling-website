@@ -12,6 +12,8 @@ import FadeInSection from "@/src/components/ui/fade-in-section";
 import { FoodReport, MonthlyReport } from "@/src/models/Report";
 
 import { cn } from "@/src/utils/func";
+import { useEffect, useState } from "react";
+import DashboardSkeleton from "../../skeleton/dashboard/loading";
 
 interface Props {
   completedOrderReport: MonthlyReport;
@@ -35,6 +37,13 @@ const MainDashboard = ({
   topFoodByOrderReport,
   customerTransactionReport,
 }: Props) => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
+  if (!loaded) return <DashboardSkeleton />;
+
   return (
     <div className={cn("flex flex-col gap-12")}>
       <div className="w-full grid grid-cols-4 gap-4">

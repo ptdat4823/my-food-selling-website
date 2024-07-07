@@ -27,9 +27,12 @@ export default async function RootLayout({
     <Provider session={session}>
       <html
         lang="en"
-        className={cn("w-screen h-screen overflow-hidden", inter.className)}
+        className={cn(
+          "w-screen h-screen overflow-x-hidden default-scrollbar dark:white-scrollbar",
+          inter.className
+        )}
       >
-        <body className={cn("w-screen h-screen overflow-hidden")}>
+        <body className={cn("w-screen")}>
           <ThemeProvider defaultTheme="system" attribute="class">
             {/* client side from here */}
             <NextUIProvider>

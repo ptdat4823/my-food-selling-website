@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 import { Pen } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -14,11 +14,13 @@ import { User } from "@/src/models/User";
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { setCurrentOrder, updateCurrentOrder } from "@/src/redux/slices/order";
 import { CartsToOrder } from "@/src/convertor/orderConvertor";
+import Loading from "../../skeleton/cart/checkout/loading";
 
 interface Props {
   thisUser: User;
 }
 const CheckoutDetail = ({ thisUser }: Props) => {
+  const [loaded, setLoaded] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const selectedCart = useAppSelector((state) => state.cart.selectedCart);
@@ -43,6 +45,11 @@ const CheckoutDetail = ({ thisUser }: Props) => {
   const handlePayMethodChange = (payMethod: PaymentMethod) => {
     setSelectedPayMethod(payMethod);
   };
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
+  if (!loaded) return <Loading />;
+
   return (
     <div className="h-fit px-2 flex flex-col gap-8">
       <div className="w-full flex flex-col gap-2">
