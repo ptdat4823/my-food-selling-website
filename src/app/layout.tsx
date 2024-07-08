@@ -1,16 +1,16 @@
+import { NextUIProvider } from "@nextui-org/react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { Toast } from "../components/ui/toast";
-import Provider from "../components/auth/session-provider";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { ThemeProvider } from "next-themes";
+import { Nunito } from "next/font/google";
+import Provider from "../components/auth/session-provider";
+import { Toast } from "../components/ui/toast";
 import ReduxProvider from "../redux/provider";
 import { cn } from "../utils/func";
-import { ThemeProvider } from "next-themes";
-import { NextUIProvider } from "@nextui-org/react";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito" });
 
 export const metadata: Metadata = {
   title: "Fresh Mart",
@@ -29,7 +29,7 @@ export default async function RootLayout({
         lang="en"
         className={cn(
           "w-screen h-screen overflow-x-hidden default-scrollbar dark:white-scrollbar",
-          inter.className
+          nunito.className
         )}
       >
         <body className={cn("w-screen")}>

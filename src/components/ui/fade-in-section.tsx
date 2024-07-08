@@ -6,8 +6,9 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 interface Props {
   children: ReactNode;
   className?: ClassValue;
+  delay?: number;
 }
-const FadeInSection = ({ children, className }: Props) => {
+const FadeInSection = ({ children, className, delay }: Props) => {
   const [countIntersection, setCountIntersection] = useState(0);
   const ref = useRef<HTMLSelectElement>(null);
 
@@ -15,7 +16,13 @@ const FadeInSection = ({ children, className }: Props) => {
     if (!ref.current) return;
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) setCountIntersection((prev) => prev + 1);
+        if (entry.isIntersecting)
+          setTimeout(
+            () => {
+              setCountIntersection((prev) => prev + 1);
+            },
+            delay ? delay : 0
+          );
       });
     });
     observer.observe(ref.current);

@@ -35,9 +35,7 @@ export default function ImageCarousel({
 
   return (
     <div className={cn("relative", className)}>
-      <div
-        className={cn("relative group overflow-hidden rounded-md", className)}
-      >
+      <div className={cn("relative group overflow-hidden rounded-md")}>
         <Button
           iconBefore={<ChevronLeft className="text-white" />}
           className={cn(

@@ -25,6 +25,8 @@ const config = {
         dark: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('/images/dark-page.jpg')",
         favourite:
           "linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), url('/images/bg-favourite.jpg')",
+        intro:
+          "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.169)), url('/images/intro-bg.jpg')",
       },
       colors: {
         //light theme
@@ -39,7 +41,7 @@ const config = {
         "hover-secondary": "#2b2b2e",
 
         //text color
-        "primary-word": "#000000",
+        "primary-word": "#323232",
         "secondary-word": "#777777",
         disable: "#d8d8d8",
 
@@ -70,6 +72,9 @@ const config = {
         "report-card":
           "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
         "primary-shadow": "0 0 60px 0px rgba(0,0,0,0.2)",
+        "highlight-orange": "0 10px 30px -6px rgb(243, 112, 0)",
+        "highlight-dark": "0 10px 30px -6px #597aff",
+        "highlight-white": "0 10px 30px -6px #ffffff",
       },
       fontFamily: {
         "web-name": [
@@ -79,6 +84,8 @@ const config = {
           "Trebuchet MS",
           "sans-serif",
         ],
+
+        nunito: ["var(--font-nunito)"],
       },
       keyframes: {
         "accordion-down": {
