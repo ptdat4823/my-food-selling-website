@@ -1,11 +1,9 @@
+"server-only";
 import crypto from "crypto";
 
 export async function UploadImage(formData: FormData) {
-  const uploadUrl = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`;
-  formData.append(
-    "upload_preset",
-    `${process.env.NEXT_PUBLIC_UPLOAD_PRESET_NAME}`
-  );
+  const uploadUrl = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`;
+  formData.append("upload_preset", `${process.env.UPLOAD_PRESET_NAME}`);
   const res = await fetch(uploadUrl, {
     method: "POST",
     body: formData,
@@ -34,8 +32,8 @@ const generateSignature = (publicId: string, apiSecret: string) => {
 };
 
 export async function DeleteImage(publicId: string) {
-  const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
-  const apiSecret = process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET;
+  const apiKey = process.env.CLOUDINARY_API_KEY;
+  const apiSecret = process.env.CLOUDINARY_API_SECRET;
   if (!apiKey || !apiSecret) {
     return {
       error: "API key or API secret is not found",
@@ -43,7 +41,7 @@ export async function DeleteImage(publicId: string) {
   }
   const timestamp = new Date().getTime().toString();
   const signature = generateSHA1(generateSignature(publicId, apiSecret));
-  const uploadUrl = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/destroy`;
+  const uploadUrl = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/destroy`;
 
   const formData = new FormData();
   formData.append("api_key", apiKey);
