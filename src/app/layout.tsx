@@ -7,8 +7,8 @@ import Provider from "../components/auth/session-provider";
 import { Toast } from "../components/ui/toast";
 import ReduxProvider from "../redux/provider";
 import { cn } from "../utils/func";
-import { authOptions } from "./api/auth/[...nextauth]/route";
 import "./globals.css";
+import { authOptions } from "../models/authOption";
 
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito" });
 

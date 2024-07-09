@@ -87,7 +87,7 @@ export default function IntroPage() {
               Order Now
             </Button>
             <Button
-              className="border border-orange-400 bg-transparent text-primary dark:hover:bg-orange-400 hover:text-white hover:shadow-highlight-orange rounded-full px-8 py-4 text-xl font-semibold ease-linear duration-200"
+              className="border border-orange-400 bg-transparent text-orange-400 dark:text-orange-400 dark:hover:bg-orange-400 dark:hover:text-white hover:text-white hover:shadow-highlight-orange rounded-full px-8 py-4 text-xl font-semibold ease-linear duration-200"
               onClick={() => {
                 router.push("/intro");
               }}
