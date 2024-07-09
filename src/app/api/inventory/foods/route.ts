@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const url = "http://localhost:8080/api/foods";
+  const url = process.env.BACKEND_HOST + "/api/foods";
   const accessToken = cookies().get("access-token")?.value;
 
   try {

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const registerUrl = "http://localhost:8080/api/auth/register";
+  const registerUrl = process.env.BACKEND_HOST + "/api/auth/register";
 
   try {
     const { name, email, password } = await request.json();

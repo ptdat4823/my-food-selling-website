@@ -1,7 +1,6 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
 
 export async function RegisterAction(data: FormData) {
   const name = data.get("username");
@@ -26,7 +25,7 @@ export async function RegisterAction(data: FormData) {
 }
 
 export async function RegisterWithGoogle(name: string, email: string) {
-  const url = "http://localhost:8080/api/auth/register";
+  const url = process.env.BACKEND_HOST + "/api/auth/register";
   const password = "google";
 
   try {
@@ -55,7 +54,7 @@ export async function RegisterWithGoogle(name: string, email: string) {
 }
 
 export async function LoginWithGoogle(email: string) {
-  const url = "http://localhost:8080/api/auth/authenticate";
+  const url = process.env.BACKEND_HOST + "/api/auth/authenticate";
   const password = "google";
 
   try {

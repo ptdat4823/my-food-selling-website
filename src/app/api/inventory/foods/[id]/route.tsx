@@ -5,7 +5,7 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const url = `http://localhost:8080/api/foods/${params.id}`;
+  const url = process.env.BACKEND_HOST + `/api/foods/${params.id}`;
   const accessToken = cookies().get("access-token")?.value;
 
   try {
@@ -42,7 +42,7 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const url = `http://localhost:8080/api/foods/${params.id}`;
+  const url = process.env.BACKEND_HOST + `/api/foods/${params.id}`;
   const accessToken = cookies().get("access-token")?.value;
 
   try {
