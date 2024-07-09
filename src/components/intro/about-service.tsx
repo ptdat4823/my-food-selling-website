@@ -6,10 +6,10 @@ const AboutService = () => {
     <section className="h-screen px-8 pt-24 flex flex-row gap-2">
       <div className="w-1/2 h-[600px] flex flex-row gap-8 whitespace-nowrap">
         <FadeInSection>
-          <CustomImage image="/images/about-food-1.jpg" />
+          <CustomImage image="/images/about-service-1.jpg" />
         </FadeInSection>
         <FadeInSection delay={200}>
-          <CustomImage image="/images/about-food-2.jpg" className="mt-16" />
+          <CustomImage image="/images/about-service-2.jpg" className="mt-16" />
         </FadeInSection>
       </div>
       <div className="w-1/2 flex flex-col gap-8 justify-start mt-24">

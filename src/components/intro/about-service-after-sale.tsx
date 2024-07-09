@@ -25,10 +25,13 @@ const AboutServiceAfterSale = () => {
       </div>
       <div className="w-1/2 h-[600px] flex flex-row justify-end gap-8 whitespace-nowrap">
         <FadeInSection delay={200}>
-          <CustomImage image="/images/about-food-3.jpg" className="mt-16" />
+          <CustomImage
+            image="/images/about-customer-service-2.jpg"
+            className="mt-16"
+          />
         </FadeInSection>
         <FadeInSection>
-          <CustomImage image="/images/about-food-4.jpg" />
+          <CustomImage image="/images/about-customer-service-1.jpg" />
         </FadeInSection>
       </div>
     </section>
