@@ -21,7 +21,8 @@ export const authOptions: AuthOptions = {
         password: {},
       },
       async authorize(credentials) {
-        const loginUrl = "http://localhost:8080/api/auth/authenticate";
+        const backend_url = process.env.BACKEND_HOST;
+        const loginUrl = `${backend_url}/api/auth/authenticate`;
         const email = credentials?.email;
         const password = credentials?.password;
         try {
@@ -32,7 +33,7 @@ export const authOptions: AuthOptions = {
               "Content-Type": "application/json",
             },
           }).catch((error) => {
-            throw new Error("Internal Server Error");
+            throw new Error("Internal Server Error with host: " + backend_url);
           });
 
           if (!res.ok) {
