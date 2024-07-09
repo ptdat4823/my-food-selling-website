@@ -45,7 +45,7 @@ const ProvinceInput = ({
             value={value}
           />
         </DropdownTrigger>
-        <DropdownMenu className="max-h-[300px] !rounded-sm overflow-y-scroll scrollbar-hide">
+        <DropdownMenu className="max-h-[300px] !rounded-sm overflow-y-scroll scrollbar-hide dark:bg-dark-secondary-bg">
           {provinceNames.map((provinceName) => (
             <DropdownItem
               key={provinceName}
@@ -53,7 +53,7 @@ const ProvinceInput = ({
                 if (onProvinceChange) onProvinceChange(provinceName);
               }}
             >
-              <div className="text-primary-word bg-transparent">
+              <div className="text-primary-word dark:text-dark-primary-word bg-transparent">
                 {provinceName}
               </div>
             </DropdownItem>
