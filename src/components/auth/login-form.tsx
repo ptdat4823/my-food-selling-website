@@ -3,8 +3,8 @@ import Logo from "@/public/images/logo.png";
 import { cn } from "@nextui-org/react";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
-import { useState } from "react";
+import { redirect, usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { Google } from "../icons/brand";
@@ -12,6 +12,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separate } from "../ui/separate";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
+import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 
 export type LoginFormData = {
   email: string;
@@ -37,6 +38,11 @@ const LoginForm = () => {
   const form = useForm<LoginFormData>();
   const { register } = form;
   const [fieldErrors, setFieldErrors] = useState<any>();
+  const path = usePathname();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  useEffect(() => {
+    if (path !== "/login") setIsLoggingIn(false);
+  }, [path]);
 
   const handleSignInWithGoogle = async () => {
     await signIn("google", {
@@ -115,10 +121,13 @@ const LoginForm = () => {
         <div className="w-full flex flex-col items-center gap-2">
           <Button
             type="submit"
-            className="w-full mt-6 text-sm font-extrabold text-white bg-primary hover:bg-primary/80"
+            className={cn(
+              "w-full mt-6 text-sm gap-2 pr-4 font-extrabold text-white bg-primary hover:bg-primary/80",
+              isLoggingIn && "opacity-50 pointer-events-none"
+            )}
+            onClick={() => setIsLoggingIn(true)}
           >
-            Sign Me In
-            {/* {isLoggingIn ? "Logging in" : "Sign Me In"} */}
+            {isLoggingIn ? <LoadingCircle color="white" /> : "Sign Me In"}
           </Button>
 
           <span className="my-2">or</span>

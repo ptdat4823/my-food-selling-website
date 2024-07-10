@@ -93,7 +93,7 @@ const CustomLink = ({
         >
           {notification && notification > 0 && notification}
         </span>
-        <span>{isChangeingPath ? <LoadingCircle /> : icon}</span>
+        <span>{isChangeingPath ? <LoadingCircle color="white" /> : icon}</span>
       </div>
       <span className={cn("w-fit font-sans font-semibold text-nowrap")}>
         {content}

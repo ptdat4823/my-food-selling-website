@@ -4,8 +4,8 @@ import { RegisterAction } from "@/src/actions/auth";
 import { cn } from "@nextui-org/react";
 import { ClassValue } from "clsx";
 import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
-import { useState } from "react";
+import { redirect, usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -13,6 +13,7 @@ import { Separate } from "../ui/separate";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
 import { useSession } from "next-auth/react";
 import { ZodType, z } from "zod";
+import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 
 export type RegisterFormData = {
   username: string;
@@ -43,6 +44,10 @@ const RegisterForm = () => {
   const { register } = form;
   const [fieldErrors, setFieldErrors] = useState<any>();
   const [isSigningUp, setIsSigningUp] = useState(false);
+  const path = usePathname();
+  useEffect(() => {
+    if (path !== "/register") setIsSigningUp(false);
+  }, [path]);
 
   const clientAction = async (data: FormData) => {
     //create request object
@@ -132,10 +137,13 @@ const RegisterForm = () => {
         <div className="w-full flex flex-col items-center gap-2">
           <Button
             type="submit"
-            className="w-full mt-10 text-sm font-extrabold text-white bg-primary hover:bg-primary/80"
-            disabled={isSigningUp}
+            className={cn(
+              "w-full mt-10 pr-4 text-sm font-extrabold text-white bg-primary hover:bg-primary/80",
+              isSigningUp && "opacity-50 pointer-events-none"
+            )}
+            onClick={() => setIsSigningUp(true)}
           >
-            {isSigningUp ? "" : "Sign Up"}
+            {isSigningUp ? <LoadingCircle color="white" /> : "Sign Up"}
           </Button>
 
           <span className="text-sm text-secondary-word dark:text-dark-secondary-word">
