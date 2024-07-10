@@ -2,18 +2,17 @@
 import Logo from "@/public/images/logo.png";
 import { RegisterAction } from "@/src/actions/auth";
 import { cn } from "@nextui-org/react";
-import { ClassValue } from "clsx";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { redirect, usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { redirect, useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { ZodType, z } from "zod";
+import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separate } from "../ui/separate";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
-import { useSession } from "next-auth/react";
-import { ZodType, z } from "zod";
-import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 
 export type RegisterFormData = {
   username: string;
@@ -44,10 +43,6 @@ const RegisterForm = () => {
   const { register } = form;
   const [fieldErrors, setFieldErrors] = useState<any>();
   const [isSigningUp, setIsSigningUp] = useState(false);
-  const path = usePathname();
-  useEffect(() => {
-    if (path !== "/register") setIsSigningUp(false);
-  }, [path]);
 
   const clientAction = async (data: FormData) => {
     //create request object
@@ -66,7 +61,8 @@ const RegisterForm = () => {
     }
 
     //call register action
-    const res = await RegisterAction(data);
+    setIsSigningUp(true);
+    const res = await RegisterAction(data).finally(() => setIsSigningUp(false));
     if (res?.error) {
       showErrorToast(res.error);
     }
@@ -141,7 +137,6 @@ const RegisterForm = () => {
               "w-full mt-10 pr-4 text-sm font-extrabold text-white bg-primary hover:bg-primary/80",
               isSigningUp && "opacity-50 pointer-events-none"
             )}
-            onClick={() => setIsSigningUp(true)}
           >
             {isSigningUp ? <LoadingCircle color="white" /> : "Sign Up"}
           </Button>

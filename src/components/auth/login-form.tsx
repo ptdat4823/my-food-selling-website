@@ -3,16 +3,16 @@ import Logo from "@/public/images/logo.png";
 import { cn } from "@nextui-org/react";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-import { redirect, usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { redirect, useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
 import { Google } from "../icons/brand";
+import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separate } from "../ui/separate";
 import { showErrorToast, showSuccessToast } from "../ui/toast";
-import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 
 export type LoginFormData = {
   email: string;
@@ -38,11 +38,7 @@ const LoginForm = () => {
   const form = useForm<LoginFormData>();
   const { register } = form;
   const [fieldErrors, setFieldErrors] = useState<any>();
-  const path = usePathname();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  useEffect(() => {
-    if (path !== "/login") setIsLoggingIn(false);
-  }, [path]);
 
   const handleSignInWithGoogle = async () => {
     await signIn("google", {
@@ -64,6 +60,7 @@ const LoginForm = () => {
       return;
     }
 
+    setIsLoggingIn(true);
     const res = await signIn("credentials", {
       email: request.email,
       password: request.password,
@@ -71,6 +68,7 @@ const LoginForm = () => {
     });
 
     if (res) {
+      setIsLoggingIn(false);
       if (res.ok) {
         showSuccessToast("Login successfully");
         redirect("/home");
@@ -125,7 +123,6 @@ const LoginForm = () => {
               "w-full mt-6 text-sm gap-2 pr-4 font-extrabold text-white bg-primary hover:bg-primary/80",
               isLoggingIn && "opacity-50 pointer-events-none"
             )}
-            onClick={() => setIsLoggingIn(true)}
           >
             {isLoggingIn ? <LoadingCircle color="white" /> : "Sign Me In"}
           </Button>
