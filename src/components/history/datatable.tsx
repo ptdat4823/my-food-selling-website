@@ -19,7 +19,6 @@ interface Props {
   orders: Order[];
 }
 const HistoryDataTable = ({ orders }: Props) => {
-  const [loaded, setLoaded] = useState(false);
   const [filteredData, setFilteredData] = useState<Order[]>([]);
   const filterOptionKeys = Object.keys(orderColumnTitles)
     .filter((key) => key !== "images")
@@ -115,11 +114,6 @@ const HistoryDataTable = ({ orders }: Props) => {
     const filteredData = Array.from(filteredAllTableData);
     return filteredData;
   };
-
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
-  if (!loaded) return <TableSkeleton />;
 
   return (
     <>

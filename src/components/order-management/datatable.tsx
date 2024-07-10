@@ -18,7 +18,6 @@ interface Props {
   orders: Order[];
 }
 export const OrderManagementDataTable = ({ orders }: Props) => {
-  const [loaded, setLoaded] = useState(false);
   const [filteredData, setFilteredData] = useState<Order[]>([]);
   const [rowUpdating, setRowUpdating] = useState<number[]>([]);
   const filterOptionKeys = Object.keys(orderColumnTitles)
@@ -98,11 +97,6 @@ export const OrderManagementDataTable = ({ orders }: Props) => {
     const filteredData = Array.from(filteredAllTableData);
     return filteredData;
   };
-
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
-  if (!loaded) return <TableSkeleton />;
 
   return (
     <CustomDatatable

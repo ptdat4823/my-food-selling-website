@@ -20,7 +20,6 @@ interface Props {
   thisUser: User;
 }
 const CheckoutDetail = ({ thisUser }: Props) => {
-  const [loaded, setLoaded] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const selectedCart = useAppSelector((state) => state.cart.selectedCart);
@@ -45,10 +44,6 @@ const CheckoutDetail = ({ thisUser }: Props) => {
   const handlePayMethodChange = (payMethod: PaymentMethod) => {
     setSelectedPayMethod(payMethod);
   };
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
-  if (!loaded) return <Loading />;
 
   return (
     <div className="h-fit px-2 flex flex-col gap-8">

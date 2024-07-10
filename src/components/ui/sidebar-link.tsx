@@ -3,7 +3,8 @@ import { Tooltip } from "@nextui-org/react";
 import { ClassValue } from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
+import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 
 export const SidebarLink = ({
   className,
@@ -29,7 +30,6 @@ export const SidebarLink = ({
           icon={icon}
           content={content}
           className={className}
-          isSidebarOpen={isSidebarOpen}
         />
       ) : (
         <Tooltip
@@ -47,7 +47,6 @@ export const SidebarLink = ({
             icon={icon}
             content={content}
             className={className}
-            isSidebarOpen={isSidebarOpen}
           />
         </Tooltip>
       )}
@@ -61,16 +60,18 @@ const CustomLink = ({
   icon,
   content,
   className,
-  isSidebarOpen,
 }: {
   href: string;
   notification?: number;
   icon?: ReactNode;
   content: string;
   className?: ClassValue;
-  isSidebarOpen: boolean;
 }) => {
   const path = usePathname();
+  const [isChangeingPath, setIsChangeingPath] = useState(false);
+  useEffect(() => {
+    if (path === href) setIsChangeingPath(false);
+  }, [path]);
   return (
     <Link
       href={href}
@@ -79,17 +80,20 @@ const CustomLink = ({
         path.startsWith(href) ? "bg-blue-600" : "hover:bg-white/10",
         className
       )}
+      onClick={() => {
+        if (href !== path) setIsChangeingPath(true);
+      }}
     >
-      <div className="relative shrink-0">
-        <div
+      <div className="relative shrink-0 w-6 flex items-center justify-center">
+        <span
           className={cn(
             "absolute -right-1.5 -top-1 w-4 h-4 rounded-full shrink-0 text-xs bg-red-600 text-white flex items-center justify-center",
             notification ? "" : "hidden"
           )}
         >
           {notification && notification > 0 && notification}
-        </div>
-        {icon}
+        </span>
+        <span>{isChangeingPath ? <LoadingCircle /> : icon}</span>
       </div>
       <span className={cn("w-fit font-sans font-semibold text-nowrap")}>
         {content}

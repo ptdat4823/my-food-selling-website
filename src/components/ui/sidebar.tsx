@@ -155,7 +155,7 @@ export default function Sidebar({
                     className="w-[24px] h-[24px] flex-shrink-0 rounded-full object-cover overflow-hidden cursor-pointer select-none"
                   />
                   <span className="w-[100px] h-full font-semibold shrink-0 truncate">
-                    {user ? user.name : "Ptdat"}
+                    {session && session.user ? session.user.name : "Ptdat"}
                   </span>
                 </div>
               </PopoverTrigger>
