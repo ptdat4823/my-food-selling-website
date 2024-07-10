@@ -4,9 +4,10 @@ import { Button } from "@/src/components/ui/button";
 import { cn } from "@/src/utils/func";
 import { Nunito } from "next/font/google";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import animation from "src/style/type-writer.module.css";
+import LoadingCircle from "../components/icons/custom-with-css/LoadingCircle/loading_circle";
 
 const nunito = Nunito({
   weight: ["400", "700", "1000"],
@@ -24,6 +25,15 @@ const animationContent = [
 export default function IntroPage() {
   const router = useRouter();
   const [contentIndex, setContentIndex] = useState(0);
+  const path = usePathname();
+  const [isGoingToLogin, setIsGoingToLogin] = useState(false);
+  const [isGoingToIntro, setIsGoingToIntro] = useState(false);
+  useEffect(() => {
+    if (path !== "/") {
+      setIsGoingToLogin(false);
+      setIsGoingToIntro(false);
+    }
+  }, [path]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -79,18 +89,32 @@ export default function IntroPage() {
           </p>
           <div className="flex flex-row gap-4 whitespace-nowrap">
             <Button
-              className="rounded-full px-8 py-4 text-xl font-semibold shadow-highlight-orange bg-orange-400 dark:hover:bg-orange-500 hover:-translate-y-1 ease-linear duration-200"
+              className="rounded-full pl-4 pr-8 py-4 gap-2 text-xl font-semibold shadow-highlight-orange bg-orange-400 dark:hover:bg-orange-500 hover:-translate-y-1 ease-linear duration-200"
               onClick={() => {
-                router.push("/home");
+                setIsGoingToLogin(true);
+                router.push("/login");
               }}
+              iconBefore={
+                <LoadingCircle
+                  color="white"
+                  className={cn("opacity-0", isGoingToLogin && "opacity-100")}
+                />
+              }
             >
               Order Now
             </Button>
             <Button
-              className="border border-orange-400 bg-transparent text-orange-400 dark:text-orange-400 dark:hover:bg-orange-400 dark:hover:text-white hover:text-white hover:shadow-highlight-orange rounded-full px-8 py-4 text-xl font-semibold ease-linear duration-200"
+              className="border border-orange-400 bg-transparent text-orange-400 dark:text-orange-400 dark:hover:bg-orange-400 dark:hover:text-white hover:text-white hover:shadow-highlight-orange rounded-full pl-4 pr-8 py-4 gap-2 text-xl font-semibold ease-linear duration-200"
               onClick={() => {
+                setIsGoingToIntro(true);
                 router.push("/intro");
               }}
+              iconBefore={
+                <LoadingCircle
+                  color="white"
+                  className={cn("opacity-0", isGoingToIntro && "opacity-100")}
+                />
+              }
             >
               Learn More
             </Button>

@@ -1,5 +1,6 @@
 "use client";
 import IntroCarousel from "@/src/components/carousel/intro-carousel";
+import LoadingCircle from "@/src/components/icons/custom-with-css/LoadingCircle/loading_circle";
 import About from "@/src/components/intro/about";
 import AboutFood1 from "@/src/components/intro/about-food-1";
 import AboutFood2 from "@/src/components/intro/about-food-2";
@@ -10,12 +11,17 @@ import { Button } from "@/src/components/ui/button";
 import MySteryBackground from "@/src/components/ui/mystery-background";
 import ThemeSwitch from "@/src/components/ui/theme-switch";
 import { cn } from "@/src/utils/func";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import animation from "src/style/scroll-watcher.module.css";
 
 export default function IntroPage() {
   const router = useRouter();
+  const path = usePathname();
+  const [isChangingPath, setIsChangingPath] = useState(false);
+  useEffect(() => {
+    if (path !== "/intro") setIsChangingPath(false);
+  }, [path]);
 
   return (
     <div className="relative">
@@ -50,10 +56,17 @@ export default function IntroPage() {
         <p>Let us bring the flavors of our restaurant to you!</p>
 
         <Button
-          className="my-10 rounded-full px-8 py-4 text-xl font-semibold shadow-highlight-orange dark:shadow-highlight-dark hover:-translate-y-1 ease-linear duration-200"
+          className="my-10 rounded-full pl-4 pr-8 py-4 gap-2 text-xl font-semibold shadow-highlight-orange dark:shadow-highlight-dark hover:-translate-y-1 ease-linear duration-200"
           onClick={() => {
-            router.push("/home");
+            setIsChangingPath(true);
+            router.push("/login");
           }}
+          iconBefore={
+            <LoadingCircle
+              color="white"
+              className={cn("opacity-0", isChangingPath && "opacity-100")}
+            />
+          }
         >
           Order Now
         </Button>
