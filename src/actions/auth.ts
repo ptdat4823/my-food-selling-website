@@ -6,8 +6,9 @@ export async function RegisterAction(data: FormData) {
   const name = data.get("username");
   const email = data.get("email");
   const password = data.get("password");
+  const nextUrl = process.env.NEXTAUTH_URL;
 
-  const res = await fetch(process.env.NEXTAUTH_URL + "/api/auth/register", {
+  const res = await fetch(nextUrl + "/api/auth/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

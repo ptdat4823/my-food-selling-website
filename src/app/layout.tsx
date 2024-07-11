@@ -24,15 +24,15 @@ export default async function RootLayout({
 }>) {
   const session = await getServerSession(authOptions);
   return (
-    <Provider session={session}>
-      <html
-        lang="en"
-        className={cn(
-          "w-screen h-screen overflow-x-hidden default-scrollbar dark:white-scrollbar",
-          nunito.className
-        )}
-      >
-        <body className={cn("w-screen")}>
+    <html
+      lang="en"
+      className={cn(
+        "w-screen h-screen overflow-x-hidden default-scrollbar dark:white-scrollbar",
+        nunito.className
+      )}
+    >
+      <body className={cn("w-screen")}>
+        <Provider session={session}>
           <ThemeProvider defaultTheme="system" attribute="class">
             {/* client side from here */}
             <NextUIProvider>
@@ -40,8 +40,8 @@ export default async function RootLayout({
             </NextUIProvider>
             <Toast />
           </ThemeProvider>
-        </body>
-      </html>
-    </Provider>
+        </Provider>
+      </body>
+    </html>
   );
 }

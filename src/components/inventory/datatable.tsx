@@ -70,7 +70,6 @@ const InventoryDataTable = ({ foods, categories }: Props) => {
   };
 
   const handleFilterChange = (filterInput: string, col: string) => {
-    console.log(filterInput, col);
     let filteredData: Food[] = [];
     if (col === "") filteredData = getFilterAllTableData(filterInput);
     else filteredData = getDataFilter(filterInput, col);

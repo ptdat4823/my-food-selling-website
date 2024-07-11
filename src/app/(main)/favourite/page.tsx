@@ -13,8 +13,6 @@ export default async function FavouritePages() {
     ? []
     : (favouriteFoodRes as any[]).map((food) => FoodToReceive(food));
 
-  console.log(favouriteFoods);
-
   return (
     <div
       className={cn(

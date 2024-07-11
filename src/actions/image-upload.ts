@@ -1,4 +1,4 @@
-"server-only";
+"use server";
 import crypto from "crypto";
 
 export async function UploadImage(formData: FormData) {

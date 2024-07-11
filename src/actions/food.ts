@@ -8,9 +8,7 @@ export const GetAllFood = async () => {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.BACKEND_HOST + "/api/foods", {
     cache: "no-cache",
-    headers: {
-      Cookie: `access-token=${accessToken}`,
-    },
+    headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
   }).catch(() => {
     return NextResponse.json(
