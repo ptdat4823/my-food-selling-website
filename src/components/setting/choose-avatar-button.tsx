@@ -1,14 +1,13 @@
 "use client";
+import default_user_image from "@/public/images/default_user.png";
+import { cn } from "@/src/utils/func";
+import { ClassValue } from "clsx";
+import { Camera, ImageMinus } from "lucide-react";
+import { CldImage } from "next-cloudinary";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { nanoid } from "nanoid";
-import { ClassValue } from "clsx";
-import default_user_image from "@/public/images/default_user.png";
-import { Camera, ImageMinus } from "lucide-react";
-import { showWarningToast } from "../ui/toast";
-import { cn } from "@/src/utils/func";
-import { CldImage } from "next-cloudinary";
 import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
+import { showWarningToast } from "../ui/toast";
 
 export const ChooseAvatarButton = ({
   className,
@@ -21,15 +20,16 @@ export const ChooseAvatarButton = ({
   onImageChanged: (file: File | null) => void;
   isLoading: boolean;
 }) => {
-  const id = nanoid();
+  const [imageValue, setImageValue] = useState<string>("");
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (
       e.target.files &&
       e.target.files.length > 0 &&
       e.target.files[0].size < 1000000
-    )
+    ) {
+      setImageValue(e.target.value);
       onImageChanged(e.target.files[0]);
-    else {
+    } else {
       showWarningToast("Image size should be less than 1MB");
     }
   };
@@ -37,7 +37,7 @@ export const ChooseAvatarButton = ({
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (!fileUrl) {
-      inputRef.current!.value = "";
+      setImageValue("");
     }
   }, [fileUrl]);
 
@@ -55,7 +55,7 @@ export const ChooseAvatarButton = ({
           </div>
         ) : (
           <label
-            htmlFor={id}
+            htmlFor="user-avatar-input"
             className="absolute top-0 left-0 right-0 flex flex-row items-center justify-center w-full h-full cursor-pointer bg-gray-200/60 text-white opacity-0 hover:opacity-100 ease-linear duration-100"
           >
             <div
@@ -74,8 +74,9 @@ export const ChooseAvatarButton = ({
         )}
         <input
           ref={inputRef}
-          id={id}
+          id="user-avatar-input"
           type="file"
+          value={imageValue || ""}
           onChange={handleChange}
           className="hidden"
           accept="image/*"
