@@ -50,7 +50,7 @@ const DistrictInput = ({
             value={value}
           />
         </DropdownTrigger>
-        <DropdownMenu className="max-h-[300px] !rounded-sm overflow-y-scroll scrollbar-hide dark:bg-dark-secondary-bg">
+        <DropdownMenu className="max-h-[300px] !rounded-sm overflow-y-scroll scrollbar-hide bg-transparent">
           {districtNames.map((districtName) => (
             <DropdownItem
               key={districtName}

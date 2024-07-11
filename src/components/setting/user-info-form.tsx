@@ -281,7 +281,7 @@ export default function UserInfoForm({ thisUser }: Props) {
                   className="text-secondary-word"
                   type="tel"
                   maxLength={10}
-                  value={watch("phonenumber")}
+                  value={watch("phonenumber") || ""}
                   errorMessages={
                     fieldErrors?.phonenumber ? fieldErrors.phonenumber[0] : ""
                   }
