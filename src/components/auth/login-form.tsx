@@ -71,7 +71,8 @@ const LoginForm = () => {
       setIsLoggingIn(false);
       if (res.ok) {
         showSuccessToast("Login successfully");
-        redirect("/home");
+        if (request.email === "admin@gmail.com") redirect("/dashboard");
+        else redirect("/home");
       } else {
         showErrorToast(res.error ? res.error : "Login failed");
       }
