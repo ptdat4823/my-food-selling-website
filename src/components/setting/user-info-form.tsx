@@ -9,7 +9,6 @@ import { UserToUpdate } from "@/src/convertor/userConvertor";
 import { User } from "@/src/models/User";
 import {
   cn,
-  deleteImage,
   deleteImages,
   isValidPhoneNumberInput,
   uploadImage,
@@ -24,8 +23,6 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../ui/toast";
-import { UploadImage } from "@/src/actions/image-upload";
-import { de } from "date-fns/locale";
 
 export type UserSettingFormData = {
   name: string;

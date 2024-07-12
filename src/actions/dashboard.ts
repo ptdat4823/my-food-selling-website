@@ -28,6 +28,8 @@ const getRange = (range: "3-month" | "6-month" | "1-year") => {
 const GetOrderByMonth = async (range: "3-month" | "6-month" | "1-year") => {
   const { startDate, endDate } = getRange(range);
   const accessToken = cookies().get("access-token")?.value;
+  const cloudname = process.env.CLOUDINARY_CLOUD_NAME;
+  console.log("cloudname in dashboard", cloudname);
   const res = await fetch(
     process.env.BACKEND_HOST +
       `/api/reports/order-by-month?start=${dateToUrlPath(

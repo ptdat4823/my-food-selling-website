@@ -60,7 +60,6 @@ const LoginForm = () => {
       return;
     }
 
-    setIsLoggingIn(true);
     const res = await signIn("credentials", {
       email: request.email,
       password: request.password,
@@ -68,13 +67,14 @@ const LoginForm = () => {
     });
 
     if (res) {
-      setIsLoggingIn(false);
       if (res.ok) {
         showSuccessToast("Login successfully");
+        setIsLoggingIn(false);
         if (request.email === "admin@gmail.com") redirect("/dashboard");
         else redirect("/home");
       } else {
         showErrorToast(res.error ? res.error : "Login failed");
+        setIsLoggingIn(false);
       }
     }
   };
@@ -124,6 +124,7 @@ const LoginForm = () => {
               "w-full mt-6 text-sm gap-2 pr-4 font-extrabold text-white bg-primary hover:bg-primary/80",
               isLoggingIn && "opacity-50 pointer-events-none"
             )}
+            onClick={() => setIsLoggingIn(true)}
           >
             {isLoggingIn ? <LoadingCircle color="white" /> : "Sign Me In"}
           </Button>

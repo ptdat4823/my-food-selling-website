@@ -61,13 +61,14 @@ const RegisterForm = () => {
     }
 
     //call register action
-    setIsSigningUp(true);
-    const res = await RegisterAction(data).finally(() => setIsSigningUp(false));
+    const res = await RegisterAction(data);
     if (res?.error) {
       showErrorToast(res.error);
+      setIsSigningUp(false);
     }
     if (res?.message) {
       showSuccessToast(res.message);
+      setIsSigningUp(false);
       redirect("/login");
     }
   };
@@ -137,6 +138,7 @@ const RegisterForm = () => {
               "w-full mt-10 pr-4 text-sm font-extrabold text-white bg-primary hover:bg-primary/80",
               isSigningUp && "opacity-50 pointer-events-none"
             )}
+            onClick={() => setIsSigningUp(true)}
           >
             {isSigningUp ? <LoadingCircle color="white" /> : "Sign Up"}
           </Button>

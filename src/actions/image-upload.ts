@@ -2,6 +2,10 @@
 import crypto from "crypto";
 
 export async function UploadImage(formData: FormData) {
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+  const uploadPreset = process.env.UPLOAD_PRESET_NAME;
+  console.log("cloud name", cloudName);
+  console.log("upload preset", uploadPreset);
   const uploadUrl = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`;
   formData.append("upload_preset", `${process.env.UPLOAD_PRESET_NAME}`);
   const res = await fetch(uploadUrl, {
@@ -41,6 +45,7 @@ export async function DeleteImage(publicId: string) {
   }
   const timestamp = new Date().getTime().toString();
   const signature = generateSHA1(generateSignature(publicId, apiSecret));
+
   const uploadUrl = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/destroy`;
 
   const formData = new FormData();
