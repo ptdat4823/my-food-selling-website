@@ -70,7 +70,7 @@ const CustomLink = ({
   const path = usePathname();
   const [isChangeingPath, setIsChangeingPath] = useState(false);
   useEffect(() => {
-    if (path === href) setIsChangeingPath(false);
+    setIsChangeingPath(false);
   }, [path]);
   return (
     <Link
@@ -84,7 +84,12 @@ const CustomLink = ({
         if (href !== path) setIsChangeingPath(true);
       }}
     >
-      <div className="relative shrink-0 w-6 flex items-center justify-center">
+      <div
+        className={cn(
+          "relative shrink-0 w-6 flex items-center justify-center",
+          isChangeingPath && "hidden"
+        )}
+      >
         <span
           className={cn(
             "absolute -right-1.5 -top-1 w-4 h-4 rounded-full shrink-0 text-xs bg-red-600 text-white flex items-center justify-center",
@@ -93,8 +98,14 @@ const CustomLink = ({
         >
           {notification && notification > 0 && notification}
         </span>
-        <span>{isChangeingPath ? <LoadingCircle color="white" /> : icon}</span>
+        <span>{icon}</span>
       </div>
+
+      {isChangeingPath && (
+        <div className="w-6 flex items-center justify-center">
+          <LoadingCircle color="white" />
+        </div>
+      )}
       <span className={cn("w-fit font-sans font-semibold text-nowrap")}>
         {content}
       </span>

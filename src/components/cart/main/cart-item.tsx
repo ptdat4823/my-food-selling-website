@@ -132,7 +132,7 @@ export const CartItem = ({
       {!isOutOfStock && (
         <>
           {isLoading && (
-            <div className="w-[50px]">
+            <div className="w-[50px] flex items-center justify-center">
               <LoadingCircle />
             </div>
           )}

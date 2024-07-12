@@ -17,6 +17,8 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { showErrorToast } from "../ui/toast";
 import { CirclePlus } from "lucide-react";
+import { ChooseImageButton } from "./choose-image-button";
+import { deleteImages, uploadImage } from "@/src/utils/func";
 
 export type NewCategoryFormData = {
   name: string;
@@ -35,6 +37,7 @@ const NewCategoryModal = ({
   const [image, setImage] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [oldFileUrls, setOldFileUrls] = useState<string[]>([]);
 
   const form = useForm<NewCategoryFormData>({
     resolver: zodResolver(schema),
@@ -43,7 +46,6 @@ const NewCategoryModal = ({
   const {
     register,
     handleSubmit,
-    reset,
     resetField,
     formState: { errors },
   } = form;
@@ -52,7 +54,8 @@ const NewCategoryModal = ({
     setIsLoading(true);
     await onAddClick(data.name, image)
       .then(() => {
-        reset();
+        resetValues();
+        deleteOldImages(oldFileUrls);
         onOpenChange();
       })
       .catch((e) => {
@@ -67,6 +70,37 @@ const NewCategoryModal = ({
     setFileUrl(null);
   };
 
+  // if newFileUrl == null, it means the user removed image
+  const handleImageChosen = async (newFileUrl: File | null) => {
+    if (newFileUrl) {
+      //upload image to cloudinary
+      const res = await uploadImage(newFileUrl);
+      if (res.error) {
+        showErrorToast(res.error);
+        return;
+      }
+      if (res.message) {
+        //update images in form
+        setFileUrl(res.data.url);
+      }
+    } else {
+      //save old image url to delete later if user submit form
+      if (fileUrl) setOldFileUrls([...oldFileUrls, fileUrl]);
+
+      //update images in form
+      setFileUrl(null);
+    }
+  };
+
+  const deleteOldImages = async (oldImageUrls: string[]) => {
+    //delete image in cloudinary
+    if (oldImageUrls.length > 0) {
+      const res = await deleteImages(oldImageUrls);
+      if (res.errors) {
+        res.errors.forEach((error) => showErrorToast(error));
+      }
+    }
+  };
   return (
     <form>
       <div>
@@ -91,10 +125,9 @@ const NewCategoryModal = ({
                   <div className="flex flex-row gap-4">
                     <ChooseImageButton
                       fileUrl={fileUrl}
-                      setFileUrl={setFileUrl}
-                      onFileChosen={setImage}
+                      onImageChanged={handleImageChosen}
                     />
-                    <div className="!my-4 w-full flex flex-col gap-3 text-sm">
+                    <div className="w-full mb-[2px] flex flex-col justify-end gap-3 text-sm">
                       <Input
                         id="category_name"
                         label="Category name"
@@ -114,9 +147,11 @@ const NewCategoryModal = ({
                     onClick={() => {
                       handleSubmit(handleFormSubmit)();
                     }}
-                    className="!h-[35px] w-[100px] bg-green-400 text-white hover:bg-green-500 dark:hover:bg-green-500 rounded "
+                    className="!h-[35px] w-[100px] bg-green-400 text-white hover:bg-green-500 dark:hover:bg-green-500 rounded gap-2"
                     disabled={isLoading}
-                    iconAfter={isLoading ? <LoadingCircle /> : null}
+                    iconAfter={
+                      isLoading ? <LoadingCircle color="white" /> : null
+                    }
                   >
                     Add
                   </Button>
@@ -143,71 +178,71 @@ const NewCategoryModal = ({
   );
 };
 
-const ChooseImageButton = ({
-  fileUrl,
-  setFileUrl,
-  onFileChosen,
-}: {
-  fileUrl: string | null;
-  setFileUrl: (url: string | null) => void;
-  onFileChosen: (file: File | null) => void;
-}) => {
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFileUrl(URL.createObjectURL(e.target.files[0]));
-      onFileChosen(e.target.files[0]);
-    }
-  };
+// const ChooseImageButton = ({
+//   fileUrl,
+//   setFileUrl,
+//   onFileChosen,
+// }: {
+//   fileUrl: string | null;
+//   setFileUrl: (url: string | null) => void;
+//   onFileChosen: (file: File | null) => void;
+// }) => {
+//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     if (e.target.files && e.target.files.length > 0) {
+//       setFileUrl(URL.createObjectURL(e.target.files[0]));
+//       onFileChosen(e.target.files[0]);
+//     }
+//   };
 
-  return (
-    <div className="w-[100px] h-[80px] relative border rounded-sm shrink-0">
-      {!fileUrl || fileUrl.length === 0 ? (
-        <>
-          <label
-            htmlFor={"new_category_image"}
-            className="absolute top-0 left-0 flex items-center justify-center w-full h-full hover:cursor-pointer text-opacity-90"
-          >
-            + Image
-          </label>
-          <input
-            id={"new_category_image"}
-            type="file"
-            onChange={handleFileChange}
-            className="hidden"
-            accept="image/*"
-          />
-        </>
-      ) : (
-        <>
-          <Image
-            width={100}
-            height={100}
-            sizes="100px"
-            src={fileUrl!}
-            alt="image"
-            className="w-full h-full"
-          />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1rem"
-            height="1rem"
-            className="absolute top-[-8px] right-[-8px] hover:cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              onFileChosen(null);
-              setFileUrl(null);
-            }}
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="black"
-              d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"
-            />
-          </svg>
-        </>
-      )}
-    </div>
-  );
-};
+//   return (
+//     <div className="w-[100px] h-[80px] relative border rounded-sm shrink-0">
+//       {!fileUrl || fileUrl.length === 0 ? (
+//         <>
+//           <label
+//             htmlFor={"new_category_image"}
+//             className="absolute top-0 left-0 flex items-center justify-center w-full h-full hover:cursor-pointer text-opacity-90"
+//           >
+//             + Image
+//           </label>
+//           <input
+//             id={"new_category_image"}
+//             type="file"
+//             onChange={handleFileChange}
+//             className="hidden"
+//             accept="image/*"
+//           />
+//         </>
+//       ) : (
+//         <>
+//           <Image
+//             width={100}
+//             height={100}
+//             sizes="100px"
+//             src={fileUrl!}
+//             alt="image"
+//             className="w-full h-full"
+//           />
+//           <svg
+//             xmlns="http://www.w3.org/2000/svg"
+//             width="1rem"
+//             height="1rem"
+//             className="absolute top-[-8px] right-[-8px] hover:cursor-pointer"
+//             onClick={(e) => {
+//               e.stopPropagation();
+//               onFileChosen(null);
+//               setFileUrl(null);
+//             }}
+//             viewBox="0 0 24 24"
+//           >
+//             <path
+//               fill="black"
+//               d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"
+//             />
+//           </svg>
+//         </>
+//       )}
+//     </div>
+//   );
+// };
 
 export default NewCategoryModal;

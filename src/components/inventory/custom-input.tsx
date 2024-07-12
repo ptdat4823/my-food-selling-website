@@ -79,7 +79,7 @@ const DescriptionInput = ({ label, register, required, error }: InputProps) => {
       <textarea
         id={id}
         {...register(label, { required })}
-        className="resize-none w-full bg-transparent border border-borderColor focus:border-primary outline-none rounded-md p-2 placeholder:text-sm text-sm"
+        className="resize-none w-full bg-transparent border border-borderColor focus:border-primary outline-none rounded-md p-2 placeholder:text-sm text-sm default-scrollbar dark:white-scrollbar max-h-[150px]"
         rows={3}
         placeholder="Description"
       />
@@ -231,7 +231,7 @@ const ImagesInput = ({
   error,
 }: {
   fileUrls: (string | null)[];
-  onImageChanged: (file: File | null, index: number) => void;
+  onImageChanged: (file: File | null, index: number) => Promise<void>;
   error?: FieldError;
 }) => {
   const [displayFileUrls, setDisplayFileUrls] = useState<(string | null)[]>([
@@ -256,10 +256,7 @@ const ImagesInput = ({
           <ChooseImageButton
             key={index}
             fileUrl={fileUrl}
-            onImageChanged={(imageFile) => {
-              onImageChanged(imageFile, index);
-            }}
-            className="rounded-md"
+            onImageChanged={(imageFile) => onImageChanged(imageFile, index)}
           />
         ))}
       </div>

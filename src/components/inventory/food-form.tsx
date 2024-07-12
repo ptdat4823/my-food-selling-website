@@ -26,11 +26,13 @@ import {
   UploadImage,
 } from "@/src/actions/image-upload";
 import {
+  cn,
   deleteImage,
   deleteImages,
   getPublicIdFromCloudinaryUrl,
   uploadImage,
 } from "@/src/utils/func";
+import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
 
 export type FoodFormData = {
   name: string;
@@ -104,7 +106,6 @@ export const FoodForm = ({
   categories: FoodCategory[];
 }) => {
   const [isUploadingFood, setIsUploadingFood] = useState(false);
-  const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [oldImageUrls, setOldImageUrls] = useState<string[]>([]);
 
@@ -180,10 +181,7 @@ export const FoodForm = ({
   const handleImageChosen = async (newFileUrl: File | null, index: number) => {
     if (newFileUrl) {
       //upload image to cloudinary
-      setIsLoadingImage(true);
-      const res = await uploadImage(newFileUrl).finally(() =>
-        setIsLoadingImage(false)
-      );
+      const res = await uploadImage(newFileUrl);
       if (res.error) {
         showErrorToast(res.error);
         return;
@@ -219,21 +217,22 @@ export const FoodForm = ({
     );
 
     //if food is existed, it means we are updating food
+    setIsUploadingFood(true);
     const res = food
       ? await UpdateFood(food.id, dataForm)
       : await CreateFood(dataForm);
 
     if (res.error) {
       showErrorToast(res.error);
+      setIsUploadingFood(false);
     }
 
     if (res.message) {
+      showSuccessToast(res.message);
+      setIsUploadingFood(false);
       deleteImagesAfterSubmit();
       closeForm();
-      showSuccessToast(res.message);
     }
-
-    setIsUploadingFood(false);
   };
 
   return (
@@ -379,23 +378,33 @@ export const FoodForm = ({
             <div className="flex-1" />
             <Button
               type="submit"
-              className="w-[100px] px-4 text-white"
-              disabled={isUploadingFood}
+              className={cn(
+                "w-[100px] px-4 text-white",
+                isUploadingFood && "opacity-50 pointer-events-none"
+              )}
               onClick={() => {
                 setIsFormSubmitted(true);
               }}
             >
-              {food ? "Update" : "Add"}
+              {isUploadingFood ? (
+                <LoadingCircle color="white" />
+              ) : food ? (
+                "Update"
+              ) : (
+                "Add"
+              )}
             </Button>
             <Button
               type="button"
-              className="w-[100px] px-4 bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20"
+              className={cn(
+                "w-[100px] px-4 bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20",
+                isUploadingFood && "opacity-50 pointer-events-none"
+              )}
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 closeForm();
               }}
-              disabled={isUploadingFood}
             >
               Cancel
             </Button>

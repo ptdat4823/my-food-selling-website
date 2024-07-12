@@ -134,7 +134,7 @@ export const FoodDetail = ({
                             <span>{food.name}</span>
                             <Button
                               className={cn(
-                                "rounded-full ease-linear duration-100 bg-transparent hover:bg-transparent hover:opacity-60",
+                                "rounded-full ease-linear duration-100 bg-transparent dark:hover:bg-transparent hover:bg-transparent hover:opacity-60",
                                 !isFavorite && "opacity-50"
                               )}
                               iconBefore={<SolidHeartIcon color="pink" />}
@@ -216,7 +216,9 @@ export const FoodDetail = ({
 
                   <ModalBody className="font-sans">
                     <span className="font-semibold">Desciption</span>
-                    <p>{food.description}</p>
+                    <textarea className="resize-none bg-transparent w-full h-[500px] default-scrollbar dark:white-scrollbar">
+                      {food.description}
+                    </textarea>
                   </ModalBody>
                 </div>
                 <div className="flex-[0_0_100%] h-full scrollbar font-sans pt-4">

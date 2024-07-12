@@ -8,7 +8,6 @@ import { NextResponse } from "next/server";
 export const GetAllCarts = async () => {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.BACKEND_HOST + "/api/cart", {
-    cache: "no-cache",
     headers: {
       Cookie: `access-token=${accessToken}`,
     },
@@ -28,7 +27,6 @@ export const GetAllCarts = async () => {
 export async function AddCart(data: Cart) {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.NEXTAUTH_URL + "/api/cart", {
-    cache: "no-cache",
     method: "POST",
     headers: {
       Cookie: `access-token=${accessToken}`,
@@ -49,7 +47,6 @@ export async function AddCart(data: Cart) {
 export async function DeleteCart(id: number) {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.NEXTAUTH_URL + `/api/cart/${id}`, {
-    cache: "no-cache",
     method: "DELETE",
     headers: {
       Cookie: `access-token=${accessToken}`,
@@ -69,7 +66,6 @@ export async function DeleteCart(id: number) {
 export async function UpdateCart(id: number, data: Cart) {
   const accessToken = cookies().get("access-token")?.value;
   const res = await fetch(process.env.NEXTAUTH_URL + `/api/cart/${id}`, {
-    cache: "no-cache",
     method: "PUT",
     headers: {
       Cookie: `access-token=${accessToken}`,

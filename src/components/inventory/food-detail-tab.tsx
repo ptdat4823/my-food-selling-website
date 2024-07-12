@@ -110,7 +110,9 @@ const RowInfo = ({
         <textarea
           readOnly
           disabled
-          className={cn("h-[120px] w-full resize-none border-2 p-1")}
+          className={cn(
+            "h-[120px] w-full resize-none border-2 p-1 default-scrollbar dark:white-scrollbar"
+          )}
           defaultValue={value}
         ></textarea>
       ) : (

@@ -49,7 +49,7 @@ export default function FoodItem({
   return (
     <div
       className={cn(
-        "rounded overflow-hidden shadow-lg bg-[#575656a6] dark:bg-[#12192ca6] bg-opacity-75 hover:scale-105 p-0 transition-all ease-linear duration-100 cursor-pointer",
+        "rounded overflow-hidden shadow-lg bg-[#575656a6] dark:bg-[#12192ca6] bg-opacity-75 p-0 transition-all ease-linear duration-100 cursor-pointer",
         className
       )}
       onClick={onClick}
@@ -57,7 +57,7 @@ export default function FoodItem({
       <div className="w-full h-48 overflow-hidden cursor-pointer">
         <FoodImageFrame food={food} onClick={onClick} />
       </div>
-      <div className="flex flex-col m-2 gap-2 text-white">
+      <div className="flex flex-col m-2 gap-2 text-white select-none">
         <div className="w-full flex flex-row items-center justify-between">
           <span className="font-semibold">{food.name}</span>
           <Button

@@ -1,27 +1,22 @@
 "use client";
+import { CreateOrder } from "@/src/actions/order";
+import { CartsToOrder } from "@/src/convertor/orderConvertor";
 import { Cart } from "@/src/models/Cart";
 import { Food } from "@/src/models/Food";
-import React, { useEffect, useState } from "react";
-import { SummaryItem } from "./summary-item";
-import { Separate } from "../../ui/separate";
-import { Button } from "../../ui/button";
-import { usePathname, useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
-import path from "path";
-import { ClassValue } from "clsx";
-import { cn, isValidString } from "@/src/utils/func";
-import animation from "src/style/animation.module.css";
 import { Order, PaymentMethod } from "@/src/models/Order";
-import { CartsToOrder } from "@/src/convertor/orderConvertor";
-import {
-  showDefaultToast,
-  showErrorToast,
-  showSuccessToast,
-} from "../../ui/toast";
 import { User } from "@/src/models/User";
-import { setCurrentOrder } from "@/src/redux/slices/order";
-import { CreateOrder } from "@/src/actions/order";
+import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { setSelectedCart } from "@/src/redux/slices/cart";
+import { setCurrentOrder } from "@/src/redux/slices/order";
+import { cn, isValidString } from "@/src/utils/func";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import animation from "src/style/animation.module.css";
+import { Button } from "../../ui/button";
+import { Separate } from "../../ui/separate";
+import { showDefaultToast, showErrorToast } from "../../ui/toast";
+import { SummaryItem } from "./summary-item";
+import LoadingCircle from "../../icons/custom-with-css/LoadingCircle/loading_circle";
 
 interface Props {
   foods: Food[];
@@ -34,6 +29,7 @@ const SummaryList = ({ foods, thisUser }: Props) => {
   const selectedCartIds = selectedCart.map((cart) => cart.id);
   const [subtotal, setSubtotal] = useState<number>(0);
   const path = usePathname();
+  const [isChangeingPath, setIsChangeingPath] = useState(false);
   const rightColRef = React.useRef<HTMLDivElement>(null);
   const currentOrder = useAppSelector((state) => state.order.currentOrder);
 
@@ -44,6 +40,10 @@ const SummaryList = ({ foods, thisUser }: Props) => {
     });
     setSubtotal(tempSubtotal);
   }, [selectedCart, selectedCartIds]);
+
+  useEffect(() => {
+    setIsChangeingPath(false);
+  }, [path]);
 
   const fadeOut = () => {
     if (rightColRef.current) {
@@ -95,12 +95,14 @@ const SummaryList = ({ foods, thisUser }: Props) => {
       if (res.message) {
         handleAfterMakeOrder();
         fadeOut();
+        setIsChangeingPath(true);
         setTimeout(() => {
           router.push("/cart/complete");
         }, 250);
       }
     } else {
       SetOrder(selectedCart);
+      setIsChangeingPath(true);
       router.push("/cart/checkout");
     }
   };
@@ -150,8 +152,13 @@ const SummaryList = ({ foods, thisUser }: Props) => {
             "dark:bg-dark-secondary dark:hover:bg-dark-hover-secondary"
           )}
           onClick={handleCartTabChange}
+          iconBefore={isChangeingPath ? <LoadingCircle color="white" /> : null}
         >
-          {path === "/cart/checkout" ? "Make order" : "Checkout details"}
+          {isChangeingPath
+            ? null
+            : path === "/cart/checkout"
+            ? "Make order"
+            : "Checkout details"}
         </Button>
       </div>
     </div>
