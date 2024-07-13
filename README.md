@@ -28,38 +28,63 @@ git clone https://github.com/ptdat4823/my-food-selling-website.git
 
 - _Navigate to the Project Directory:_
 
-  ```bash
-  cd my-food-selling-website
-  ```
+```bash
+cd my-food-selling-website
+```
 
 - _Install dependencies for nextjs:_
 
-  ```bash
-  npm install
-  ```
+```bash
+npm install
+```
 
 - _Start the development server NextJS:_
 
-  ```bash
-  npm run dev
-  ```
+```bash
+npm run dev
+```
 
-**3. Backend Setup (Spring Boot):**
+**3. Backend Setup with Docker:**
 
-- _Install jdk and setup JAVAHOME:_ [Installation Guide](https://www.youtube.com/watch?v=jPwrWjEwtrw)
+- _Download Docker Desktop at this [link](https://www.docker.com/products/docker-desktop/)._
 
-- _Navigate to the backend directory from project directory_
+- _Install Docker Image via terminal_
 
-  ```bash
-  cd my-food-selling-website/src/server
-  ```
+```bash
+docker pull ptdat4823/freshmart-spring
+```
 
-- _Start the development server Springboot Java_
+- _Run docker by terminal_
 
-  ```bash
-  mvn spring-boot:run
-  ```
+```bash
+docker run -p 8080:8080 ptdat4823/freshmart-spring
+```
 
 **4. Access the Website:**
 
 Open your browser and go to http://localhost:3000 to experience the website.
+
+## Additional Notes
+
+- Ensure that Docker is running before attempting to start the backend server.
+- The backend server will be accessible at http://localhost:8080. Make sure this port is not in use by another service.
+- For production deployment, further configuration may be required to ensure security and scalability.
+
+## Contribution
+
+We welcome contributions to improve My Food Selling Website. To contribute, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes.
+4. Submit a pull request with a description of your changes.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for more details.
+
+## Support
+
+If you have any questions or need support, please open an issue in the repository or contact us at phamtiendat@gmail.com
+
+Thank you for using My Food Selling Website!
