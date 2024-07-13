@@ -230,8 +230,9 @@ export const FoodForm = ({
     if (res.message) {
       showSuccessToast(res.message);
       setIsUploadingFood(false);
-      deleteImagesAfterSubmit();
-      closeForm();
+      deleteImagesAfterSubmit().then(() => {
+        closeForm();
+      });
     }
   };
 
