@@ -21,25 +21,62 @@ export const GetAllCategories = async () => {
   return [];
 };
 
+// export async function CreateCategory(formData: FormData) {
+//   const accessToken = cookies().get("access-token")?.value;
+//   const res = await fetch(
+//     process.env.NEXTAUTH_URL + "/api/inventory/categories",
+//     {
+//       method: "POST",
+//       headers: {
+//         Cookie: `access-token=${accessToken}`,
+//       },
+//       body: formData,
+//     }
+//   );
+//   if (!res.ok) {
+//     return {
+//       error: res.statusText,
+//     };
+//   }
+//   revalidatePath("/(main)/inventory");
+//   return {
+//     message: res.statusText,
+//   };
+// }
+
 export async function CreateCategory(formData: FormData) {
+  const url = process.env.BACKEND_HOST + "/api/categories";
   const accessToken = cookies().get("access-token")?.value;
-  const res = await fetch(
-    process.env.NEXTAUTH_URL + "/api/inventory/categories",
-    {
+
+  try {
+    const res = await fetch(url, {
+      cache: "no-cache",
       method: "POST",
       headers: {
         Cookie: `access-token=${accessToken}`,
       },
       body: formData,
+      credentials: "include",
+    }).catch(() => {
+      throw new Error("Internal Server Error");
+    });
+
+    if (!res.ok) {
+      if (res.status === 400)
+        return {
+          error: "Category already exists!",
+        };
+      return {
+        error: "Create new category failed!",
+      };
     }
-  );
-  if (!res.ok) {
+  } catch (e: any) {
     return {
-      error: res.statusText,
+      error: e.message || "Internal Server Error",
     };
   }
-  revalidatePath("/(main)/inventory");
+  revalidatePath("/(main)/inventory", "layout");
   return {
-    message: res.statusText,
+    message: "Create new category successfully!",
   };
 }
