@@ -94,16 +94,16 @@ const SummaryList = ({ foods, thisUser }: Props) => {
       }
       if (res.message) {
         handleAfterMakeOrder();
-        fadeOut();
-        setIsChangeingPath(true);
+        // fadeOut();
         setTimeout(() => {
           router.push("/cart/complete");
+          setIsChangeingPath(false);
         }, 250);
       }
     } else {
       SetOrder(selectedCart);
-      setIsChangeingPath(true);
       router.push("/cart/checkout");
+      setIsChangeingPath(false);
     }
   };
 
@@ -151,7 +151,10 @@ const SummaryList = ({ foods, thisUser }: Props) => {
             "absolute bottom-0 right-0 w-full bg-secondary hover:bg-hover-secondary",
             "dark:bg-dark-secondary dark:hover:bg-dark-hover-secondary"
           )}
-          onClick={handleCartTabChange}
+          onClick={() => {
+            setIsChangeingPath(true);
+            handleCartTabChange();
+          }}
           iconBefore={isChangeingPath ? <LoadingCircle color="white" /> : null}
         >
           {isChangeingPath

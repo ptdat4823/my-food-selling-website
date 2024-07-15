@@ -1,9 +1,9 @@
 "use server";
 
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { Feedback, Order } from "../models/Order";
-import { NextResponse } from "next/server";
+import { fetchData } from "./fetch-util";
 
 export const CreateOrder = async (order: Order) => {
   const accessToken = cookies().get("access-token")?.value;
@@ -39,24 +39,15 @@ export const CreateOrder = async (order: Order) => {
 
 export const GetAllOrders = async () => {
   const accessToken = cookies().get("access-token")?.value;
-  const res = await fetch(process.env.BACKEND_HOST + "/api/orders", {
-    method: "GET",
-    headers: {
-      Cookie: `access-token=${accessToken}`,
-    },
+  const url = process.env.BACKEND_HOST + "/api/orders";
+
+  const options = {
+    headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
-  }).catch(() => {
-    return NextResponse.json(
-      {},
-      { status: 500, statusText: "Internal Server Error" }
-    );
-  });
-  if (!res.ok) {
-    return {
-      error: res.statusText,
-    };
-  }
-  return await res.json();
+  };
+  const res = await fetchData(url, options);
+  if (res.error) return res.error;
+  return res;
 };
 
 export const UpdateOrder = async (id: number, order: Order) => {

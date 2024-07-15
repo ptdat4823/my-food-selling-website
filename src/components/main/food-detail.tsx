@@ -30,6 +30,7 @@ import {
 import { CommentSection } from "./comment-section";
 import { FoodProperty } from "./food-property";
 import FoodRating from "./food-rating";
+import { useTheme } from "next-themes";
 
 export const FoodDetail = ({
   isOpen,
@@ -56,6 +57,7 @@ export const FoodDetail = ({
   const [isLoading, setIsLoading] = useState(false);
   const [selectedSize, setSelectedSize] = useState<FoodSize>(food.foodSizes[0]);
   const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
+  const { theme } = useTheme();
 
   useEffect(() => {
     setSelectedSize(food.foodSizes[0]);
@@ -249,7 +251,9 @@ export const FoodDetail = ({
               <Button
                 iconAfter={
                   isLoading ? (
-                    <LoadingCircle />
+                    <LoadingCircle
+                      color={theme === "light" ? "orange" : "blue"}
+                    />
                   ) : (
                     <ShoppingCart className="w-4 h-4" />
                   )

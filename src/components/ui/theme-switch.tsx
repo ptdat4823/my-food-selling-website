@@ -39,8 +39,7 @@ const ThemeSwitch = ({ className }: Props) => {
         "w-10 h-10 bg-transparent hover:bg-transparent dark:hover:bg-transparent hover:opacity-100",
         className
       )}
-      iconBefore={theme === "light" && <SunIcon />}
-      iconAfter={theme === "dark" && <NightIcon />}
+      iconAfter={theme === "dark" ? <NightIcon /> : <SunIcon />}
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     />
   );

@@ -32,6 +32,12 @@ git clone https://github.com/ptdat4823/my-food-selling-website.git
 cd my-food-selling-website
 ```
 
+- _Copy the `env.sample` file to `.env` file_
+
+```bash
+cp env.sample .env
+```
+
 - _Install dependencies for nextjs:_
 
 ```bash
@@ -46,7 +52,7 @@ npm run dev
 
 **3. Backend Setup with Docker:**
 
-- _Download Docker Desktop at this [link](https://www.docker.com/products/docker-desktop/)._
+- _Download Docker Desktop at [here](https://www.docker.com/products/docker-desktop/)._
 
 - _Install Docker Image via terminal_
 

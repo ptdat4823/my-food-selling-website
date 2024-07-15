@@ -3,22 +3,19 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { fetchData } from "./fetch-util";
 
 export const GetAllFood = async () => {
   const accessToken = cookies().get("access-token")?.value;
-  const res = await fetch(process.env.BACKEND_HOST + "/api/foods", {
+  const url = process.env.BACKEND_HOST + "/api/foods";
+  const options = {
     headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
-  }).catch(() => {
-    return NextResponse.json(
-      {},
-      { status: 500, statusText: "Internal Server Error" }
-    );
-  });
-  if (res.ok) {
-    return await res.json();
-  }
-  return [];
+  };
+  const res = await fetchData(url, options);
+
+  if (res.error) return res.error;
+  return res;
 };
 
 export const GetFavouriteFood = async () => {
@@ -40,7 +37,7 @@ export const GetFavouriteFood = async () => {
 
 export async function CreateFood(formData: FormData) {
   const accessToken = cookies().get("access-token")?.value;
-  const res = await fetch(process.env.NEXTAUTH_URL + "/api/inventory/foods", {
+  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/inventory/foods`, {
     method: "POST",
     headers: {
       Cookie: `access-token=${accessToken}`,
