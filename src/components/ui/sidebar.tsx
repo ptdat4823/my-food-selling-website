@@ -92,7 +92,7 @@ export default function Sidebar({
                 isSidebarOpen={isSidebarOpen}
               />
               <SidebarLink
-                href="/inventory"
+                href="/inventory?page=1&size=10"
                 content="Inventory"
                 icon={<LayoutList />}
                 isSidebarOpen={isSidebarOpen}

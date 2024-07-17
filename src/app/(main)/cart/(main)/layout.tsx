@@ -2,7 +2,6 @@ import { GetAllFood } from "@/src/actions/food";
 import { GetInfo } from "@/src/actions/user";
 import { PaymentStepBar } from "@/src/components/cart/main/payment-step-bar";
 import SummaryList from "@/src/components/cart/main/summary-list";
-import { Food } from "@/src/models/Food";
 import { cn, getActiveFood } from "@/src/utils/func";
 
 export default async function CartLayout({
@@ -10,14 +9,7 @@ export default async function CartLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [foodsResult, userResults] = await Promise.allSettled([
-    GetAllFood(),
-    GetInfo(),
-  ]);
-
-  const foods =
-    foodsResult.status === "fulfilled" ? (foodsResult.value as Food[]) : [];
-  const user = userResults.status === "fulfilled" ? userResults.value : null;
+  const [foodsRes, userRes] = await Promise.all([GetAllFood(), GetInfo()]);
 
   return (
     <div
@@ -39,7 +31,11 @@ export default async function CartLayout({
         </div>
         {children}
       </div>
-      <SummaryList foods={getActiveFood(foods)} thisUser={user} />
+      <SummaryList
+        foods={getActiveFood(foodsRes.data)}
+        thisUser={userRes.data}
+        error={foodsRes.error || userRes.error}
+      />
     </div>
   );
 }

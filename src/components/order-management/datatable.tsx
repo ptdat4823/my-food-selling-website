@@ -16,8 +16,9 @@ import TableSkeleton from "../skeleton/table/table-skeleton";
 
 interface Props {
   orders: Order[];
+  error?: string;
 }
-export const OrderManagementDataTable = ({ orders }: Props) => {
+export const OrderManagementDataTable = ({ orders, error }: Props) => {
   const [filteredData, setFilteredData] = useState<Order[]>([]);
   const [rowUpdating, setRowUpdating] = useState<number[]>([]);
   const filterOptionKeys = Object.keys(orderColumnTitles)
@@ -39,6 +40,9 @@ export const OrderManagementDataTable = ({ orders }: Props) => {
     }
   };
 
+  useEffect(() => {
+    if (error) showErrorToast(error);
+  }, [error]);
   useEffect(() => {
     setFilteredData(orders);
   }, [orders]);

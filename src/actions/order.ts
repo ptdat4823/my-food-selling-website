@@ -45,8 +45,7 @@ export const GetAllOrders = async () => {
     headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
   };
-  const res = await fetchData(url, options);
-  if (res.error) return res.error;
+  const res = await fetchData(url, options, []);
   return res;
 };
 

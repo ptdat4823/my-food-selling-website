@@ -77,7 +77,7 @@ const CustomLink = ({
       href={href}
       className={cn(
         "min-w-10 flex flex-row items-center gap-2 justify-start p-2 text-white whitespace-nowrap overflow-hidden rounded-md transition-all cursor-pointer",
-        path.startsWith(href) ? "bg-blue-600" : "hover:bg-white/10",
+        href.startsWith(path) ? "bg-blue-600" : "hover:bg-white/10",
         className
       )}
       onClick={() => {
@@ -93,7 +93,7 @@ const CustomLink = ({
         <span
           className={cn(
             "absolute -right-1.5 -top-1 w-4 h-4 rounded-full shrink-0 text-xs bg-red-600 text-white flex items-center justify-center",
-            notification ? "" : "hidden"
+            notification && notification > 0 ? "" : "hidden"
           )}
         >
           {notification && notification > 0 && notification}

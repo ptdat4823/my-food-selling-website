@@ -1,15 +1,26 @@
 "use server";
-export const fetchData = async (url: string, options: any) => {
-  const res = await fetch(url, { ...options, cache: "force-cache" }).catch(
-    () => {
-      throw new Error("Internal Server Error");
+
+export const fetchData = async (url: string, options: any, errorData?: any) => {
+  try {
+    const res = await fetch(url, { ...options, cache: "force-cache" }).catch(
+      () => {
+        throw new Error("Internal Server Error");
+      }
+    );
+    if (!res.ok) {
+      return {
+        error:
+          res.statusText || "Something went wrong, please try again later!",
+        data: errorData,
+      };
     }
-  );
-  if (!res.ok) {
     return {
-      error: res.statusText || "Something went wrong, please try again later!",
-      status: res.status || 400,
+      data: await res.json(),
+    };
+  } catch (error: any) {
+    return {
+      error: error.message,
+      data: errorData,
     };
   }
-  return await res.json();
 };

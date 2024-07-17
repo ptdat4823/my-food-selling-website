@@ -32,8 +32,9 @@ const getUpdatedCartData = (cartData: Cart[], selectedCart: Cart[]) => {
 interface CartListProps {
   carts: Cart[];
   className?: ClassValue;
+  error?: string;
 }
-const CartList = ({ carts, className }: CartListProps) => {
+const CartList = ({ carts, className, error }: CartListProps) => {
   const dispatch = useAppDispatch();
   const [loaded, setLoaded] = useState(false);
   const selectedCart = useAppSelector((state) => state.cart.selectedCart);
@@ -53,6 +54,10 @@ const CartList = ({ carts, className }: CartListProps) => {
     setCartData(getUpdatedCartData(carts, selectedCart));
     dispatch(setCartItems(cartData));
   }, [carts]);
+
+  useEffect(() => {
+    if (error) showErrorToast(error);
+  }, [error]);
 
   useEffect(() => {
     setLoaded(true);

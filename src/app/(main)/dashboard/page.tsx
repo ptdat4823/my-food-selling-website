@@ -87,7 +87,9 @@ export default async function DashboardPage() {
       : defaultFoodReport;
 
   const user =
-    userResults.status === "fulfilled" ? (userResults.value as User) : null;
+    userResults.status === "fulfilled"
+      ? (userResults.value.data as User)
+      : null;
   if (!user || !user.isAdmin) return notFound();
 
   return (

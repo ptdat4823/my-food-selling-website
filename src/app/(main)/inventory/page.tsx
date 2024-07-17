@@ -1,21 +1,26 @@
 import { GetAllCategories } from "@/src/actions/category";
-import { GetAllFood } from "@/src/actions/food";
+import { GetFoodByPage } from "@/src/actions/food";
 import InventoryDataTable from "@/src/components/inventory/datatable";
-import { Food, FoodCategory } from "@/src/models/Food";
+import { Food } from "@/src/models/Food";
 import { getActiveFood } from "@/src/utils/func";
+import { redirect } from "next/navigation";
 
-const InventoryPage = async () => {
-  const [foodsResult, categoriesResult] = await Promise.allSettled([
-    GetAllFood(),
+interface Props {
+  searchParams: {
+    page: number;
+    size: number;
+  };
+}
+const InventoryPage = async ({ searchParams }: Props) => {
+  const page = searchParams.page;
+  const size = searchParams.size;
+  if (!page || !size) {
+    redirect("/inventory?page=1&size=10");
+  }
+  const [foodRes, categorieRes] = await Promise.all([
+    GetFoodByPage(page, size),
     GetAllCategories(),
   ]);
-
-  const foods =
-    foodsResult.status === "fulfilled" ? (foodsResult.value as Food[]) : [];
-  const categories =
-    categoriesResult.status === "fulfilled"
-      ? (categoriesResult.value as FoodCategory[])
-      : [];
 
   return (
     <div className="h-screen flex flex-col p-8 text-primary-word dark:text-dark-primary-word overflow-x-hidden default-scrollbar dark:white-scrollbar">
@@ -25,8 +30,9 @@ const InventoryPage = async () => {
         </h1>
       </div>
       <InventoryDataTable
-        foods={getActiveFood(foods)}
-        categories={categories}
+        foods={getActiveFood(foodRes.data as Food[])}
+        categories={categorieRes.data}
+        error={foodRes.error || categorieRes.error}
       />
     </div>
   );

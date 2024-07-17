@@ -21,8 +21,9 @@ import LoadingCircle from "../../icons/custom-with-css/LoadingCircle/loading_cir
 interface Props {
   foods: Food[];
   thisUser: User;
+  error?: string;
 }
-const SummaryList = ({ foods, thisUser }: Props) => {
+const SummaryList = ({ foods, thisUser, error }: Props) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const selectedCart = useAppSelector((state) => state.cart.selectedCart);
@@ -44,6 +45,10 @@ const SummaryList = ({ foods, thisUser }: Props) => {
   useEffect(() => {
     setIsChangeingPath(false);
   }, [path]);
+
+  useEffect(() => {
+    if (error) showErrorToast(error);
+  }, [error]);
 
   const fadeOut = () => {
     if (rightColRef.current) {

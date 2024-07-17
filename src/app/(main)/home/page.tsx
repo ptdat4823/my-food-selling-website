@@ -7,34 +7,24 @@ import BestSellerList from "@/src/components/main/best-seller-list";
 import FavoriteList from "@/src/components/main/favorite-list";
 import SearchBar from "@/src/components/main/search-bar";
 import { FoodToReceive } from "@/src/convertor/foodConvertor";
-import { FoodCategory } from "@/src/models/Food";
+import { Food, FoodCategory } from "@/src/models/Food";
 import { getActiveFood } from "@/src/utils/func";
 import { Skeleton } from "@nextui-org/react";
 
 const HomePage = async () => {
-  const [foodsResult, categoriesResult, favouriteResults, userResults] =
-    await Promise.allSettled([
-      GetAllFood(),
-      GetAllCategories(),
-      GetFavouriteFood(),
-      GetInfo(),
-    ]);
+  const [foodsRes, categoriesRes, favouriteRes, userRes] = await Promise.all([
+    GetAllFood(),
+    GetAllCategories(),
+    GetFavouriteFood(),
+    GetInfo(),
+  ]);
 
-  const foods =
-    foodsResult.status === "fulfilled"
-      ? (foodsResult.value as any[]).map((item) => FoodToReceive(item))
-      : [];
-  const categories =
-    categoriesResult.status === "fulfilled"
-      ? (categoriesResult.value as FoodCategory[])
-      : [];
-  const favouriteFoods =
-    favouriteResults.status === "fulfilled"
-      ? (favouriteResults.value as any[]).map((item) => FoodToReceive(item))
-      : [];
+  const foods = foodsRes.data.map((item: any) => FoodToReceive(item)) || [];
+  const favouriteFoods: Food[] = favouriteRes.data.map((item: any) =>
+    FoodToReceive(item)
+  );
   const favouriteFoodIds = favouriteFoods.map((food) => food.id);
-
-  const user = userResults.status === "fulfilled" ? userResults.value : null;
+  const user = userRes.data;
 
   return (
     <div className="w-full h-screen default-scrollbar dark:white-scrollbar bg-light bg-cover dark:bg-dark">

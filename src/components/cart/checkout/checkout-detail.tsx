@@ -1,25 +1,26 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Button } from "../../ui/button";
-import { Pen } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Separate } from "../../ui/separate";
-import { Input } from "../../ui/input";
-import { TextArea } from "../../ui/textarea";
-import { PayMethodButton } from "./paymethod-button";
-import Image from "next/image";
 import PayByCashImage from "@/public/images/pay_by_cash.png";
+import { CartsToOrder } from "@/src/convertor/orderConvertor";
 import { Order, PaymentMethod } from "@/src/models/Order";
 import { User } from "@/src/models/User";
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { setCurrentOrder, updateCurrentOrder } from "@/src/redux/slices/order";
-import { CartsToOrder } from "@/src/convertor/orderConvertor";
-import Loading from "../../skeleton/cart/checkout/loading";
+import { Pen } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
+import { Separate } from "../../ui/separate";
+import { TextArea } from "../../ui/textarea";
+import { showErrorToast } from "../../ui/toast";
+import { PayMethodButton } from "./paymethod-button";
 
 interface Props {
   thisUser: User;
+  error?: string;
 }
-const CheckoutDetail = ({ thisUser }: Props) => {
+const CheckoutDetail = ({ thisUser, error }: Props) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const selectedCart = useAppSelector((state) => state.cart.selectedCart);
@@ -44,6 +45,10 @@ const CheckoutDetail = ({ thisUser }: Props) => {
   const handlePayMethodChange = (payMethod: PaymentMethod) => {
     setSelectedPayMethod(payMethod);
   };
+
+  useEffect(() => {
+    if (error) showErrorToast(error);
+  }, [error]);
 
   return (
     <div className="h-fit px-2 flex flex-col gap-8">

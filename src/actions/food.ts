@@ -12,27 +12,30 @@ export const GetAllFood = async () => {
     headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
   };
-  const res = await fetchData(url, options);
+  const res = await fetchData(url, options, []);
+  return res;
+};
 
-  if (res.error) return res.error;
+export const GetFoodByPage = async (page: number, size: number) => {
+  const accessToken = cookies().get("access-token")?.value;
+  const url = process.env.BACKEND_HOST + `/api/foods?page=${page}&size=${size}`;
+  const options = {
+    headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
+    credentials: "include",
+  };
+  const res = await fetchData(url, options, []);
   return res;
 };
 
 export const GetFavouriteFood = async () => {
   const accessToken = cookies().get("access-token")?.value;
-  const res = await fetch(process.env.BACKEND_HOST + "/api/food-favorite", {
-    headers: {
-      Cookie: `access-token=${accessToken}`,
-    },
+  const url = process.env.BACKEND_HOST + "/api/food-favorite";
+  const options = {
+    headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
-  }).catch(() => {
-    return NextResponse.json(
-      {},
-      { status: 500, statusText: "Internal Server Error" }
-    );
-  });
-  if (res.ok) return await res.json();
-  return [];
+  };
+  const res = await fetchData(url, options, []);
+  return res;
 };
 
 export async function CreateFood(formData: FormData) {

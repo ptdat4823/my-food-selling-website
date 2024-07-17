@@ -18,8 +18,9 @@ import { FoodForm } from "./food-form";
 interface Props {
   foods: Food[];
   categories: FoodCategory[];
+  error?: string;
 }
-const InventoryDataTable = ({ foods, categories }: Props) => {
+const InventoryDataTable = ({ foods, categories, error }: Props) => {
   const [filteredData, setFilteredData] = useState<Food[]>([]);
   const [openNewFoodForm, setOpenNewFoodForm] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food>();
@@ -30,6 +31,10 @@ const InventoryDataTable = ({ foods, categories }: Props) => {
   useEffect(() => {
     setFilteredData(foods);
   }, [foods]);
+
+  useEffect(() => {
+    if (error) showErrorToast(error);
+  }, [error]);
 
   const handleDeleteFood = async (id: number) => {
     const imagesToDelete = foods.find((food) => food.id === id)?.images;
