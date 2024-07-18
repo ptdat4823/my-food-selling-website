@@ -27,30 +27,66 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "./button";
 import { Separate } from "./separate";
 import { SidebarLink } from "./sidebar-link";
 import ThemeSwitch from "./theme-switch";
+import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
+import { GetFavouriteFood } from "@/src/actions/food";
+import { showErrorToast } from "./toast";
+import { setFavorite } from "@/src/redux/slices/favorite";
+import { FoodToReceive } from "@/src/convertor/foodConvertor";
+import { Food } from "@/src/models/Food";
+import { GetAllCarts } from "@/src/actions/cart";
+import { setCartItems } from "@/src/redux/slices/cart";
 
 interface Props {
-  cartQuantity: number;
-  favouriteQuantity: number;
   user: User | null;
 }
-export default function Sidebar({
-  cartQuantity,
-  favouriteQuantity,
-  user,
-}: Props) {
+export default function Sidebar({ user }: Props) {
   const { data: session } = useSession();
   if (!session) {
     redirect("/login");
   }
 
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showPopover, setShowPopover] = useState(false);
+  const favouriteQuantity = useAppSelector(
+    (state) => state.favorite.value
+  ).length;
+  const isAdmin = useMemo(() => {
+    if (session.user)
+      return (
+        session.user.email === "admin@gmail.com" ||
+        session.user.name === "admin"
+      );
+    if (user) return user.isAdmin;
+    return false;
+  }, [session, user]);
+
+  const cartQuantity = useAppSelector((state) => state.cart.cartItems).length;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [favoriteRes, cartRes] = await Promise.all([
+        GetFavouriteFood(),
+        GetAllCarts(),
+      ]);
+      if (favoriteRes.error || cartRes.error) {
+        showErrorToast(favoriteRes.error || cartRes.error);
+      }
+      const favoriteFoods: Food[] = favoriteRes.data.map((item: any) =>
+        FoodToReceive(item)
+      );
+
+      dispatch(setFavorite(favoriteFoods));
+      dispatch(setCartItems(cartRes.data));
+    };
+    if (!isAdmin) fetchData();
+  }, []);
 
   const handleLogOut = async (e: any) => {
     e.preventDefault();
@@ -83,7 +119,7 @@ export default function Sidebar({
             </span>
           </div>
 
-          {user && user.isAdmin ? (
+          {isAdmin ? (
             <div className="flex flex-col gap-2 mb-2">
               <SidebarLink
                 href="/dashboard"
@@ -92,7 +128,7 @@ export default function Sidebar({
                 isSidebarOpen={isSidebarOpen}
               />
               <SidebarLink
-                href="/inventory?page=1&size=10"
+                href="/inventory"
                 content="Inventory"
                 icon={<LayoutList />}
                 isSidebarOpen={isSidebarOpen}
@@ -227,11 +263,11 @@ export default function Sidebar({
               closeDelay={0}
               placement="right"
               className={cn(
-                "text-white font-sans px-1 border-0 rounded-[999px] bg-blue-500 "
+                "text-white font-sans px-1 border-0 rounded-[999px] bg-blue-500"
               )}
             >
               <Button
-                className="bg-transparent hover:bg-transparent hover:opacity-100"
+                className="bg-transparent hover:bg-white/10 dark:hover:bg-white/10"
                 onClick={() => {
                   setIsSidebarOpen(!isSidebarOpen);
                 }}

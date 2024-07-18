@@ -17,10 +17,16 @@ import { FoodForm } from "./food-form";
 
 interface Props {
   foods: Food[];
+  pagination?: { totalPages: number; currentPage: number; pageSize: number };
   categories: FoodCategory[];
   error?: string;
 }
-const InventoryDataTable = ({ foods, categories, error }: Props) => {
+const InventoryDataTable = ({
+  foods,
+  pagination,
+  categories,
+  error,
+}: Props) => {
   const [filteredData, setFilteredData] = useState<Food[]>([]);
   const [openNewFoodForm, setOpenNewFoodForm] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food>();
@@ -102,6 +108,7 @@ const InventoryDataTable = ({ foods, categories, error }: Props) => {
     <>
       <CustomDatatable
         data={filteredData}
+        pagination={pagination}
         columns={menuTableColumns()}
         columnTitles={menuColumnTitles}
         buttons={[

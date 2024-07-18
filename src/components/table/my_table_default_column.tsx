@@ -1,18 +1,16 @@
-import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "./my_table_column_header";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
+import { displayNumber, formatDate } from "@/src/utils/func";
+import { Checkbox } from "@nextui-org/react";
+import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { ReactNode } from "react";
-import { format } from "date-fns";
-import { Checkbox } from "@nextui-org/react";
-import { displayNumber, formatDate } from "@/src/utils/func";
 import { Button } from "../ui/button";
+import { DataTableColumnHeader } from "./my_table_column_header";
 
 function defaultColumn<T>(
   accessorKey: string,
@@ -85,7 +83,13 @@ function defaultIndexColumn<T>(): ColumnDef<T> {
   return {
     accessorKey: "#",
     header: ({ column }) => <DataTableColumnHeader column={column} title="#" />,
-    cell: ({ row }) => <p className="px-2">{row.index + 1}</p>,
+    cell: ({ row, table }) => {
+      const pageSize = table.getState().pagination.pageSize;
+      const pageIndex = table.getState().pagination.pageIndex;
+      const rowCount =
+        row.index + 1 > pageSize ? (row.index + 1) % pageSize : row.index + 1;
+      return <p className="px-2">{pageSize * pageIndex + rowCount}</p>;
+    },
   };
 }
 
@@ -139,8 +143,8 @@ function getColumns<T>(
 
 export {
   defaultColumn,
-  defaultSelectColumn,
-  defaultIndexColumn,
   defaultConfigColumn,
+  defaultIndexColumn,
+  defaultSelectColumn,
   getColumns,
 };

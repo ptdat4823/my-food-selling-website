@@ -1,9 +1,10 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { fetchData } from "./fetch-util";
+import { defaultPage } from "../models/Page";
 
 export const GetAllFood = async () => {
   const accessToken = cookies().get("access-token")?.value;
@@ -12,7 +13,7 @@ export const GetAllFood = async () => {
     headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
   };
-  const res = await fetchData(url, options, []);
+  const res = await fetchData(url, options, defaultPage, ["food"]);
   return res;
 };
 
@@ -23,7 +24,7 @@ export const GetFoodByPage = async (page: number, size: number) => {
     headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
   };
-  const res = await fetchData(url, options, []);
+  const res = await fetchData(url, options, defaultPage, ["food"]);
   return res;
 };
 
@@ -34,7 +35,7 @@ export const GetFavouriteFood = async () => {
     headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
   };
-  const res = await fetchData(url, options, []);
+  const res = await fetchData(url, options, [], ["food", "favorite"]);
   return res;
 };
 
@@ -52,7 +53,7 @@ export async function CreateFood(formData: FormData) {
       error: res.statusText,
     };
   }
-  revalidatePath("/(main)/inventory");
+  revalidateTag("food");
   return {
     message: res.statusText,
   };
@@ -75,7 +76,7 @@ export async function UpdateFood(id: number, formData: FormData) {
       error: res.statusText,
     };
   }
-  revalidatePath("/(main)/inventory");
+  revalidateTag("food");
   return {
     message: res.statusText,
   };
@@ -97,7 +98,7 @@ export async function DeleteFood(id: number) {
       error: res.statusText,
     };
   }
-  revalidatePath("/(main)/inventory");
+  revalidateTag("food");
   return {
     message: res.statusText,
   };
@@ -121,7 +122,7 @@ export async function DeleteFoods(listId: number[]) {
       errors: failed.map((result) => result.statusText),
     };
   }
-  revalidatePath("/(main)/inventory");
+  revalidateTag("food");
   return {
     message: "Deleted successfully!",
   };
@@ -148,7 +149,7 @@ export async function ChangeStateFavouriteFood(id: number) {
       error: res.statusText,
     };
   }
-  revalidatePath("/(main)");
+  revalidateTag("favorite");
   return {
     message: res.statusText,
   };
@@ -190,7 +191,7 @@ export async function UploadComment(id: number, comment: any) {
       error: res.statusText || "Upload comment failed",
     };
   }
-  revalidatePath("/(main)");
+  revalidateTag("food");
   return {
     message: "Upload comment successfully!",
   };
@@ -214,7 +215,7 @@ export async function DeleteComment(id: number) {
       error: res.statusText || "Deleted comment failed",
     };
   }
-  revalidatePath("/(main)");
+  revalidateTag("food");
   return {
     message: "Deleted comment successfully!",
   };

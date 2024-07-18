@@ -11,24 +11,36 @@ import {
   orderTableColumns,
 } from "./columns";
 import { OrderDetailTab } from "./order-detail-tab";
-import { notFound } from "next/navigation";
-import TableSkeleton from "../skeleton/table/table-skeleton";
 
 interface Props {
   orders: Order[];
+  pagination?: {
+    totalPages: number;
+    currentPage: number;
+    pageSize: number;
+  };
   error?: string;
 }
-export const OrderManagementDataTable = ({ orders, error }: Props) => {
+export const OrderManagementDataTable = ({
+  orders,
+  error,
+  pagination,
+}: Props) => {
   const [filteredData, setFilteredData] = useState<Order[]>([]);
   const [rowUpdating, setRowUpdating] = useState<number[]>([]);
   const filterOptionKeys = Object.keys(orderColumnTitles)
     .filter((key) => key !== "images")
     .map((key) => key);
 
+  useEffect(() => {
+    setFilteredData(orders);
+  }, [orders]);
+
   const onStatusChange = async (id: number, status: OrderStatus) => {
-    setRowUpdating([...rowUpdating, id]);
     const orderToUpdate = orders.find((order) => order.id === id);
     if (!orderToUpdate) return;
+    setRowUpdating([...rowUpdating, id]);
+
     const res = await UpdateOrder(id, { ...orderToUpdate, status }).finally(
       () => setRowUpdating(rowUpdating.filter((rowId) => rowId !== id))
     );
@@ -36,6 +48,10 @@ export const OrderManagementDataTable = ({ orders, error }: Props) => {
       showErrorToast(res.error);
     }
     if (res.message) {
+      const newOrders = orders.map((order) =>
+        order.id === id ? { ...order, status } : order
+      );
+      setFilteredData(newOrders);
       showSuccessToast(res.message);
     }
   };
@@ -43,9 +59,7 @@ export const OrderManagementDataTable = ({ orders, error }: Props) => {
   useEffect(() => {
     if (error) showErrorToast(error);
   }, [error]);
-  useEffect(() => {
-    setFilteredData(orders);
-  }, [orders]);
+
   const handleCustomerFilter = (filterInput: string, data: Order[]) => {
     const filteredData = data.filter((order) =>
       order.user.name.toString().includes(filterInput.toString())
@@ -105,6 +119,7 @@ export const OrderManagementDataTable = ({ orders, error }: Props) => {
   return (
     <CustomDatatable
       data={filteredData}
+      pagination={pagination}
       columns={orderTableColumns(rowUpdating, onStatusChange)}
       columnTitles={orderColumnTitles}
       infoTabs={[

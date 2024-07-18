@@ -16,7 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
@@ -31,15 +32,40 @@ export function CustomDataTablePagination<TData>({
   table,
   config,
 }: DataTablePaginationProps<TData>) {
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  useEffect(() => {
-    if (table.getState().pagination.pageIndex !== currentPageIndex)
-      table.setPageIndex(currentPageIndex);
-  }, [currentPageIndex, table.getState().pagination.pageIndex]);
+  // Get a new searchParams string by merging the current
+  // searchParams with a provided key/value pair
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams]
+  );
 
   const handlePageChange = (pageIndex: number) => {
-    setCurrentPageIndex(pageIndex);
+    if (!searchParams.get("page") || !searchParams.get("size")) {
+      table.setPageIndex(pageIndex);
+    } else {
+      const params = createQueryString("page", (pageIndex + 1).toString());
+      router.push(`${pathname}?${params}`);
+    }
+  };
+
+  const handlePageSizeChange = (pageSize: string) => {
+    table.setPageSize(Number(pageSize));
+
+    if (!searchParams.get("page") || !searchParams.get("size")) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", "1");
+    params.set("size", pageSize);
+
+    router.push(`${pathname}?${params.toString()}`);
   };
   return (
     <div
@@ -74,7 +100,9 @@ export function CustomDataTablePagination<TData>({
               "h-8 w-8 p-0 whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white",
               "dark:bg-white/10 dark:hover:bg-white/20 dark:text-dark-primary-word dark:disabled:hover:bg-white/10"
             )}
-            onClick={() => handlePageChange(currentPageIndex - 1)}
+            onClick={() =>
+              handlePageChange(table.getState().pagination.pageIndex - 1)
+            }
             disabled={!table.getCanPreviousPage()}
             iconAfter={<ChevronLeftIcon className="h-4 w-4" />}
           ></Button>
@@ -87,7 +115,9 @@ export function CustomDataTablePagination<TData>({
               "h-8 w-8 p-0 whitespace-nowrap bg-white text-secondary-word hover:bg-gray-200 border disabled:hover:bg-white",
               "dark:bg-white/10 dark:hover:bg-white/20 dark:text-dark-primary-word dark:disabled:hover:bg-white/10"
             )}
-            onClick={() => handlePageChange(currentPageIndex + 1)}
+            onClick={() =>
+              handlePageChange(table.getState().pagination.pageIndex + 1)
+            }
             disabled={!table.getCanNextPage()}
             iconAfter={<ChevronRightIcon className="h-4 w-4" />}
           ></Button>
@@ -107,9 +137,7 @@ export function CustomDataTablePagination<TData>({
           <p className="text-sm font-medium">Rows per page</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
-            onValueChange={(value) => {
-              table.setPageSize(Number(value));
-            }}
+            onValueChange={handlePageSizeChange}
           >
             <SelectTrigger className="h-8 w-[70px]">
               <SelectValue placeholder={table.getState().pagination.pageSize} />

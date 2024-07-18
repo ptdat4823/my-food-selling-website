@@ -6,7 +6,7 @@ import { Food } from "@/src/models/Food";
 import { Order, PaymentMethod } from "@/src/models/Order";
 import { User } from "@/src/models/User";
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
-import { setSelectedCart } from "@/src/redux/slices/cart";
+import { setCartItems, setSelectedCart } from "@/src/redux/slices/cart";
 import { setCurrentOrder } from "@/src/redux/slices/order";
 import { cn, isValidString } from "@/src/utils/func";
 import { usePathname, useRouter } from "next/navigation";
@@ -26,13 +26,16 @@ interface Props {
 const SummaryList = ({ foods, thisUser, error }: Props) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+
+  const carts = useAppSelector((state) => state.cart.cartItems);
   const selectedCart = useAppSelector((state) => state.cart.selectedCart);
   const selectedCartIds = selectedCart.map((cart) => cart.id);
+  const currentOrder = useAppSelector((state) => state.order.currentOrder);
   const [subtotal, setSubtotal] = useState<number>(0);
+
   const path = usePathname();
   const [isChangeingPath, setIsChangeingPath] = useState(false);
   const rightColRef = React.useRef<HTMLDivElement>(null);
-  const currentOrder = useAppSelector((state) => state.order.currentOrder);
 
   useEffect(() => {
     let tempSubtotal = 0;
@@ -73,6 +76,9 @@ const SummaryList = ({ foods, thisUser, error }: Props) => {
 
   const handleAfterMakeOrder = () => {
     dispatch(setCurrentOrder(null));
+    dispatch(
+      setCartItems(carts.filter((cart) => !selectedCartIds.includes(cart.id)))
+    );
     dispatch(setSelectedCart([]));
   };
 

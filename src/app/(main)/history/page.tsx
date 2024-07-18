@@ -1,10 +1,32 @@
-import { GetAllOrders } from "@/src/actions/order";
+import { GetAllOrders, GetOrderByPage } from "@/src/actions/order";
 import HistoryDataTable from "@/src/components/history/datatable";
+import { Page } from "@/src/models/Page";
 import { cn } from "@/src/utils/func";
+import { redirect } from "next/navigation";
 
-export default async function HistoryPage() {
-  const [orderResults] = await Promise.all([GetAllOrders()]);
-  const orders = orderResults.error ? [] : orderResults;
+interface Props {
+  searchParams: {
+    page: number;
+    size: number;
+  };
+}
+export default async function HistoryPage({ searchParams }: Props) {
+  const page = searchParams.page;
+  const size = searchParams.size;
+
+  const [orderRes] = await Promise.all([
+    page && size ? GetOrderByPage(page, size) : GetAllOrders(),
+  ]);
+  const orderPage: Page = orderRes.data;
+  const pagination =
+    page && size
+      ? {
+          totalPages: orderPage.totalPages,
+          currentPage: page,
+          pageSize: size,
+        }
+      : undefined;
+
   return (
     <div
       className={cn(
@@ -17,7 +39,11 @@ export default async function HistoryPage() {
           History
         </h1>
       </div>
-      <HistoryDataTable orders={orders} />
+      <HistoryDataTable
+        orders={orderPage.data}
+        error={orderRes.error}
+        pagination={pagination}
+      />
     </div>
   );
 }

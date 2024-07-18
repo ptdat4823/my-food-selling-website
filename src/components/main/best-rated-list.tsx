@@ -7,10 +7,9 @@ import { cn } from "@/src/utils/func";
 
 interface Props {
   foods: Food[];
-  favoriteFoodIds: number[];
   user: User;
 }
-const BestRatedList = ({ foods, favoriteFoodIds, user }: Props) => {
+const BestRatedList = ({ foods, user }: Props) => {
   const bestRatedList = foods
     .filter((food) => food.rating > 0)
     .sort((a, b) => b.rating - a.rating);
@@ -19,11 +18,7 @@ const BestRatedList = ({ foods, favoriteFoodIds, user }: Props) => {
       <h3 className="text-4xl font-semibold mb-4 text-primary dark:text-dark-primary-word">
         Best rated
       </h3>
-      <FoodList
-        foods={bestRatedList}
-        favoriteFoodIds={favoriteFoodIds}
-        user={user}
-      />
+      <FoodList foods={bestRatedList} user={user} />
     </div>
   );
 };

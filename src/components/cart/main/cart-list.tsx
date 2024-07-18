@@ -16,7 +16,6 @@ import { showErrorToast, showSuccessToast } from "../../ui/toast";
 import { CartItem } from "./cart-item";
 import { EmptyCart } from "./empty-cart";
 import { FoodTitleBar } from "./food-title-bar";
-import { Skeleton } from "@nextui-org/react";
 import CartListSkeleton from "../../skeleton/cart/main/cart-list-skeleton";
 
 const getUpdatedCartData = (cartData: Cart[], selectedCart: Cart[]) => {
@@ -30,15 +29,14 @@ const getUpdatedCartData = (cartData: Cart[], selectedCart: Cart[]) => {
 };
 
 interface CartListProps {
-  carts: Cart[];
   className?: ClassValue;
   error?: string;
 }
-const CartList = ({ carts, className, error }: CartListProps) => {
+const CartList = ({ className, error }: CartListProps) => {
   const dispatch = useAppDispatch();
-  const [loaded, setLoaded] = useState(false);
   const selectedCart = useAppSelector((state) => state.cart.selectedCart);
   const selectedCartIds = selectedCart.map((cart) => cart.id);
+  const carts = useAppSelector((state) => state.cart.cartItems);
 
   const [cartData, setCartData] = useState(
     getUpdatedCartData(carts, selectedCart)
@@ -52,18 +50,11 @@ const CartList = ({ carts, className, error }: CartListProps) => {
 
   useEffect(() => {
     setCartData(getUpdatedCartData(carts, selectedCart));
-    dispatch(setCartItems(cartData));
   }, [carts]);
 
   useEffect(() => {
     if (error) showErrorToast(error);
   }, [error]);
-
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
-
-  if (!loaded) return <CartListSkeleton />;
 
   return (
     <div className={cn(className)}>

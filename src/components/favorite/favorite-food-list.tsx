@@ -1,46 +1,55 @@
 "use client";
 import { Food } from "@/src/models/Food";
 import { User } from "@/src/models/User";
+import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
+import { setFavorite } from "@/src/redux/slices/favorite";
 import { cn } from "@/src/utils/func";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FoodDetail } from "../main/food-detail";
-import { EmptyItem } from "./empty-item";
-import FavouriteFoodItem from "./favorite-food-item";
 import FoodItem from "../main/food-item";
+import { showErrorToast } from "../ui/toast";
+import { EmptyItem } from "./empty-item";
 
 interface Props {
-  foods: Food[];
   user: User;
+  error?: string;
 }
-const FavoriteFoodList = ({ foods, user }: Props) => {
+const FavoriteFoodList = ({ user, error }: Props) => {
   const [isOpen, setOpen] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food>();
+  const tempFavoriteFoods = useAppSelector((state) => state.favorite.value);
+  const tempFavoriteFoodIds = useAppSelector((state) => state.favorite.ids);
 
   const handleFoodClick = (food: Food) => {
     setSelectedFood(food);
     setOpen(!isOpen);
   };
 
+  useEffect(() => {
+    if (error) showErrorToast(error);
+  }, [error]);
+
   return (
     <div>
-      {foods.length === 0 && <EmptyItem />}
+      {tempFavoriteFoods.length === 0 && <EmptyItem />}
       <div
         className={cn(
           "grid grid-cols-3 gap-2 max-md:grid-cols-1 max-lg:grid-cols-2",
-          foods.length === 0 ? "hidden" : ""
+          tempFavoriteFoods.length === 0 ? "hidden" : ""
         )}
       >
-        {foods.map((food) => {
+        {tempFavoriteFoods.map((food) => {
           return (
             <FoodItem
               key={food.id}
               food={food}
               onClick={() => handleFoodClick(food)}
-              isFavorite={true}
+              isFavorite={tempFavoriteFoodIds.includes(food.id)}
             />
           );
         })}
       </div>
+
       {selectedFood && (
         <FoodDetail
           isOpen={isOpen}

@@ -27,6 +27,7 @@ import {
 } from "@/src/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { DataTableViewOptions } from "./my_table_column_visibility_toggle";
+import { useSearchParams } from "next/navigation";
 
 export type DatatableConfig<TData> = {
   showDefaultSearchInput?: boolean;
@@ -66,6 +67,11 @@ const defaultConfig: DatatableConfig<any> = {
 
 export type CustomDatatableProps<TData> = {
   data: TData[];
+  pagination?: {
+    totalPages: number;
+    currentPage: number;
+    pageSize: number;
+  };
   columns: ColumnDef<TData>[];
   columnTitles: {
     [key: string]: string;
@@ -78,6 +84,7 @@ export type CustomDatatableProps<TData> = {
 
 export function CustomDatatable<TData>({
   data,
+  pagination,
   columns,
   columnTitles,
   infoTabs,
@@ -97,6 +104,12 @@ export function CustomDatatable<TData>({
   const [colFilterInput, setColFilterInput] = useState("");
   const [filterKeys, setFilterKeys] = useState(config.filterOptionKeys ?? []);
   const [selectedFilterKey, setSelectedFilterKey] = useState("");
+  const paginationOption = pagination
+    ? {
+        pageIndex: pagination.currentPage - 1,
+        pageSize: pagination.pageSize,
+      }
+    : undefined;
 
   const table = useReactTable<TData>({
     data,
@@ -104,12 +117,15 @@ export function CustomDatatable<TData>({
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: pagination ? undefined : getPaginationRowModel(),
+    manualPagination: pagination ? true : undefined,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    pageCount: pagination ? pagination.totalPages : undefined,
     state: {
+      ...(paginationOption ? { pagination: paginationOption } : {}),
       sorting,
       columnFilters,
       columnVisibility,

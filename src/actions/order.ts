@@ -1,9 +1,10 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { Feedback, Order } from "../models/Order";
 import { fetchData } from "./fetch-util";
+import { defaultPage } from "../models/Page";
 
 export const CreateOrder = async (order: Order) => {
   const accessToken = cookies().get("access-token")?.value;
@@ -31,7 +32,8 @@ export const CreateOrder = async (order: Order) => {
       error: e.message,
     };
   }
-  revalidatePath("/(main)/cart");
+  revalidateTag("order");
+  revalidateTag("cart");
   return {
     message: "Make order successfully!",
   };
@@ -45,7 +47,20 @@ export const GetAllOrders = async () => {
     headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
   };
-  const res = await fetchData(url, options, []);
+  const res = await fetchData(url, options, [], ["order"]);
+  return res;
+};
+
+export const GetOrderByPage = async (page: number, size: number) => {
+  const accessToken = cookies().get("access-token")?.value;
+  const url =
+    process.env.BACKEND_HOST + `/api/orders?page=${page}&size=${size}`;
+
+  const options = {
+    headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
+    credentials: "include",
+  };
+  const res = await fetchData(url, options, defaultPage, ["order"]);
   return res;
 };
 
@@ -75,7 +90,7 @@ export const UpdateOrder = async (id: number, order: Order) => {
       error: e.message,
     };
   }
-  revalidatePath("/(main)/order-management");
+  revalidateTag("order");
   return {
     message: "Updated successfully!",
   };
@@ -110,7 +125,7 @@ export const RateOrder = async (id: number, feedback: Feedback) => {
       error: e.message,
     };
   }
-  revalidatePath("/(main)");
+  revalidateTag("order");
   return {
     message: "Sent feedback successfully!",
   };

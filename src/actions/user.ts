@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { fetchData } from "./fetch-util";
 
@@ -11,7 +11,7 @@ export const GetInfo = async () => {
     headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
   };
-  const res = await fetchData(url, options, undefined);
+  const res = await fetchData(url, options, undefined, ["user"]);
   return res;
 };
 
@@ -40,7 +40,7 @@ export const UpdateInfo = async (formData: FormData) => {
       error: e.message,
     };
   }
-  revalidatePath("/(main)/setting");
+  revalidateTag("user");
   return {
     message: "Updated successfully!",
   };
@@ -74,7 +74,7 @@ export const ChangePassword = async (formData: FormData) => {
       error: e.message,
     };
   }
-  revalidatePath("/(main)");
+  revalidateTag("user");
   return {
     message: "Changed password successfully!",
   };

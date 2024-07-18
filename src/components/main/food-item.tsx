@@ -1,12 +1,7 @@
 "use client";
-import { ChangeStateFavouriteFood } from "@/src/actions/food";
 import { Food } from "@/src/models/Food";
 import { cn } from "@/src/utils/func";
 import { ClassValue } from "clsx";
-import { useSession } from "next-auth/react";
-import { SolidHeartIcon } from "../icons/solid";
-import { Button } from "../ui/button";
-import { showDefaultToast, showErrorToast } from "../ui/toast";
 import FoodImageFrame from "./food-image-frame";
 import { FoodPrice } from "./food-price";
 import FoodRating from "./food-rating";
@@ -22,7 +17,6 @@ export default function FoodItem({
   onClick?: () => void;
   isFavorite?: boolean;
 }) {
-  const { data: session } = useSession();
   const getMinAndMaxPrice = (food: Food) => {
     const tempSortedPriceList = food.foodSizes
       .map((foodSize) => foodSize.price)
@@ -35,51 +29,20 @@ export default function FoodItem({
 
   const sortedPriceList = getMinAndMaxPrice(food);
 
-  const handleFavoriteFoodIdsChange = async (id: number) => {
-    if (!session) {
-      showDefaultToast("Please login to add your favourite food");
-      return;
-    }
-    const res = await ChangeStateFavouriteFood(id);
-    if (res.error) {
-      showErrorToast(res.error);
-    }
-  };
-
   return (
     <div
       className={cn(
-        "rounded overflow-hidden shadow-lg bg-[#575656a6] dark:bg-[#12192ca6] bg-opacity-75 p-0 transition-all ease-linear duration-100 cursor-pointer",
+        "rounded-lg overflow-hidden bg-transparent p-0 transition-all ease-linear duration-100 cursor-pointer",
         className
       )}
       onClick={onClick}
     >
-      <div className="w-full h-48 overflow-hidden cursor-pointer">
-        <FoodImageFrame food={food} onClick={onClick} />
+      <div className="w-full h-fit rounded-md overflow-hidden cursor-pointer">
+        <FoodImageFrame food={food} onClick={onClick} isFavorite={isFavorite} />
       </div>
-      <div className="flex flex-col m-2 gap-2 text-white select-none">
+      <div className="flex flex-col m-2 gap-2 text-primary-word dark:text-dark-primary-word select-none">
         <div className="w-full flex flex-row items-center justify-between">
           <span className="font-semibold">{food.name}</span>
-          <Button
-            className={cn(
-              "rounded-full ease-linear duration-100 bg-transparent hover:bg-transparent hover:opacity-60",
-              "dark:hover:bg-transparent"
-            )}
-            iconBefore={
-              isFavorite ? <SolidHeartIcon /> : <SolidHeartIcon color="white" />
-            }
-            onClick={(e) => {
-              e.stopPropagation();
-              handleFavoriteFoodIdsChange(food.id);
-            }}
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <FoodPrice
-            currency="$"
-            defaultPrice={sortedPriceList[0]}
-            secondPrice={sortedPriceList[sortedPriceList.length - 1]}
-          />
           <div
             className={cn(
               "flex gap-1 text-sm font-semibold",
@@ -89,6 +52,13 @@ export default function FoodItem({
             <span>{food.rating}</span>
             <FoodRating rating={food.rating} />
           </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <FoodPrice
+            currency="$"
+            defaultPrice={sortedPriceList[0]}
+            secondPrice={sortedPriceList[sortedPriceList.length - 1]}
+          />
         </div>
 
         <div className="flex items-center">

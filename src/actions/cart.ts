@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { Cart } from "../models/Cart";
 import { fetchData } from "./fetch-util";
@@ -12,7 +12,7 @@ export const GetAllCarts = async () => {
     headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
   };
-  const res = await fetchData(url, options, []);
+  const res = await fetchData(url, options, [], ["cart"]);
   return res;
 };
 
@@ -30,7 +30,7 @@ export async function AddCart(data: Cart) {
       error: res.statusText,
     };
   }
-  revalidatePath("/(main)");
+  revalidateTag("cart");
   return {
     message: res.statusText,
   };
@@ -49,7 +49,7 @@ export async function DeleteCart(id: number) {
       error: res.statusText,
     };
   }
-  revalidatePath("/(main)/cart");
+  revalidateTag("cart");
   return {
     message: res.statusText,
   };
@@ -69,7 +69,7 @@ export async function UpdateCart(id: number, data: Cart) {
       error: res.statusText,
     };
   }
-  revalidatePath("/(main)/cart");
+  revalidateTag("cart");
   return {
     message: res.statusText,
   };

@@ -33,6 +33,7 @@ import {
   uploadImage,
 } from "@/src/utils/func";
 import LoadingCircle from "../icons/custom-with-css/LoadingCircle/loading_circle";
+import { addFood } from "@/src/redux/slices/food";
 
 export type FoodFormData = {
   name: string;
@@ -105,6 +106,7 @@ export const FoodForm = ({
   closeForm: () => any;
   categories: FoodCategory[];
 }) => {
+  const dispatch = useAppDispatch();
   const [isUploadingFood, setIsUploadingFood] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [oldImageUrls, setOldImageUrls] = useState<string[]>([]);
@@ -209,6 +211,7 @@ export const FoodForm = ({
       (cat: any) => cat.name === values.category
     );
     const newFood = FoodFormDataToFood(values, selectedCategory!);
+    dispatch(addFood(newFood));
     const foodToSend = FoodToSend(newFood);
     const dataForm: any = new FormData();
     dataForm.set(

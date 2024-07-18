@@ -1,24 +1,29 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { UpdateOrder } from "@/src/actions/order";
+import { Order, OrderStatus } from "@/src/models/Order";
+import { formatDate, handleFilterColumn } from "@/src/utils/func";
+import { useEffect, useState } from "react";
 import { CustomDatatable } from "../table/custom_datatable";
+import { ConfirmDialog, useConfirmDialog } from "../ui/confirm-dialog";
+import { showErrorToast, showSuccessToast } from "../ui/toast";
 import {
   orderColumnTitles,
   orderDefaultVisibilityState,
   orderTableColumns,
 } from "./columns";
-import { Order, OrderStatus } from "@/src/models/Order";
-import { formatDate, handleFilterColumn } from "@/src/utils/func";
 import { FoodDetailTab } from "./food-detail-tab";
-import { ConfirmDialog, useConfirmDialog } from "../ui/confirm-dialog";
-import { UpdateOrder } from "@/src/actions/order";
-import { showErrorToast, showSuccessToast } from "../ui/toast";
 import { RateForm } from "./rate-form";
-import TableSkeleton from "../skeleton/table/table-skeleton";
 
 interface Props {
   orders: Order[];
+  pagination?: {
+    totalPages: number;
+    currentPage: number;
+    pageSize: number;
+  };
+  error?: string;
 }
-const HistoryDataTable = ({ orders }: Props) => {
+const HistoryDataTable = ({ orders, error, pagination }: Props) => {
   const [filteredData, setFilteredData] = useState<Order[]>([]);
   const filterOptionKeys = Object.keys(orderColumnTitles)
     .filter((key) => key !== "images")
@@ -55,6 +60,9 @@ const HistoryDataTable = ({ orders }: Props) => {
       showSuccessToast(res.message);
     }
   };
+  useEffect(() => {
+    if (error) showErrorToast(error);
+  }, [error]);
 
   useEffect(() => {
     setFilteredData(orders);
@@ -119,6 +127,7 @@ const HistoryDataTable = ({ orders }: Props) => {
     <>
       <CustomDatatable
         data={filteredData}
+        pagination={pagination}
         columns={orderTableColumns(
           rowUpdating,
           handleConfirmBeforeStatusChange

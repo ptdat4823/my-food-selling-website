@@ -75,8 +75,9 @@ const splitAddress = (address: string) => {
 
 interface Props {
   thisUser: User;
+  error?: string;
 }
-export default function UserInfoForm({ thisUser }: Props) {
+export default function UserInfoForm({ thisUser, error }: Props) {
   const [fieldErrors, setFieldErrors] = useState<any>();
   const [isSaving, setIsSaving] = useState(false);
   const [isLoadingAvatar, setIsLoadingAvatar] = useState(true);
@@ -114,6 +115,10 @@ export default function UserInfoForm({ thisUser }: Props) {
     form.setValue("newPassword", undefined);
     form.setValue("confirmPassword", undefined);
   };
+
+  useEffect(() => {
+    if (error) showErrorToast(error);
+  }, [error]);
 
   useEffect(() => {
     setInitialValues(thisUser);

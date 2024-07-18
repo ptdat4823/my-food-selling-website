@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { fetchData } from "./fetch-util";
@@ -12,7 +12,7 @@ export const GetAllCategories = async () => {
     headers: accessToken ? { Cookie: `access-token=${accessToken}` } : {},
     credentials: "include",
   };
-  const res = await fetchData(url, options, []);
+  const res = await fetchData(url, options, [], ["category"]);
   return res;
 };
 
@@ -70,7 +70,7 @@ export async function CreateCategory(formData: FormData) {
       error: e.message || "Internal Server Error",
     };
   }
-  revalidatePath("/(main)/inventory", "layout");
+  revalidateTag("category");
   return {
     message: "Create new category successfully!",
   };

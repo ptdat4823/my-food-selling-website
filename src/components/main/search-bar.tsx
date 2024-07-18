@@ -7,18 +7,19 @@ import { FoodItemSearch } from "./food-item-search";
 import { ClassValue } from "clsx";
 import { cn } from "@/src/utils/func";
 import { SearchIcon } from "lucide-react";
+import { useAppSelector } from "@/src/redux/hooks";
 
 interface Props {
   foods: Food[];
-  favoriteFoodIds: number[];
   user: User;
   className?: ClassValue;
 }
-const SearchBar = ({ foods, favoriteFoodIds, user, className }: Props) => {
+const SearchBar = ({ foods, user, className }: Props) => {
   const [searchInput, setSearchInput] = useState("");
   const [searchFocus, setSearchFocus] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const [selectedFood, setSelectedFood] = useState<Food>();
+  const favoriteFoodIds = useAppSelector((state) => state.favorite.ids);
 
   const handleFoodClick = (food: Food) => {
     setSelectedFood(food);

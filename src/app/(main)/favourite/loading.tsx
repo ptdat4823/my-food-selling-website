@@ -12,7 +12,11 @@ const Loading = () => {
       <h1 className="text-primary dark:text-dark-primary-word text-3xl font-bold mb-16">
         Your favourite foods
       </h1>
-      <FoodListSkeleton />
+      <div className="flex flex-col gap-1">
+        <FoodListSkeleton />
+        <FoodListSkeleton />
+        <FoodListSkeleton />
+      </div>
     </div>
   );
 };

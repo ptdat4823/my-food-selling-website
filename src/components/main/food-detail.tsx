@@ -1,3 +1,4 @@
+"use client";
 import { AddCart } from "@/src/actions/cart";
 import { ChangeStateFavouriteFood } from "@/src/actions/food";
 import { Cart } from "@/src/models/Cart";
@@ -31,6 +32,8 @@ import { CommentSection } from "./comment-section";
 import { FoodProperty } from "./food-property";
 import FoodRating from "./food-rating";
 import { useTheme } from "next-themes";
+import { useAppDispatch } from "@/src/redux/hooks";
+import { addCartItem } from "@/src/redux/slices/cart";
 
 export const FoodDetail = ({
   isOpen,
@@ -48,12 +51,12 @@ export const FoodDetail = ({
   className?: ClassValue;
 }) => {
   const { data: session } = useSession();
+  const dispatch = useAppDispatch();
   const [emblaRef, emplaApi] = useEmblaCarousel({
     loop: false,
     watchDrag: false,
   });
-  const { selectedIndex, scrollSnaps, onDotButtonClick } =
-    useDotButton(emplaApi);
+  const { selectedIndex, onDotButtonClick } = useDotButton(emplaApi);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedSize, setSelectedSize] = useState<FoodSize>(food.foodSizes[0]);
   const [selectedFoodQuantity, setSelectedFoodQuantity] = useState(1);
@@ -78,6 +81,7 @@ export const FoodDetail = ({
       foodSize: selectedSize,
       note: "",
     };
+    dispatch(addCartItem(newCartItem));
     const res = await AddCart(newCartItem);
     if (res.error) {
       showErrorToast(res.error);
